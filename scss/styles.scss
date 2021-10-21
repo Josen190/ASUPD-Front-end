@@ -1,0 +1,110 @@
+$BgInputCollor: #fff;
+$ErrCollor: #e35d6a;
+$BorderCollor: #ced4da;
+$Collor: #212529;
+
+//создать маргины для повторяющихся элементов
+
+.center_desktop{
+  position: fixed;
+  top: 30%;
+  left: 40%;
+}
+
+.removing_indentation{
+      margin: 0;
+}
+
+.form{
+  width: 300px;
+  text-align: center;
+  margin: 0 auto;
+
+  h1{
+      font-size: 30px;
+      text-transform: uppercase;
+  }
+
+  .input_text{
+    display: block;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: $Collor;
+    background-color: $BgInputCollor;
+    background-clip: padding-box;
+    border: 1px solid $BorderCollor;
+    margin: 0 auto 15px;
+    border-radius: 50px;
+  }
+
+  .input_date{
+      display: block;
+      border-radius: 50px;
+      margin: 0 auto 15px;
+      color: $Collor;
+      background-color: $BgInputCollor;
+  }
+
+  .input_tel{
+      display: block;
+      border-radius: 50px;
+      margin: 0 auto 15px;
+      color: $Collor;
+      background-color: $BgInputCollor;
+  }
+
+  .input_submit{
+      border-radius: 45px;
+      float: right;
+      color: $Collor;
+      background-color: $BgInputCollor;
+  }
+
+  .authorization{
+    a {
+      display: block;
+      text-decoration: none;
+      font-family: 'Montserrat', sans-serif;
+      transition: 0.4s ease-in-out;
+      color: #6c757d;
+      font-size: 12px;
+      float: left;
+      width: 140px;
+      text-align: initial;
+    }
+
+    .input_submit{
+      position: relative;
+      bottom: 18px;
+      right: 13px;
+    }
+  }
+
+  .registration{
+    width: 400px;
+
+    .password {
+      display: inline;
+      flex-direction: row;
+      width: 185px;
+    }
+
+    .input_submit{
+      display: block;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-content: center;
+      align-items: center;
+      width: 160px;
+      margin: 0 auto 50px;
+      float: inherit;
+    }
+
+    .removing_indentation{
+          margin: 0;
+    }
+  }
+
+}

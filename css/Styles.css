@@ -1,22 +1,23 @@
-
-.center_desktop{
+.center_desktop {
   position: fixed;
-    top: 30%;
-    left: 40%;
+  top: 30%;
+  left: 40%;
 }
 
-.form{
+.removing_indentation {
+  margin: 0;
+}
+
+.form {
   width: 300px;
   text-align: center;
   margin: 0 auto;
 }
-
-.form h1{
-    font-size: 30px;
-    text-transform: uppercase;
+.form h1 {
+  font-size: 30px;
+  text-transform: uppercase;
 }
-
-.input_text{
+.form .input_text {
   display: block;
   width: 100%;
   font-size: 1rem;
@@ -29,60 +30,71 @@
   margin: 0 auto 15px;
   border-radius: 50px;
 }
-
-.input_date{
-    display: block;
-    border-radius: 50px;
-    margin: 0 auto 15px;
+.form .input_date {
+  display: block;
+  border-radius: 50px;
+  margin: 0 auto 15px;
+  color: #212529;
+  background-color: #fff;
 }
-
-.input_tel{
-    display: block;
-    border-radius: 50px;
-    margin: 0 auto 15px;
+.form .input_tel {
+  display: block;
+  border-radius: 50px;
+  margin: 0 auto 15px;
+  color: #212529;
+  background-color: #fff;
 }
-
-.input_submit{
-    border-radius: 45px;
-    float: right;
+.form .input_submit {
+  border-radius: 45px;
+  float: right;
+  color: #212529;
+  background-color: #fff;
 }
-
-.form.authorization.link {
-    float: left;
-    width: 140px;
-    text-align: initial;
-}
-
-.form.link a{
+.form .authorization a {
   display: block;
   text-decoration: none;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
+  -webkit-transition: 0.4s ease-in-out;
   transition: 0.4s ease-in-out;
   color: #6c757d;
   font-size: 12px;
+  float: left;
+  width: 140px;
+  text-align: initial;
 }
-
-.form.registration{
+.form .authorization .input_submit {
+  position: relative;
+  bottom: 18px;
+  right: 13px;
+}
+.form .registration {
   width: 400px;
 }
-
-.form.registration.password {
-    display: inline;
-    flex-direction: row;
-    width: 150px;
+.form .registration .password {
+  display: inline;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: 185px;
 }
-
-.registration.input_submit{
+.form .registration .input_submit {
   display: block;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: center;
-  align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   width: 160px;
   margin: 0 auto 50px;
   float: inherit;
 }
-
-.removing_indentation{
-      margin: 0;
+.form .registration .removing_indentation {
+  margin: 0;
 }

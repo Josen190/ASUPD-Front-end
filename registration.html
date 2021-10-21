@@ -10,29 +10,32 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
 		<title>Регистрация</title>
+     <script src="https://www.google.com/recaptcha/api.js"></script>
   </head>
 <body>
 <div class="form registration container">
-  <h1>Регистрация</h1>
-  <p>Адресс электроной почты</p>
-  <input id = "regEmail" type="text" class="form-control input_text" name="email"
-  placeholder="Электроная почта">
+  <div class="form registration container">
+    <h1>Регистрация</h1>
+    <p>Адресс электроной почты</p>
+    <input id = "regEmail" type="text" class="form-control input_text" name="email"
+    placeholder="Электроная почта">
+  </div>
 
   <div class="form registration container password">
     <p>Придумайте пароль</p>
-    <input id = "regPassword_1" type="text" class="form-control input_text" name="password"
+    <input id = "regPassword_1" type="text" class="form-control input_text password" name="password"
     placeholder="пароль">
-    <input id = "regPassword_2" type="text" class="form-control input_text" name="password"
+    <input id = "regPassword_2" type="text" class="form-control input_text password" name="password"
     placeholder="повторите пароль">
   </div>
 
-  <div class="form registration container FIO">
+  <div class="form registration container">
     <p>Введите Фамилию Имя Отчество</p>
       <input id = "regLast_name" type="text" class="form-control input_text" name="last_name"
       placeholder="Фамилия">
       <input id = "regFirst_name" type="text" class="form-control input_text" name="first_name"
       placeholder="Имя">
-      <input id = "regPatronymic" type="text" class="form-control input_text removing_indentation "
+      <input id = "regPatronymic" type="text" class="form-control input_text removing_indentation"
       name="patronymic" placeholder="Отчество">
       <p>
         <input id = "regPresence_patronymic" type="checkbox" name="presencePatronymic"
@@ -41,44 +44,48 @@
       </p>
   </div>
 
-  <p>Введите дату рождения</p>
-  <input id = "regData" type="date" class="form-control input_date" name="data">
-  <p>Введите номер телефона</p>
-  <input id = "regPhone" type="tel" class="form-control input_tel" name="phone"
-  pattern="[0-9] [0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
-  required placeholder="+7 123 456 78 90">
-  <p>Введите место работы/учебы и должность/???</p>
-  <input id = "regPlace_work" type="text" class="form-control input_text" name="place_work" placeholder="">
-  <input id = "regPost" type="text" class="form-control input_text " name="post" placeholder="">
-  <script  type="text/javascript">
-    function sendForm() {
-      let email = document.getElementById('regEmail').value;
-      let password = document.getElementById('regPassword_1').value;
-      let password_2 = document.getElementById('regPassword_2').value;
+  <div class="form registration container">
+    <p>Введите дату рождения</p>
+    <input id = "regData" type="date" class="form-control input_date" name="data">
+    <p>Введите номер телефона</p>
+    <input id = "regPhone" type="tel" class="form-control input_tel" name="phone"
+    pattern="[0-9] [0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
+    required placeholder="+7 123 456 78 90">
+    <p>Введите место работы/учебы и должность/???</p>
+    <input id = "regPlace_work" type="text" class="form-control input_text" name="place_work" placeholder="">
+    <input id = "regPost" type="text" class="form-control input_text " name="post" placeholder="">
+    <script  type="text/javascript">
+      function sendForm() {
+        let email = document.getElementById('regEmail').value;
+        let password = document.getElementById('regPassword_1').value;
+        let password_2 = document.getElementById('regPassword_2').value;
 
-      alert(password == password_2);
+        alert(password == password_2);
 
-      let last_name = document.getElementById('regLast_name').value;
-      let first_name = document.getElementById('regFirst_name').value;
-      let patronymic = document.getElementById('regPatronymic').value;
-      let presencePatronymic = document.getElementById('regPresence_patronymic').value;
-      let data = document.getElementById('regData').value;
-      let phone = document.getElementById('regPhone').value;
-      let place_work = document.getElementById('regPlace_work').value;
-      let post = document.getElementById('regPost').value;
+        let last_name = document.getElementById('regLast_name').value;
+        let first_name = document.getElementById('regFirst_name').value;
+        let patronymic = document.getElementById('regPatronymic').value;
+        let presencePatronymic = document.getElementById('regPresence_patronymic').value;
+        let data = document.getElementById('regData').value;
+        let phone = document.getElementById('regPhone').value;
+        let place_work = document.getElementById('regPlace_work').value;
+        let post = document.getElementById('regPost').value;
 
-      alert("+");
-
-      if (true){
-        document.location.href = "#";
-      }
-    };
-  </script>
-  <input id = "reg" type="submit" class="btn btn-outline-secondary registration input_submit"
-  name="reg" value="Зарегестрироваться" onclick="sendForm()">
+        if (true){
+          document.location.href = "#";
+        }
+      };
+    </script>
+    <input id = "reg" type="submit" class="btn btn-outline-secondary registration input_submit g-recaptcha"
+    name="reg" value="Зарегестрироваться" onclick="sendForm()" data-sitekey="6LfaNeYcAAAAAC0HUI7Km25FVynemlRtjuBNMX2_"
+        data-callback='onSubmit' data-action='submit'>
+  </div>
+  <div class="recaptcha">
+    <script>
+       function onSubmit(token) {
+         document.getElementById("demo-form").submit();
+       }
+   </script>
 </div>
-
-
-
 </body>
 </html>
