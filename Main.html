@@ -12,15 +12,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
 
 		<title>Авторизация</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/cesiumjs/1.78/Build/Cesium/Cesium.js"></script>
   </head>
 <body>
-	<div class="form">
-    <div class="authorization center_desktop">
-      <h1>Авторизация</h1>
-  		<input id = "login_1" type="text" class="form-control input_text" name="login" placeholder="Логин">
-  		<input id = "password_1" type="text" class="form-control input_text" name="password" placeholder="Пароль">
-  		<div class="links">
+  <script src="https://ajax.googleapis.com/ajax/libs/cesiumjs/1.78/Build/Cesium/Cesium.js"></script>
+	<div class="form authorization container center_desktop">
+		<h1>Авторизация</h1>
+			<input id = "login_1" type="text" class="form-control input_text" name="login" placeholder="Логин">
+			<input id = "password_1" type="text" class="form-control input_text" name="password" placeholder="Пароль">
+			<div class="form authorization container" >
 				<a href="password_recovery.html">Забыли пароль?</a>
 				<a href="registration.html">Регистрация</a>
 			</div>
@@ -31,15 +30,12 @@
           alert(login + '\n' + password);
           if (true){
             document.location.href = "account.html";
-          }else{
-            
           }
         };
       </script>
-      <div class="send" >
-        <input id = "send_1" type="submit" class="btn btn-outline-secondary input_submit" name="send" value="Войти" onclick="sendForm()">
+      <div class="form authorization container" >
+			<input id = "send_1" type="submit" class="btn btn-outline-secondary input_submit" name="send" value="Войти" onclick="sendForm()">
       </div>
-    </div>
   </div>
 </body>
 </html>

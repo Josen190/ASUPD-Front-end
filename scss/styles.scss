@@ -1,31 +1,9 @@
 $BgInputCollor: #fff;
-$ErrCollor: red;
+$ErrCollor: #e35d6a;
 $BorderCollor: #ced4da;
 $Collor: #212529;
 
-@mixin  blockInLine($display: inline,
-                    $flex-direction: row,
-                    $width: 49%){
-  display: $display;
-  flex-direction: $flex-direction;
-  width: $width;
-}
-
-@mixin errSelection{
-  border: 1px solid $ErrCollor;
-}
-
-@mixin inputMain(){
-  display: block;
-  border-radius: 50px;
-  margin: 0 auto 15px;
-  color: $Collor;
-  background-color: $BgInputCollor;
-}
-
-*{
-  font-size: 20px;
-}
+//создать маргины для повторяющихся элементов
 
 .center_desktop{
   position: fixed;
@@ -33,14 +11,14 @@ $Collor: #212529;
   left: 40%;
 }
 
+.removing_indentation{
+      margin: 0;
+}
+
 .form{
+  width: 300px;
   text-align: center;
   margin: 0 auto;
-  width: 70%;
-
-  .invisible{
-    height: 70px;
-  }
 
   h1{
       font-size: 30px;
@@ -48,118 +26,69 @@ $Collor: #212529;
   }
 
   .input_text{
-    @include inputMain();
+    display: block;
     width: 100%;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
+    color: $Collor;
+    background-color: $BgInputCollor;
     background-clip: padding-box;
     border: 1px solid $BorderCollor;
-
-
-    }
+    margin: 0 auto 15px;
+    border-radius: 50px;
+  }
 
   .input_date{
-      @include inputMain();
+      display: block;
+      border-radius: 50px;
+      margin: 0 auto 15px;
+      color: $Collor;
+      background-color: $BgInputCollor;
   }
 
   .input_tel{
-      @include inputMain();
-
+      display: block;
+      border-radius: 50px;
+      margin: 0 auto 15px;
+      color: $Collor;
+      background-color: $BgInputCollor;
   }
 
   .input_submit{
-      @include inputMain();
+      border-radius: 45px;
+      float: right;
+      color: $Collor;
+      background-color: $BgInputCollor;
   }
 
   .authorization{
-    width: 20%;
-    text-align: center;
-    margin: 0 auto;
-
-    .links{
+    a {
+      display: block;
+      text-decoration: none;
+      font-family: 'Montserrat', sans-serif;
+      transition: 0.4s ease-in-out;
+      color: #6c757d;
+      font-size: 12px;
       float: left;
-      width: 50%;
-      a {
-        display: block;
-        text-decoration: none;
-        font-family: 'Montserrat', sans-serif;
-        transition: 0.4s ease-in-out;
-        color: #6c757d;
-        font-size: 15px;
-        text-align: initial;
-        margin-left: 12px;
-      }
+      width: 140px;
+      text-align: initial;
     }
 
-    .send {
-      float: right;
-      width: 49%;
-      *{
-        margin-left: 50%;
-      }
+    .input_submit{
+      position: relative;
+      bottom: 18px;
+      right: 13px;
     }
   }
 
   .registration{
-    text-align: center;
-    margin: 0 auto;
-    width: 40%;
-
-    .email{
-      .err {
-        @include errSelection;
-      }
-    }
+    width: 400px;
 
     .password {
-      .err {
-        @include errSelection;
-      }
-
-      input{
-        @include blockInLine();
-      }
-    }
-
-    .fio{
-      .err {
-        @include errSelection;
-      }
-    }
-
-    .data {
-      float: left;
-      width: 49%;
-
-      .err {
-        @include errSelection;
-      }
-
-      * {
-          @include blockInLine($display: block, $width: 100%);
-        }
-    }
-
-    .phone {
-      float: right;
-      width: 49%;
-
-      .err {
-        @include errSelection;
-      }
-
-
-
-      *{
-        @include blockInLine($display: block, $width: 100%);
-      }
-    }
-
-    .other{
-      .err {
-        @include errSelection;
-      }
+      display: inline;
+      flex-direction: row;
+      width: 185px;
     }
 
     .input_submit{
@@ -168,7 +97,7 @@ $Collor: #212529;
       flex-wrap: nowrap;
       align-content: center;
       align-items: center;
-      width: auto;
+      width: 160px;
       margin: 0 auto 50px;
       float: inherit;
     }
@@ -177,4 +106,5 @@ $Collor: #212529;
           margin: 0;
     }
   }
+
 }

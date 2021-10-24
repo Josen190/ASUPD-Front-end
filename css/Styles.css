@@ -1,20 +1,17 @@
-* {
-  font-size: 20px;
-}
-
 .center_desktop {
   position: fixed;
   top: 30%;
   left: 40%;
 }
 
+.removing_indentation {
+  margin: 0;
+}
+
 .form {
+  width: 300px;
   text-align: center;
   margin: 0 auto;
-  width: 70%;
-}
-.form .invisible {
-  height: 70px;
 }
 .form h1 {
   font-size: 30px;
@@ -22,16 +19,16 @@
 }
 .form .input_text {
   display: block;
-  border-radius: 50px;
-  margin: 0 auto 15px;
-  color: #212529;
-  background-color: #fff;
   width: 100%;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #ced4da;
+  margin: 0 auto 15px;
+  border-radius: 50px;
 }
 .form .input_date {
   display: block;
@@ -48,93 +45,38 @@
   background-color: #fff;
 }
 .form .input_submit {
-  display: block;
-  border-radius: 50px;
-  margin: 0 auto 15px;
+  border-radius: 45px;
+  float: right;
   color: #212529;
   background-color: #fff;
 }
-.form .authorization {
-  width: 20%;
-  text-align: center;
-  margin: 0 auto;
-}
-.form .authorization .links {
-  float: left;
-  width: 50%;
-}
-.form .authorization .links a {
+.form .authorization a {
   display: block;
   text-decoration: none;
   font-family: "Montserrat", sans-serif;
   -webkit-transition: 0.4s ease-in-out;
   transition: 0.4s ease-in-out;
   color: #6c757d;
-  font-size: 15px;
+  font-size: 12px;
+  float: left;
+  width: 140px;
   text-align: initial;
-  margin-left: 12px;
 }
-.form .authorization .send {
-  float: right;
-  width: 49%;
-}
-.form .authorization .send * {
-  margin-left: 50%;
+.form .authorization .input_submit {
+  position: relative;
+  bottom: 18px;
+  right: 13px;
 }
 .form .registration {
-  text-align: center;
-  margin: 0 auto;
-  width: 40%;
+  width: 400px;
 }
-.form .registration .email .err {
-  border: 1px solid red;
-}
-.form .registration .password .err {
-  border: 1px solid red;
-}
-.form .registration .password input {
+.form .registration .password {
   display: inline;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
-  width: 49%;
-}
-.form .registration .fio .err {
-  border: 1px solid red;
-}
-.form .registration .data {
-  float: left;
-  width: 49%;
-}
-.form .registration .data .err {
-  border: 1px solid red;
-}
-.form .registration .data * {
-  display: block;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  width: 100%;
-}
-.form .registration .phone {
-  float: right;
-  width: 49%;
-}
-.form .registration .phone .err {
-  border: 1px solid red;
-}
-.form .registration .phone * {
-  display: block;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  width: 100%;
-}
-.form .registration .other .err {
-  border: 1px solid red;
+  width: 185px;
 }
 .form .registration .input_submit {
   display: block;
@@ -149,7 +91,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: auto;
+  width: 160px;
   margin: 0 auto 50px;
   float: inherit;
 }
