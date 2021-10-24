@@ -69,7 +69,9 @@ $Collor: #212529;
   }
 
   .input_submit{
-      @include inputMain();
+    display: block;
+    border-radius: 50px;
+    margin: 0 auto 15px;
   }
 
   .authorization{
@@ -172,7 +174,6 @@ $Collor: #212529;
       margin: 0 auto 50px;
       float: inherit;
     }
-
     .removing_indentation{
           margin: 0;
     }
