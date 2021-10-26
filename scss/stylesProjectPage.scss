@@ -1,0 +1,117 @@
+*{
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f2f4fb;
+}
+
+.pull-left{
+    float: left;
+}
+
+.pull-right{
+    float: right;
+}
+
+button{
+    cursor: pointer;
+    background-color: white;
+    border: 0px;
+    width: 100%;
+    border-radius: 10px; 
+    
+    &:hover
+    {
+        box-shadow: 10px 5px 5px gray;
+        background-color: #f2f4fb;
+    }
+}
+
+
+header{
+        
+    position: fixed;
+    width: 100%;
+    color: white;
+    top: 0;
+
+    .navbar{
+        background-color: #164ACF;      
+    }
+
+    a, a:link, a:visited {
+        text-decoration: none;
+        color: white;
+        margin: 0 20px;
+    }
+}
+
+aside
+{
+    @media (max-width: 449px) {
+        top: 70px;
+    }    
+    top: 50px;
+    left: 10px;
+    background-color: white;   
+    position: fixed; 
+    border-radius: 10px;
+    width: 25%;
+    height: 80%;
+    padding: 12px;
+
+    text-align: center;
+
+    div.form > input
+    {
+        margin-bottom: 15px;
+        width: 100%;
+        align-items: center;
+        border: 0px;
+        outline: 0;
+        text-align: center;
+
+        &:focus
+        {            
+            border: 2px solid blue;                  
+            box-shadow: none;  
+            text-align: start;
+        }
+    }
+
+    button{
+        cursor: pointer;
+        background-color: white;
+        border: 0px;
+        width: 100%;
+        border-radius: 10px; 
+        
+        &:hover
+        {
+            box-shadow: 10px 5px 5px gray;
+            background-color: #f2f4fb;
+        }
+    }
+}
+
+#board
+{
+    @media (max-width: 449px) {
+        top: 70px;
+    }
+
+    @media (max-width: 768px) {
+        left: 1%;
+    }  
+
+    top: 50px;
+    left: 30%;
+    right: 30px;
+    height: 85%;
+    background-color:beige;
+    position: fixed;
+    background-size: 100% 100%;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
