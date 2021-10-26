@@ -246,8 +246,20 @@ aside button:hover {
   border-radius: 6px;
   border: 1px solid #d0d7de;
 }
-#board .create-column {
+
+.create-column {
   display: block;
   position: absolute;
   z-index: 3;
+  width: 100%;
+  height: 100%;
+  background-color: #00000066;
+}
+.create-column .form-column {
+  position: fixed;
+  top: 30%;
+  left: 40%;
+  background-color: #fff;
+  width: 40%;
+  height: 40%;
 }
