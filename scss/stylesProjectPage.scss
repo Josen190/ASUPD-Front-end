@@ -10,6 +10,38 @@ small {
     font-size: 90%;
 }
 
+header{
+
+    position: fixed;
+    width: 100%;
+    color: white;
+    top: 0;
+
+    .navbar{
+        background-color: #164ACF;
+    }
+
+    a, a:link, a:visited {
+        text-decoration: none;
+        color: white;
+        margin: 0 20px;
+    }
+}
+
+.button{
+  cursor: pointer;
+  background-color: white;
+  border: 0px;
+  width: 100%;
+  border-radius: 10px;
+
+  &:hover
+  {
+    box-shadow: 10px 5px 5px gray;
+    background-color: #f2f4fb;
+  }
+}
+
 .pull-left{
     float: left;
 }
@@ -30,7 +62,41 @@ small {
   display: none;
 }
 
-button{
+
+
+aside
+{
+  @media (max-width: 449px) {
+      top: 70px;
+  }
+  top: 50px;
+  left: 10px;
+  background-color: white;
+  position: fixed;
+  border-radius: 10px;
+  width: 25%;
+  height: 80%;
+  padding: 12px;
+  text-align: center;
+
+  div.form > input
+  {
+    margin-bottom: 15px;
+    width: 100%;
+    align-items: center;
+    border: 0px;
+    outline: 0;
+    text-align: center;
+
+    &:focus
+    {
+      border: 2px solid blue;
+      box-shadow: none;
+      text-align: start;
+    }
+  }
+
+  .button{
     cursor: pointer;
     background-color: white;
     border: 0px;
@@ -39,76 +105,10 @@ button{
 
     &:hover
     {
-        box-shadow: 10px 5px 5px gray;
-        background-color: #f2f4fb;
+      box-shadow: 10px 5px 5px gray;
+      background-color: #f2f4fb;
     }
-}
-
-
-header{
-
-    position: fixed;
-    width: 100%;
-    color: white;
-    top: 0;
-
-    .navbar{
-        background-color: #164ACF;
-    }
-
-    a, a:link, a:visited {
-        text-decoration: none;
-        color: white;
-        margin: 0 20px;
-    }
-}
-
-aside
-{
-    @media (max-width: 449px) {
-        top: 70px;
-    }
-    top: 50px;
-    left: 10px;
-    background-color: white;
-    position: fixed;
-    border-radius: 10px;
-    width: 25%;
-    height: 80%;
-    padding: 12px;
-
-    text-align: center;
-
-    div.form > input
-    {
-        margin-bottom: 15px;
-        width: 100%;
-        align-items: center;
-        border: 0px;
-        outline: 0;
-        text-align: center;
-
-        &:focus
-        {
-            border: 2px solid blue;
-            box-shadow: none;
-            text-align: start;
-        }
-    }
-
-    button{
-        cursor: pointer;
-        background-color: white;
-        border: 0px;
-        width: 100%;
-        border-radius: 10px;
-
-        &:hover
-        {
-            box-shadow: 10px 5px 5px gray;
-            background-color: #f2f4fb;
-        }
-    }
+  }
 }
 
 #board
@@ -193,7 +193,15 @@ aside
           width: 25px;
           height: 25px;
           margin-right: 5px;
+          align-items: center;
+          border: 0px;
+
+          &:hover
+          {
+            background-color: #f2f4fb;
+          }
         }
+
         .column-menu{
           float: right;
           display: inline;
@@ -263,6 +271,11 @@ aside
         border-style: dashed ;
         border-radius: 6px ;
         border: 1px solid #d0d7de ;
+
+        &:hover
+        {
+          background-color: #f2f4fb;
+        }
       }
 
     }
@@ -306,6 +319,13 @@ aside
           width: 50px;
           height: 50px;
           border-radius: 30px ;
+          align-items: center;
+          border: 0px;
+
+          &:hover
+          {
+            background-color: #f2f4fb;
+          }
         }
       }
 

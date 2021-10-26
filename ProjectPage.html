@@ -48,7 +48,7 @@
               </div>
             </details>
 
-            <button type="button" class="button-new-card" aria-label="Добавить новую карточку" aria-expanded="false">
+            <button type="button" class="button-new-card" aria-label="Добавить новую карточку" aria-expanded="false" class="btn">
               <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-plus">
                 <path fill-rule="evenodd" d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"></path>
               </svg>
@@ -97,7 +97,7 @@
           <input type="text" onclick="this.select();" class="form-control" id="nameOfProject"
             placeholder="Название проекта">
           <input id="inputStatus" type="text" disabled class="form-control" placeholder="Статус проекта">
-          <button type="button" data-bs-toggle="modal" data-bs-target="#statusSelect">Изменить статус</button>
+          <button type="button" data-bs-toggle="modal" data-bs-target="#statusSelect" class="button">Изменить статус</button>
         </div>
       </div>
     </aside>
@@ -123,7 +123,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button id="saveStatusbtn" onclick="SaveStatusFunction()" type="button" class="align-items-center">Сохранить</button>
+          <button id="saveStatusbtn" onclick="SaveStatusFunction()" type="button" class="align-items-center button">Сохранить</button>
         </div>
       </div>
     </div>

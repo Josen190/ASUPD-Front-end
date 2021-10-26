@@ -11,6 +11,34 @@ small {
   font-size: 90%;
 }
 
+header {
+  position: fixed;
+  width: 100%;
+  color: white;
+  top: 0;
+}
+header .navbar {
+  background-color: #164ACF;
+}
+header a, header a:link, header a:visited {
+  text-decoration: none;
+  color: white;
+  margin: 0 20px;
+}
+
+.button {
+  cursor: pointer;
+  background-color: white;
+  border: 0px;
+  width: 100%;
+  border-radius: 10px;
+}
+.button:hover {
+  -webkit-box-shadow: 10px 5px 5px gray;
+          box-shadow: 10px 5px 5px gray;
+  background-color: #f2f4fb;
+}
+
 .pull-left {
   float: left;
 }
@@ -29,34 +57,6 @@ small {
 
 .display-none {
   display: none;
-}
-
-button {
-  cursor: pointer;
-  background-color: white;
-  border: 0px;
-  width: 100%;
-  border-radius: 10px;
-}
-button:hover {
-  -webkit-box-shadow: 10px 5px 5px gray;
-          box-shadow: 10px 5px 5px gray;
-  background-color: #f2f4fb;
-}
-
-header {
-  position: fixed;
-  width: 100%;
-  color: white;
-  top: 0;
-}
-header .navbar {
-  background-color: #164ACF;
-}
-header a, header a:link, header a:visited {
-  text-decoration: none;
-  color: white;
-  margin: 0 20px;
 }
 
 aside {
@@ -91,14 +91,14 @@ aside div.form > input:focus {
           box-shadow: none;
   text-align: start;
 }
-aside button {
+aside .button {
   cursor: pointer;
   background-color: white;
   border: 0px;
   width: 100%;
   border-radius: 10px;
 }
-aside button:hover {
+aside .button:hover {
   -webkit-box-shadow: 10px 5px 5px gray;
           box-shadow: 10px 5px 5px gray;
   background-color: #f2f4fb;
@@ -185,6 +185,13 @@ aside button:hover {
   width: 25px;
   height: 25px;
   margin-right: 5px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 0px;
+}
+#board .col-my .col-header .button-new-card:hover {
+  background-color: #f2f4fb;
 }
 #board .col-my .col-header .column-menu {
   float: right;
@@ -246,6 +253,9 @@ aside button:hover {
   border-radius: 6px;
   border: 1px solid #d0d7de;
 }
+#board .add-column .add-column-btn:hover {
+  background-color: #f2f4fb;
+}
 
 .create-column {
   position: absolute;
@@ -285,6 +295,13 @@ aside button:hover {
   width: 50px;
   height: 50px;
   border-radius: 30px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 0px;
+}
+.create-column .form-column .form-header .form-close:hover {
+  background-color: #f2f4fb;
 }
 .create-column .form-column .content {
   padding: 16px;
