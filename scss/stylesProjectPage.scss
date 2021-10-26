@@ -6,6 +6,10 @@ body {
     background-color: #f2f4fb;
 }
 
+small {
+    font-size: 90%;
+}
+
 .pull-left{
     float: left;
 }
@@ -14,13 +18,25 @@ body {
     float: right;
 }
 
+.color-text-primary{
+  color: #24292f;
+}
+
+.color-fg-muted{
+  color: #57606a;
+}
+
+.display-none{
+  display: none;
+}
+
 button{
     cursor: pointer;
     background-color: white;
     border: 0px;
     width: 100%;
-    border-radius: 10px; 
-    
+    border-radius: 10px;
+
     &:hover
     {
         box-shadow: 10px 5px 5px gray;
@@ -30,14 +46,14 @@ button{
 
 
 header{
-        
+
     position: fixed;
     width: 100%;
     color: white;
     top: 0;
 
     .navbar{
-        background-color: #164ACF;      
+        background-color: #164ACF;
     }
 
     a, a:link, a:visited {
@@ -51,11 +67,11 @@ aside
 {
     @media (max-width: 449px) {
         top: 70px;
-    }    
+    }
     top: 50px;
     left: 10px;
-    background-color: white;   
-    position: fixed; 
+    background-color: white;
+    position: fixed;
     border-radius: 10px;
     width: 25%;
     height: 80%;
@@ -73,9 +89,9 @@ aside
         text-align: center;
 
         &:focus
-        {            
-            border: 2px solid blue;                  
-            box-shadow: none;  
+        {
+            border: 2px solid blue;
+            box-shadow: none;
             text-align: start;
         }
     }
@@ -85,8 +101,8 @@ aside
         background-color: white;
         border: 0px;
         width: 100%;
-        border-radius: 10px; 
-        
+        border-radius: 10px;
+
         &:hover
         {
             box-shadow: 10px 5px 5px gray;
@@ -103,15 +119,169 @@ aside
 
     @media (max-width: 768px) {
         left: 1%;
-    }  
+    }
+
+    //$bcCollar: beige
+    $bcCollar: #fff;
+    $colCollor: #e9ecef;
 
     top: 50px;
     left: 30%;
     right: 30px;
     height: 85%;
-    background-color:beige;
+    background-color: $bcCollar;
     position: fixed;
     background-size: 100% 100%;
-    overflow-x: scroll;
-    overflow-y: scroll;
+    overflow-x: auto;
+    padding: 16px;
+
+    .row-my{
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: flex-start;
+      height: 100%;
+    }
+
+    .col-my{
+      border-width: 1px;
+      border-radius: 6px;
+      background-color: $colCollor;
+      overflow-y: auto;
+      margin-right: 16px;
+      //padding: 16px !important;
+      position: relative;
+      white-space: normal;
+      min-height: 200px;
+      max-height: 95%;
+      width: 30%;
+
+      .col-header{
+        padding: 8px !important;
+            vertical-align: middle !important;
+
+        .number-cards{
+          display: inline-block;
+          min-width: 40px;
+          padding: 0 6px;
+          font-size: 15px;
+          font-weight: 500;
+          line-height: 18px;
+          color: black;
+          text-align: center;
+          background-color: peachpuff;
+          border: 1px solid transparent;
+          border-radius: 2em;
+        }
+
+        .name-column{
+          display: inline !important;
+          font-size: 14px !important;
+          padding: 4px !important;
+          margin: 0 !important;
+          font-weight: 600;
+        }
+
+        .button-new-card{
+          padding: 4px !important;
+          float: right !important;
+          display: inline-block;
+          line-height: 1;
+          background: transparent;
+          width: 25px;
+          height: 25px;
+          margin-right: 5px;
+        }
+        .column-menu{
+          float: right !important;
+          display: inline !important;
+
+          .open{
+            position: absolute;
+            z-index: 2;
+            right: 0;
+            left: auto;
+            min-width: 180px;
+            padding-top: 4px;
+            top: 0 !important;
+            margin-top: 32px !important;
+          }
+        }
+      }
+
+      .col-content{
+        padding: 8px;
+
+        .card{
+          &:hover{
+              background-color: #f2f4fb;
+          }
+
+          overflow: hidden;
+          padding: 4px 8px;
+          min-height: 75px;
+          border-width: 1px;
+          border-radius: 6px;
+
+          .card-svg{
+            position: absolute;
+          }
+
+          .card-content{
+            font-size: 14px;
+            margin-left: 24px;
+            margin-top: 2px;
+          }
+
+          .add-info{
+            font-size: 10px;
+            margin-left: 24px;
+            margin-top: 2px;
+          }
+        }
+      }
+    }
+
+    .add-column{
+      display: block;
+      width: 320px;
+
+    .add-column-btn{
+        width: 315px;
+        border-color: #d0d7de ;
+        display: inline-block ;
+        font-weight: 600 ;
+        text-align: center ;
+        padding-top: 40px ;
+        padding-bottom: 40px ;
+        margin-bottom: 0 ;
+        vertical-align: top ;
+        background-color: #ffffff ;
+        color: #57606a ;
+        border-style: dashed ;
+        border-radius: 6px ;
+        border: 1px solid #d0d7de ;
+      }
+
+    }
+
+    .create-column{
+        display: block;
+        position: absolute;
+        z-index: 3;
+
+        .form-column{
+          .form-header{
+            .name{
+
+            }
+          }
+
+          .content{
+
+          }
+        }
+      }
 }
