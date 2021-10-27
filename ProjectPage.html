@@ -25,72 +25,16 @@
       </nav>
     </header>
 
-    <div id="board" class="containter-fluid">
-      <div class="row-my row flex-nowrap">
+    <button id="addColumn" type="button" style="position: fixed; top: 50%; z-index: 20;" name="button">Добавить столбец</button>
+
+    <div class="containter-fluid">      
+      <div id="board" class="row-my row flex-nowrap">
         <!-- колонки -->
-        <div class="col-my col-3">
-          <!-- хэдер колонки -->
-          <div class="col-header">
-            <span title="0" data-view-component="true" class="number-cards">0</span>
-
-            <h3 class="name-column">
-              <span>To do</span>
-            </h3>
-
-            <details class="column-menu">
-              <summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">
-                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal">
-                  <path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
-                </svg>
-              </summary>
-              <div class="open">
-                <button type="button" name="button">удалить столбец</button>
-              </div>
-            </details>
-
-            <button type="button" class="button-new-card" aria-label="Добавить новую карточку" aria-expanded="false" class="btn">
-              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-plus">
-                <path fill-rule="evenodd" d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"></path>
-              </svg>
-            </button>
-
-          </div>
-          <!-- карточки -->
-          <div class="col-content">
-            <div class="card">
-                <span class="card-svg">
-                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-note">
-                    <path fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H1.75zM3.5 6.25a.75.75 0 01.75-.75h7a.75.75 0 010 1.5h-7a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h4a.75.75 0 000-1.5h-4z"></path>
-                  </svg>
-                </span>
-              <div class="card-content">
-                  Свойство CSS width устанавливает ширину элемента. По умолчанию она равняется ширине внутренней области, но если
-                  box-sizing имеет значение border-box, то она будет равняться ширине области рамки.Свойство CSS width
-                  устанавливает ширину элемента. По умолчанию она равняется ширине внутренней области, но если box-sizing имеет
-                  значение border-box, то она будет равняться ширине области рамки.
-                  Свойство CSS width устанавливает ширину элемента. По умолчанию она равняется ширине внутренней области, но если
-                  box-sizing имеет знач
-              </div>
-              <smal class="add-info color-fg-muted">
-                Добавлено
-                <a class="color-text-primary" href="#" draggable="false">Josen190</a>
-              </small>
-            </div>
-          </div>
-        </div>
-
-        <!-- кнопка создать колонку -->
-        <div class="add-column">
-          <button id="add-column" class="add-column-btn" aria-expanded="false" onclick="removeClass('create-column', 'display-none')">
-            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-plus">
-              <path fill-rule="evenodd" d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"></path>
-            </svg>
-            Добавить колонку
-          </button>
-        </div>
+                
       </div>
     </div>
 
+    <!-- Sidebar -->
     <aside class="d-none d-md-block">
       <div class="container-fluid">
         <div class="form">
