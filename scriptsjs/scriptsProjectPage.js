@@ -13,7 +13,7 @@ function SaveStatusFunction(){
     }
 }
 
-
+//  логика класов HTML
 function hasClass(ele,cls) {
   return !!ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
 }
@@ -32,6 +32,8 @@ function removeClass(id,cls) {
   }
 }
 
+
+//  добавить картоку в колонку
 function addCard(){
   const btnAddCard = document.querySelector('.button-new-card');
   const contentOfCard = document.querySelector('.card-content');
@@ -41,28 +43,43 @@ function addCard(){
   })
 }
 
+// Main
+let addColumnBtn = document.getElementById("createColumn");
+
+addColumnBtn.addEventListener('click', ()=>{
+  new ListForCards(root);
+  console.log("Добавить колонку");
+})
+
 //Логика карточек
 let root = document.getElementById("board");
 
 class ListForCards{
-  constructor(place, title="To do"){    
+  constructor(place, title="новая колонка"){
+    let name = document.getElementById("nameColum");
+    if (name.value != "") title = name.value;
+    name.value = "";
+
     this.place=place;
     this.title=title;
     this.cardList=[];
 
-    this.render();
+    this.render(title);
   }
 
-  render(){
-    this.createListForCards();
-    this.place.append(this.divCol);
+  render(name){
+    this.createListForCards(name);
+    let addColumnRender = document.getElementById("addColumn");
+    addColumnRender.insertAdjacentElement('beforeBegin', this.divCol);
+
+    //this.place.insertBefore(this.divCol, addColumnRender);
   }
 
   addCardFunc(){
     this.cardList.push(new Card(this.divListContent, this));
   }
 
-  createListForCards(){
+  createListForCards(name){
     this.divCol = document.createElement('div');
     this.divCol.classList.add('col-my');
     this.divCol.classList.add('col-3');
@@ -74,10 +91,10 @@ class ListForCards{
     this.AddCardBtn.type = "button";
     this.AddCardBtn.classList.add('button-new-card');
     this.AddCardBtn.ariaLabel = "Добавить новую карточку";
-    
+
     this.AddCardBtn.ariaExpanded = false;
         this.AddCardBtn.addEventListener('click', ()=>{
-      console.log("Новая карточка");  
+      console.log("Новая карточка");
       this.addCardFunc(this.ListForCards);
     })
 
@@ -86,15 +103,15 @@ class ListForCards{
                                   '</svg>';
 
     this.divHeader.innerHTML = '<span title="0" data-view-component="true" class="number-cards">0</span>' +
-                                '<h3 class="name-column"><span>To do</span></h3>' + 
+                                '<h3 class="name-column"><span>'+ name +'</span></h3>' +
                                 '<details class="column-menu">' +
                                   '<summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">' +
                                     '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal">' +
                                       '<path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>' +
-                                    '</svg>' + 
-                                  '</summary>' + 
+                                    '</svg>' +
+                                  '</summary>' +
                                   '<div class="open">' +
-                                    '<button type="button" name="button">удалить столбец</button>' + 
+                                    '<button type="button" name="button">удалить столбец</button>' +
                                   '</div>' +
                                 '</details>';
 
@@ -104,8 +121,8 @@ class ListForCards{
     this.divListContent.classList.add('col-content');
 
 
-    this.divCol.append(this.divHeader);    
-    this.divCol.append(this.divListContent);  
+    this.divCol.append(this.divHeader);
+    this.divCol.append(this.divListContent);
   }
 }
 
@@ -134,11 +151,3 @@ class Card{
                           '<small class="add-info color-fg-muted">Добавлено<a class="color-text-primary" href="#" draggable="false">Josen190</a></small>';
   }
 }
-
-// Main
-let addColumnBtn = document.getElementById("addColumn");
-
-addColumnBtn.addEventListener('click', ()=>{
-  new ListForCards(root);
-  console.log("Добавить колонку");
-})
