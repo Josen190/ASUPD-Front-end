@@ -29,60 +29,17 @@
 
     <div class="containter-fluid">
       <div id="board" class="row-my row flex-nowrap">
-        <!-- колонки -->
-        <div class="col-my col-3">
-          <div class="col-header">
-            <span title="0" data-view-component="true" class="number-cards">0</span>
-            <h3 class="name-column">
-              <span>dgdfgd</span>
-            </h3>
-            <details class="column-menu">
-              <summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">
-                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal">
-                  <path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
-                </svg>
-              </summary>
-              <div class="open">
-                <button type="button" name="button">удалить столбец</button>
-              </div>
-            </details>
-            <button type="button" class="button-new-card" aria-label="Добавить новую карточку" aria-expanded="false" onclick="removeClass('add-card', 'display-none')">
-              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-plus">
-                <path fill-rule="evenodd" d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"></path>
-              </svg>
-            </button>
-          </div>
-
-          <div class="col-content">
-
-            <div id = "add-card" class="add-card display-none">
-              <div class="form" accept-charset="UTF-8">
-                <input type="hidden" name="content_type" value="Note">
-                <input type="hidden" name="client_uid" value="75de466ef3aa261df45a6fddefb6c289">
-                <textarea name="note" required="" autofocus="" aria-label="Введите заметку" class="form-control input-block js-quick-submit js-size-to-fit js-note-text js-length-limited-input" data-input-max-length="256" data-warning-length="99" data-warning-text="{{remaining}} remaining" placeholder="Введите заметку" spellcheck="false"></textarea>
-                <div class="flex">
-                  <button type="submit" class="btn" onclick="addCardFunc()">
-                        Добавлят
-                  </button>
-                  <button type="button" class="btn" onclick="addClass('add-card', 'display-none')">
-                        Отмена
-                  </button>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
         <div id = "addColumn" class="add-column">
           <!-- кнопка создать колонку -->
-          <button id="add-column-btn" class="add-column-btn" aria-expanded="false" onclick="removeClass('create-column', 'display-none')">
+          <button displa id="add-column-btn" class="add-column-btn" aria-expanded="false" onclick="removeClass('create-column', 'display-none')">
             <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-plus">
               <path fill-rule="evenodd" d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"></path>
             </svg>
             Добавить колонку
           </button>
         </div>
+        <!-- колонки -->
+                
       </div>
     </div>
 

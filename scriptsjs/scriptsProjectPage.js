@@ -13,6 +13,12 @@ function SaveStatusFunction(){
     }
 }
 
+function setAttributes(el, attrs) {
+  for(var key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+}
+
 //  логика класов HTML
 function hasClass(ele,cls) {
   return !!ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
@@ -33,25 +39,25 @@ function removeClass(id,cls) {
 }
 
 
-//  добавить картоку в колонку
-function addCard(){
-  const btnAddCard = document.querySelector('.button-new-card');
-  const contentOfCard = document.querySelector('.card-content');
+// //  добавить картоку в колонку
+// function addCard(){
+//   const btnAddCard = document.querySelector('.button-new-card');
+//   const contentOfCard = document.querySelector('.card-content');
 
-  btnAddCard.addEventListener('click', () => {
-    contentOfCard.style.display = 'block';
-  })
-}
+//   btnAddCard.addEventListener('click', () => {
+//     contentOfCard.style.display = 'block';
+//   })
+// }
 
 // Main
 let addColumnBtn = document.getElementById("createColumn");
 
 addColumnBtn.addEventListener('click', ()=>{
+  console.log("Была нажата addColumnBtn");
   new ListForCards(root);
-  console.log("Добавить колонку");
 })
 
-//Логика карточек
+//Логика карточек. Определяем место, куда будем помещать колонки
 let root = document.getElementById("board");
 
 class ListForCards{
@@ -64,90 +70,167 @@ class ListForCards{
     this.title=title;
     this.cardList=[];
 
-    this.render(title);
+    this.render();
   }
 
-  render(name){
-    this.createListForCards(name);
-    let addColumnRender = document.getElementById("addColumn");
-    addColumnRender.insertAdjacentElement('beforeBegin', this.divCol);
-
-    //this.place.insertBefore(this.divCol, addColumnRender);
+  render(){
+    this.createListForCards(); //Создаём html форму колонки
+    this.place.append(this.divCol); //Присоеденяем созданную колонку к контейнеру root
   }
 
-  addCardFunc(){
+  //Создаём форму для заполнения карточки
+  addCardFormFunc(){
+    this.AddCardBtn.setAttribute("style", "display:none");
     this.cardList.push(new Card(this.divListContent, this));
   }
 
-  createListForCards(name){
+  createListForCards(){
+    // Контейнер-колонка
     this.divCol = document.createElement('div');
-    this.divCol.classList.add('col-my');
-    this.divCol.classList.add('col-3');
+    this.divCol.classList.add('col-my', 'col-3');
 
+    //Заголовок колонки
     this.divHeader = document.createElement('div');
     this.divHeader.classList.add('col-header');
 
+    //Кнопка для добавления карточки  
     this.AddCardBtn = document.createElement('button');
-    this.AddCardBtn.type = "button";
+    setAttributes(this.AddCardBtn, {"type": "button", "aria-label": "Добавить новую карточку", "aria-expanded": "false"});
     this.AddCardBtn.classList.add('button-new-card');
-    this.AddCardBtn.ariaLabel = "Добавить новую карточку";
-
-    this.AddCardBtn.ariaExpanded = false;
-        this.AddCardBtn.addEventListener('click', ()=>{
-      console.log("Новая карточка");
-      this.addCardFunc(this.ListForCards);
+    this.AddCardBtn.addEventListener('click', ()=>{
+      console.log("Была нажата addCardBtn");
+      this.addCardFormFunc();
     })
-
     this.AddCardBtn.innerHTML = '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-plus">' +
                                       '<path fill-rule="evenodd" d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"></path>' +
                                   '</svg>';
 
-    this.divHeader.innerHTML = '<span title="0" data-view-component="true" class="number-cards">0</span>' +
-                                '<h3 class="name-column"><span>'+ name +'</span></h3>' +
-                                '<details class="column-menu">' +
-                                  '<summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">' +
-                                    '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal">' +
-                                      '<path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>' +
-                                    '</svg>' +
-                                  '</summary>' +
-                                  '<div class="open">' +
-                                    '<button type="button" name="button">удалить столбец</button>' +
-                                  '</div>' +
-                                '</details>';
+    //Счётчик количества карточек в колонке
+    this.numberOfCards = document.createElement('span');
+    this.numberOfCards.classList.add('number-cards');
+    this.numberOfCards.innerText = 0;
 
+    //Кнопка удалить колонку
+    this.DeleteColumnBtn = document.createElement('button');  
+    setAttributes(this.DeleteColumnBtn, {"type": "button"});  
+    this.DeleteColumnBtn.innerText = "Удалить столбец";
+    this.DeleteColumnBtn.addEventListener('click', ()=>{
+      console.log("Была нажата DeleteColumnBtn");
+      this.divCol.remove();
+    }) 
+
+    //"Собираем" заголовок карточки
+    this.divHeader.append(this.numberOfCards);
+    this.divHeader.insertAdjacentHTML('beforeend',  '<h3 class="name-column"><span>' + this.title + '</span></h3>' +
+                                                  '<details class="column-menu">' +
+                                                      '<summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">' +
+                                                        '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal">' +
+                                                            '<path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>' +
+                                                          '</svg>' + 
+                                                      '</summary>' + 
+                                                      '<div class="open"></div>' +
+                                                  '</details>');
+    this.divHeader.childNodes[2].childNodes[1].appendChild(this.DeleteColumnBtn); //Помещаем кнопку в <div class="open"></div>
     this.divHeader.append(this.AddCardBtn);
 
+    //Контейнер в колонке, который содержит текст карточки
     this.divListContent = document.createElement('div');
     this.divListContent.classList.add('col-content');
 
-
+    //Досабираем итоговую колонку
     this.divCol.append(this.divHeader);
     this.divCol.append(this.divListContent);
   }
 }
 
+//Класс, описывающий карточку
 class Card{
-  constructor(place, listForCards){
+  constructor(place, listForCards){ //listForCards передаём, чтобы увеличивать/уменшать счётчик карточек в колонке
     this.place = place;
-    this.listForCards = listForCards;
+    this.listForCards = listForCards; 
 
     this.render();
   }
 
   render(){
-    this.createCardElement();
-    this.place.append(this.card);
+    this.createCardFormElement(); //Создаём форму для заполнения карточки
+    // this.place.append(this.card);
+  }
+
+  createCardFormElement(){
+    //Создаём контейнер для формы заполнения карточки
+    this.formCard = document.createElement('div');
+    setAttributes(this.formCard, {"class": "form", "accept-charset": "UTF-8"});
+
+    this.inputContentType = document.createElement('input');
+    setAttributes(this.inputContentType, {"type": "hidden", "name": "content_type", "value": "Note"});
+
+    this.inputClientUid = document.createElement('input');
+    setAttributes(this.inputClientUid, {"type": "hidden", "name": "client_uid", "value": "75de466ef3aa261df45a6fddefb6c289"});
+
+    //Поле ввода текста для формы
+    this.textAreaOfCardForm = document.createElement('textarea');
+    setAttributes(this.textAreaOfCardForm, {"name":"note", "required":"", "autofocus":"", "aria-label":"Введите заметку", "class":"form-control input-block js-quick-submit js-size-to-fit js-note-text js-length-limited-input",
+      "data-input-max-length":"256", "data-warning-length":"99", "data-warning-text":"{{remaining}} remaining", "placeholder":"Введите заметку", "spellcheck":"false"});
+    this.textAreaOfCardForm.style = "white-space:pre";
+
+    //Контейнер для кнопок
+    this.divContainer = document.createElement('div');
+    this.divContainer.classList.add('flex');
+
+    //Потвердить создание карточки
+    this.submitCardBtn = document.createElement('button');
+    setAttributes(this.submitCardBtn, {"type":"submit", "class":"btn"});
+    this.submitCardBtn.innerText = "Добавить";
+    this.submitCardBtn.addEventListener('click', ()=>{
+      console.log("Была нажата кнопка потверждения создания карточки");
+      this.listForCards.numberOfCards.innerText = Number(this.listForCards.numberOfCards.innerText) + 1;
+      this.createCardElement();
+    })
+
+    //Отменить создание карточки
+    this.deleteCardForm = document.createElement('button');
+    setAttributes(this.deleteCardForm, {"type":"button", "class":"btn"});
+    this.deleteCardForm.innerText = "Отмена";
+    this.deleteCardForm.addEventListener('click', ()=>{
+      console.log("Была нажата кнопка отмены создания карточки");
+      this.formCard.remove();
+      this.listForCards.AddCardBtn.setAttribute("style", "display:inline");
+    })
+
+    //Теперь собираем все компоненты воедино
+    this.divContainer.append(this.submitCardBtn, this.deleteCardForm);
+    this.formCard.append(this.inputContentType, this.inputClientUid, this.textAreaOfCardForm, this.divContainer);
+
+    this.place.append(this.formCard);
   }
 
   createCardElement(){
+    //Контейнер для карточки
     this.card = document.createElement('div');
-    this.card.classList.add('card');
+    this.card.classList.add('add-card');
+
+    //Кнопка удалить карточку
+    this.DeleteCardBtn = document.createElement('button');
+    this.DeleteCardBtn.innerText = "X";
+    this.DeleteCardBtn.addEventListener('click', ()=>{
+      this.listForCards.numberOfCards.innerText = Number(this.listForCards.numberOfCards.innerText) - 1;
+      this.card.remove();
+      let i = this.listForCards.cardList.indexOf(this);
+      this.listForCards.cardList.splice(i,1);
+    });
+
     this.card.innerHTML = '<span class="card-svg">' +
                             '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-note">' +
                               '<path fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H1.75zM3.5 6.25a.75.75 0 01.75-.75h7a.75.75 0 010 1.5h-7a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h4a.75.75 0 000-1.5h-4z"></path>' +
                             '</svg>' +
                           '</span>' +
-                          '<div class="card-content"></div>' +
+                          '<div class="card-content">' + this.textAreaOfCardForm.value + '</div>' +
                           '<small class="add-info color-fg-muted">Добавлено<a class="color-text-primary" href="#" draggable="false">Josen190</a></small>';
+    this.card.append(this.DeleteCardBtn)
+                      
+    this.formCard.remove(); //Удаляем форму для создания карточки
+    this.place.append(this.card); //Вместно неё добавляем обычную карточку
+    this.listForCards.AddCardBtn.setAttribute("style", "display:inline"); //Возвращаем кнопку для создания следующей карточки
   }
 }
