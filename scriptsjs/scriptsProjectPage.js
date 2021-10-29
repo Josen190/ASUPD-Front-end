@@ -38,17 +38,6 @@ function removeClass(id,cls) {
   }
 }
 
-
-// //  добавить картоку в колонку
-// function addCard(){
-//   const btnAddCard = document.querySelector('.button-new-card');
-//   const contentOfCard = document.querySelector('.card-content');
-
-//   btnAddCard.addEventListener('click', () => {
-//     contentOfCard.style.display = 'block';
-//   })
-// }
-
 // Main
 let addColumnBtn = document.getElementById("createColumn");
 
@@ -80,7 +69,7 @@ class ListForCards{
 
   //Создаём форму для заполнения карточки
   addCardFormFunc(){
-    this.AddCardBtn.setAttribute("style", "display:none");
+    this.AddCardBtn.setAttribute("style", "display:none"); //Скрываем кнопку, чтобы пользователь не мог бесконечно создавать формы
     this.cardList.push(new Card(this.divListContent, this));
   }
 
@@ -137,7 +126,7 @@ class ListForCards{
     this.divListContent = document.createElement('div');
     this.divListContent.classList.add('col-content');
 
-    //Досабираем итоговую колонку
+    //Дособираем итоговую колонку
     this.divCol.append(this.divHeader);
     this.divCol.append(this.divListContent);
   }
@@ -149,12 +138,18 @@ class Card{
     this.place = place;
     this.listForCards = listForCards; 
 
+    //Здесь хранится содержание карточки
+    this.cardEntity = {
+      title: "",
+      description: "Click to write a description...",
+      comments: []
+    }
+
     this.render();
   }
 
   render(){
     this.createCardFormElement(); //Создаём форму для заполнения карточки
-    // this.place.append(this.card);
   }
 
   createCardFormElement(){
@@ -171,12 +166,11 @@ class Card{
     //Поле ввода текста для формы
     this.textAreaOfCardForm = document.createElement('textarea');
     setAttributes(this.textAreaOfCardForm, {"name":"note", "required":"", "autofocus":"", "aria-label":"Введите заметку", "class":"form-control input-block js-quick-submit js-size-to-fit js-note-text js-length-limited-input",
-      "data-input-max-length":"256", "data-warning-length":"99", "data-warning-text":"{{remaining}} remaining", "placeholder":"Введите заметку", "spellcheck":"false"});
-    this.textAreaOfCardForm.style = "white-space:pre";
+      "data-input-max-length":"256", "data-warning-length":"99", "data-warning-text":"{{remaining}} remaining", "placeholder":"Введите заметку", "spellcheck":"false"});    
 
     //Контейнер для кнопок
-    this.divContainer = document.createElement('div');
-    this.divContainer.classList.add('flex');
+    this.divContainerForBtn = document.createElement('div');
+    this.divContainerForBtn.classList.add('flex');
 
     //Потвердить создание карточки
     this.submitCardBtn = document.createElement('button');
@@ -194,13 +188,13 @@ class Card{
     this.deleteCardForm.innerText = "Отмена";
     this.deleteCardForm.addEventListener('click', ()=>{
       console.log("Была нажата кнопка отмены создания карточки");
-      this.formCard.remove();
-      this.listForCards.AddCardBtn.setAttribute("style", "display:inline");
+      this.formCard.remove(); //Убираем форму
+      this.listForCards.AddCardBtn.setAttribute("style", "display:inline"); //Возвращаем кнопку
     })
 
     //Теперь собираем все компоненты воедино
-    this.divContainer.append(this.submitCardBtn, this.deleteCardForm);
-    this.formCard.append(this.inputContentType, this.inputClientUid, this.textAreaOfCardForm, this.divContainer);
+    this.divContainerForBtn.append(this.submitCardBtn, this.deleteCardForm);
+    this.formCard.append(this.inputContentType, this.inputClientUid, this.textAreaOfCardForm, this.divContainerForBtn);
 
     this.place.append(this.formCard);
   }
@@ -208,24 +202,36 @@ class Card{
   createCardElement(){
     //Контейнер для карточки
     this.card = document.createElement('div');
-    this.card.classList.add('add-card');
+    this.card.classList.add('card');
+    this.card.addEventListener('click', ()=>{
+      console.log("Была открыта карточка"); 
+      this.showCard(); //Открываем карточку     
+    })
+
+    //Название карточки
+    this.cardName = document.createElement('div');
+    this.cardName.innerText = this.textAreaOfCardForm.value;
+    this.cardEntity.title = this.textAreaOfCardForm.value;
 
     //Кнопка удалить карточку
     this.DeleteCardBtn = document.createElement('button');
     this.DeleteCardBtn.innerText = "X";
-    this.DeleteCardBtn.addEventListener('click', ()=>{
+    this.DeleteCardBtn.addEventListener('click', (e)=>{    
+      e.stopPropagation(); //Убираем открытие карточки, при нажатии на кнопку внутри карточки
       this.listForCards.numberOfCards.innerText = Number(this.listForCards.numberOfCards.innerText) - 1;
       this.card.remove();
       let i = this.listForCards.cardList.indexOf(this);
       this.listForCards.cardList.splice(i,1);
+      console.log("Была удалена карточка");
     });
 
+    //Собираем объекты
     this.card.innerHTML = '<span class="card-svg">' +
                             '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-note">' +
                               '<path fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H1.75zM3.5 6.25a.75.75 0 01.75-.75h7a.75.75 0 010 1.5h-7a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h4a.75.75 0 000-1.5h-4z"></path>' +
                             '</svg>' +
                           '</span>' +
-                          '<div class="card-content">' + this.textAreaOfCardForm.value + '</div>' +
+                          '<div class="card-content">' + this.cardName.innerText + '</div>' +
                           '<small class="add-info color-fg-muted">Добавлено<a class="color-text-primary" href="#" draggable="false">Josen190</a></small>';
     this.card.append(this.DeleteCardBtn)
                       
@@ -233,4 +239,108 @@ class Card{
     this.place.append(this.card); //Вместно неё добавляем обычную карточку
     this.listForCards.AddCardBtn.setAttribute("style", "display:inline"); //Возвращаем кнопку для создания следующей карточки
   }
+
+  showCard(){
+    //Задний фон страницы (затемнение страницы)
+    this.cardPageContainer = document.createElement('div');
+    this.cardPageContainer.classList.add('card-page-container');
+    //Закрываем окно карточки, если пользователь нажал за границей окна карточки
+    this.cardPageContainer.addEventListener('click', (e)=>{
+      if(e.target.classList.contains("card-page-container")){
+        this.cardPageContainer.remove();
+      }
+    })
+
+    //Окно карточки
+    this.cardPageMenu = document.createElement('div');
+    this.cardPageMenu.classList.add('card-page-menu');
+
+    //Название карточки
+    this.cardTitle = document.createElement('div');
+    this.cardTitle.classList.add('cardTitle');
+    this.cardTitle.innerText = this.cardEntity.title;
+
+    //Содержание карточки
+    this.cardDescription = document.createElement('textarea');
+    this.cardDescription.classList.add('cardDescription'); 
+    this.cardDescription.value = this.cardEntity.description;
+
+    //Кнопка для сохранения содержания карточки
+    this.saveContentOfCardBtn = document.createElement('button');
+    this.saveContentOfCardBtn.classList.add('saveContentBtn');
+    this.saveContentOfCardBtn.innerHTML = "Сохранить";
+    this.saveContentOfCardBtn.addEventListener('click', ()=>{
+      this.cardEntity.description = this.cardDescription.value;
+      this.cardPageContainer.remove();
+    })
+
+    //Контейнер для коментариев
+    this.commentContainer = document.createElement('div');
+    this.commentContainer.classList.add('comment-container');
+    //Контейнер для ввода коментария
+    this.commentInput = document.createElement('input');
+    this.commentInput.classList.add('commentsInput');
+    
+    //Кнопка для сохранения коментария
+    this.saveCommentBtn = document.createElement('button');
+    this.saveCommentBtn.classList.add('saveContentBtn');
+    this.saveCommentBtn.innerHTML = "Сохранить коментарий";
+    this.saveCommentBtn.addEventListener('click', ()=>{
+      if (this.commentInput.value != ""){          
+        this.cardEntity.comments.push(this.commentInput.value);
+        this.commentInput.value = "";
+        this.renderComments();
+      }
+    })
+
+    //Собираем карточку
+    this.renderComments();
+
+    this.cardPageMenu.append(this.cardTitle, this.cardDescription, this.saveContentOfCardBtn, this.saveCommentBtn, this.commentInput,
+      this.commentContainer);
+    this.cardPageContainer.append(this.cardPageMenu);
+
+    //Выводим карточку на экран
+    document.getElementById('bodyId').append(this.cardPageContainer);
+  }
+
+  renderComments(){
+    let currentCommentsDOM = Array.from(this.commentContainer.childNodes);
+
+      currentCommentsDOM.forEach(commentDOM =>{
+        commentDOM.remove();
+      });
+
+    this.cardEntity.comments.forEach(comment =>{
+      new Comment(comment, this.commentContainer, this.cardEntity.comments);
+    });
+  }
+}
+
+class Comment{
+    constructor(text, place, listOfComments){
+        this.text = text;
+        this.place = place;
+        this.listOfComments = listOfComments;
+
+        this.render();
+    }
+
+    render(){
+        this.div = document.createElement('div');
+        this.div.className = "comment";
+        this.div.innerText = this.text;
+        
+        //Кнопка для удаления комментария
+        this.DeleteCommentBtn = document.createElement('button');
+        this.DeleteCommentBtn.innerText = "X";
+        this.DeleteCommentBtn.addEventListener('click', (e)=>{    
+          this.div.remove();
+          let i = this.listOfComments.indexOf(this);
+          this.listOfComments.splice(i,1);
+        });
+        this.div.append(this.DeleteCommentBtn);
+        
+        this.place.append(this.div);
+    }
 }
