@@ -120,8 +120,7 @@ aside
   }
 }
 
-#board
-{
+#board{
     @media (max-width: 449px) {
         top: 70px;
     }
@@ -392,4 +391,126 @@ aside
         }
       }
     }
+}
+
+#card{
+  position: absolute;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  background-color: #00000066;
+
+  .form-card{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color:  #fff;
+    width: 40%;
+    height: 85%;
+    border-radius: 30px ;
+    border: 1px solid #d0d7de ;
+    padding: 20px;
+
+    .header{
+      display: block;
+      height: 80px;
+      width: 100%;
+
+      .info{
+        display: block;
+        float: left;
+        width: 50%;
+
+        *{
+          margin: 0;
+          margin-bottom: 1px;
+        }
+      }
+
+      .close{
+        display: block;
+        float: right;
+        width: 25px;
+        height: 25px;
+      }
+
+      .last-change{
+        display: block;
+        text-align: right;
+        position: relative;
+        top: 33%;
+        right: 3%;
+
+        p{
+        margin: 0;
+        font-size: 12px;
+        }
+      }
+    }
+
+    .content{
+      display: block;
+      float: left;
+      width: 70%;
+
+      .mode{
+        display: inline-block;
+        margin: 0;
+
+        #viewingCardContents{
+          border: 2px solid black;
+          border-bottom: 0;
+          border-right: 1px solid black;
+          width: 120px;
+
+          &:hover{
+            background-color: red;
+          }
+        }
+
+        #changeCardContents{
+          border: 2px solid black;
+          border-bottom: 0;
+          border-left: 1px solid black;
+          width: 120px;
+          position: relative;
+          left: -4.5px;
+
+          &:hover{
+            background-color: red;
+          }
+        }
+      }
+
+      .filling{
+        display: block;
+        height: 300px;
+        border: 2px solid black;
+        padding: 3px;
+        padding-left: 8px;
+      }
+    }
+
+    .comments{
+      display: block;
+      .new{
+        display: block;
+      }
+
+      .old{
+        display: flex;
+      }
+    }
+
+    .actions{
+      display: flex;
+      flex-direction: column;
+      width: 28%;
+      float: right;
+      text-align: center;
+    }
+  }
 }
