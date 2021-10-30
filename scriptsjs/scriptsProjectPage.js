@@ -38,12 +38,48 @@ function removeClass(id,cls) {
   }
 }
 
+
+//мое создание колонок и картточки
+// я ничего не менял в твоем коде
+// прсто закометировал <82> строку с <new ListForCards(root);>
+// что бы все вернуть на место коментируещь мой код и убираешь коментирование с <82> строки
+function addColumn(idName) {
+  if ('content' in document.createElement('template')) {
+    let template = document.getElementById("tempColumn");
+    let clone = template.content.cloneNode(true);
+
+    let name = document.getElementById(idName).value;
+
+    clone.getElementById("nameColum").innerHTML = name;
+    let listComent = document.getElementById("addColumn");
+    listComent.before(clone);
+  }
+}
+
+
+function addCard(){
+  if ('content' in document.createElement('template')) {
+    let template = document.getElementById("tempCard");
+    let clone = template.content.cloneNode(true);
+
+    let name = document.getElementById(idName).value;
+
+    clone.getElementById("nameColum").innerHTML = name;
+    let listComent = document.getElementById("addColumn");
+    listComent.before(clone);
+  }
+}
+
+// здесть кончается мой код
+
+//что то там у димы
+
 // Main
 let addColumnBtn = document.getElementById("createColumn");
 
 addColumnBtn.addEventListener('click', ()=>{
   console.log("Была нажата addColumnBtn");
-  new ListForCards(root);
+  //new ListForCards(root);
 })
 
 //Логика карточек. Определяем место, куда будем помещать колонки
@@ -51,7 +87,7 @@ let root = document.getElementById("board");
 
 class ListForCards{
   constructor(place, title="новая колонка"){
-    let name = document.getElementById("nameColum");
+    let name = document.getElementById("nameColumInput");
     if (name.value != "") title = name.value;
     name.value = "";
 
@@ -82,7 +118,7 @@ class ListForCards{
     this.divHeader = document.createElement('div');
     this.divHeader.classList.add('col-header');
 
-    //Кнопка для добавления карточки  
+    //Кнопка для добавления карточки
     this.AddCardBtn = document.createElement('button');
     setAttributes(this.AddCardBtn, {"type": "button", "aria-label": "Добавить новую карточку", "aria-expanded": "false"});
     this.AddCardBtn.classList.add('button-new-card');
@@ -100,13 +136,13 @@ class ListForCards{
     this.numberOfCards.innerText = 0;
 
     //Кнопка удалить колонку
-    this.DeleteColumnBtn = document.createElement('button');  
-    setAttributes(this.DeleteColumnBtn, {"type": "button"});  
+    this.DeleteColumnBtn = document.createElement('button');
+    setAttributes(this.DeleteColumnBtn, {"type": "button"});
     this.DeleteColumnBtn.innerText = "Удалить столбец";
     this.DeleteColumnBtn.addEventListener('click', ()=>{
       console.log("Была нажата DeleteColumnBtn");
       this.divCol.remove();
-    }) 
+    })
 
     //"Собираем" заголовок карточки
     this.divHeader.append(this.numberOfCards);
@@ -115,8 +151,8 @@ class ListForCards{
                                                       '<summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">' +
                                                         '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal">' +
                                                             '<path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>' +
-                                                          '</svg>' + 
-                                                      '</summary>' + 
+                                                          '</svg>' +
+                                                      '</summary>' +
                                                       '<div class="open"></div>' +
                                                   '</details>');
     this.divHeader.childNodes[2].childNodes[1].appendChild(this.DeleteColumnBtn); //Помещаем кнопку в <div class="open"></div>
@@ -136,7 +172,7 @@ class ListForCards{
 class Card{
   constructor(place, listForCards){ //listForCards передаём, чтобы увеличивать/уменшать счётчик карточек в колонке
     this.place = place;
-    this.listForCards = listForCards; 
+    this.listForCards = listForCards;
 
     //Здесь хранится содержание карточки
     this.cardEntity = {
@@ -166,7 +202,7 @@ class Card{
     //Поле ввода текста для формы
     this.textAreaOfCardForm = document.createElement('textarea');
     setAttributes(this.textAreaOfCardForm, {"name":"note", "required":"", "autofocus":"", "aria-label":"Введите заметку", "class":"form-control input-block js-quick-submit js-size-to-fit js-note-text js-length-limited-input",
-      "data-input-max-length":"256", "data-warning-length":"99", "data-warning-text":"{{remaining}} remaining", "placeholder":"Введите заметку", "spellcheck":"false"});    
+      "data-input-max-length":"256", "data-warning-length":"99", "data-warning-text":"{{remaining}} remaining", "placeholder":"Введите заметку", "spellcheck":"false"});
 
     //Контейнер для кнопок
     this.divContainerForBtn = document.createElement('div');
@@ -204,8 +240,8 @@ class Card{
     this.card = document.createElement('div');
     this.card.classList.add('card');
     this.card.addEventListener('click', ()=>{
-      console.log("Была открыта карточка"); 
-      this.showCard(); //Открываем карточку     
+      console.log("Была открыта карточка");
+      this.showCard(); //Открываем карточку
     })
 
     //Название карточки
@@ -216,7 +252,7 @@ class Card{
     //Кнопка удалить карточку
     this.DeleteCardBtn = document.createElement('button');
     this.DeleteCardBtn.innerText = "X";
-    this.DeleteCardBtn.addEventListener('click', (e)=>{    
+    this.DeleteCardBtn.addEventListener('click', (e)=>{
       e.stopPropagation(); //Убираем открытие карточки, при нажатии на кнопку внутри карточки
       this.listForCards.numberOfCards.innerText = Number(this.listForCards.numberOfCards.innerText) - 1;
       this.card.remove();
@@ -234,7 +270,7 @@ class Card{
                           '<div class="card-content">' + this.cardName.innerText + '</div>' +
                           '<small class="add-info color-fg-muted">Добавлено<a class="color-text-primary" href="#" draggable="false">Josen190</a></small>';
     this.card.append(this.DeleteCardBtn)
-                      
+
     this.formCard.remove(); //Удаляем форму для создания карточки
     this.place.append(this.card); //Вместно неё добавляем обычную карточку
     this.listForCards.AddCardBtn.setAttribute("style", "display:inline"); //Возвращаем кнопку для создания следующей карточки
@@ -262,7 +298,7 @@ class Card{
 
     //Содержание карточки
     this.cardDescription = document.createElement('textarea');
-    this.cardDescription.classList.add('cardDescription'); 
+    this.cardDescription.classList.add('cardDescription');
     this.cardDescription.value = this.cardEntity.description;
 
     //Кнопка для сохранения содержания карточки
@@ -280,13 +316,13 @@ class Card{
     //Контейнер для ввода коментария
     this.commentInput = document.createElement('input');
     this.commentInput.classList.add('commentsInput');
-    
+
     //Кнопка для сохранения коментария
     this.saveCommentBtn = document.createElement('button');
     this.saveCommentBtn.classList.add('saveContentBtn');
     this.saveCommentBtn.innerHTML = "Сохранить коментарий";
     this.saveCommentBtn.addEventListener('click', ()=>{
-      if (this.commentInput.value != ""){          
+      if (this.commentInput.value != ""){
         this.cardEntity.comments.push(this.commentInput.value);
         this.commentInput.value = "";
         this.renderComments();
@@ -330,17 +366,17 @@ class Comment{
         this.div = document.createElement('div');
         this.div.className = "comment";
         this.div.innerText = this.text;
-        
+
         //Кнопка для удаления комментария
         this.DeleteCommentBtn = document.createElement('button');
         this.DeleteCommentBtn.innerText = "X";
-        this.DeleteCommentBtn.addEventListener('click', (e)=>{    
+        this.DeleteCommentBtn.addEventListener('click', (e)=>{
           this.div.remove();
           let i = this.listOfComments.indexOf(this);
           this.listOfComments.splice(i,1);
         });
         this.div.append(this.DeleteCommentBtn);
-        
+
         this.place.append(this.div);
     }
 }
