@@ -34,7 +34,7 @@
           <div class="col-header">
             <span title="0" data-view-component="true" class="number-cards">0</span>
             <h3 class="name-column">
-              <span>dgdfgd</span>
+              <span id = "nameColum">Имя колонки</span>
             </h3>
             <details class="column-menu">
               <summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">
@@ -86,108 +86,119 @@
       </div>
     </div>
 
-    <!-- Sidebar -->
+  <!-- Sidebar -->
     <aside class="d-none d-md-block">
-      <div class="container-fluid">
-        <div class="form">
-          <input type="text" onclick="this.select();" class="form-control" id="nameOfProject"
-            placeholder="Название проекта">
-          <input id="inputStatus" type="text" disabled class="form-control" placeholder="Статус проекта">
-          <button type="button" data-bs-toggle="modal" data-bs-target="#statusSelect" class="button">Изменить статус</button>
-        </div>
-      </div>
-    </aside>
-
-  <!-- Модальное окно с выбором статуса -->
-  <div class="modal fade" id="statusSelect" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header text-center">
-          <h5 class="modal-title w-100" id="exampleModalLabel">Изменить статус</h5>
-        </div>
-        <div class="modal-body">
-          <div class="container-fluid">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioStatus" id="flexRadioInProcess" value="В процессе">В процессе
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioStatus" id="flexRadioStop" value="Приостановлен">Приостановлен
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioStatus" id="flexRadioDone" value="Завершён">Завершён
-            </div>
+        <div class="container-fluid">
+          <div class="form">
+            <input type="text" onclick="this.select();" class="form-control" id="nameOfProject"
+              placeholder="Название проекта">
+            <input id="inputStatus" type="text" disabled class="form-control" placeholder="Статус проекта">
+            <button type="button" data-bs-toggle="modal" data-bs-target="#statusSelect" class="button">Изменить статус</button>
           </div>
         </div>
-        <div class="modal-footer">
-          <button id="saveStatusbtn" onclick="SaveStatusFunction()" type="button" class="align-items-center button">Сохранить</button>
+      </aside>
+
+    <!-- Модальное окно с выбором статуса -->
+    <div class="modal fade" id="statusSelect" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h5 class="modal-title w-100" id="exampleModalLabel">Изменить статус</h5>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioStatus" id="flexRadioInProcess" value="В процессе">В процессе
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioStatus" id="flexRadioStop" value="Приостановлен">Приостановлен
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioStatus" id="flexRadioDone" value="Завершён">Завершён
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="saveStatusbtn" onclick="SaveStatusFunction()" type="button" class="align-items-center button">Сохранить</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Модальное окно создать колонку -->
-  <div id = "create-column" class="create-column display-none">
-    <div class="form-column">
-      <div class="form-header">
-        <h3 class="name">Добавить колонку</h3>
-        <button class="form-close" type="button" aria-label="Close dialog" onclick="addClass('create-column', 'display-none')">
-          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
-            <path fill-rule="evenodd" d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"></path>
-          </svg>
-        </button>
-      </div>
-      <div class="content">
-        <h4 class="name">Имя колонки</h4>
-        <input id = "nameColum" type="text" class="input_text" name="" value="">
-        <button id= "createColumn"type="submit" data-view-component="true" class="create-column-btn flex-auto btn-primary btn" onclick="addClass('create-column', 'display-none')">
-          Создать колонку
-        </button>
+    <!-- Модальное окно создать колонку -->
+    <div id = "create-column" class="create-column display-none">
+      <div class="form-column">
+        <div class="form-header">
+          <h3 class="name">Добавить колонку</h3>
+          <button class="form-close" type="button" aria-label="Close dialog" onclick="addClass('create-column', 'display-none')">
+            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+              <path fill-rule="evenodd" d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="content">
+          <h4 class="name">Имя колонки</h4>
+          <input id = "nameColum" type="text" class="input_text" name="" value="">
+          <button id= "createColumn"type="submit" data-view-component="true" class="create-column-btn flex-auto btn-primary btn" onclick="addClass('create-column', 'display-none')">
+            Создать колонку
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- окно карти -->
-  <div id = "card" class="card">
-    <div class="form-card">
-      <div class="header">
-        <div class="info">
-          <h3 id = "nameCard" class="name">Название</h3>
-          <p id = "inColumn">В этапе</p>
+    <!-- окно карти -->
+    <div id = "card" class="card display-none">
+      <div class="form-card">
+        <div class="header">
+          <div class="info">
+            <h3 id = "nameCard" class="name">Название</h3>
+            <p id = "inColumn">В этапе</p>
+          </div>
+          <div class="close">
+            <button type="button" name="close" class="button" onclick="addClass('card', 'display-none')">x</button>
+          </div>
+          <div class="last-change">
+            <p id = "lastData">Последнее изменение: lastData</p>
+            <p id = "lastUser">Изменил: lastUser</p>
+          </div>
         </div>
-        <div class="close">
-          <button type="button" name="close" class="button">x</button>
+        <div class="content">
+          <div class="mode">
+            <button id = "viewingCardContents" type="button" name="viewing">Содержание</button>
+            <button id="changeCardContents" type="button" name="change">Изменить</button>
+          </div>
+          <div class="filling">
+            <p>текст</p>
+          </div>
         </div>
-        <div class="last-change">
-          <p id = "lastData">Последнее изменение: lastData</p>
-          <p id = "lastUser">Изменил: lastUser</p>
+        <div class="actions">
+          <h4>Действия</h4>
+          <button type="button" name="estimate">Оценить</button>
+          <button type="button" name="max_estimate">Поставить макс оценку</button>
+          <button type="button" name="status">Измениьт статус</button>
+          <button type="button" name="delete" onclick="addComent()">Удалить</button>
         </div>
-      </div>
-      <div class="content">
-        <div class="mode">
-          <button id = "viewingCardContents" type="button" name="viewing">Содержание</button>
-          <button id="changeCardContents" type="button" name="change">Изменить</button>
+        <div class="comments">
+          <h5>Коментарии</h4>
+          <div class="new">
+            <textarea name="comment" rows="4" cols="70"></textarea>
+          </div>
+          <div id = "commentList" class="old">
+            <template id="tempComment">
+              <div class="elem-comment">
+                <div class="info-comment">
+                  <a id = "userCommen">кто</a>
+                  <data id = "dataComment">дата</data>
+                </div>
+                <div class="content-comment">
+                  <p id = "contentComment" >текст коментария</p>
+                </div>
+              </div>
+            </template>
+          </div>
         </div>
-        <div class="filling">
-          <p>текст</p>
-        </div>
-      </div>
-      <div class="comments">
-        <div class="new">
-
-        </div>
-        <div class="old">
-
-        </div>
-      </div>
-      <div class="actions">
-        <h4>Действия</h4>
-        <button type="button" name="estimate">Оценить</button>
-        <button type="button" name="max_estimate">Поставить макс оценку</button>
-        <button type="button" name="status">Измениьт статус</button>
-        <button type="button" name="delete">Удалить</button>
       </div>
     </div>
-  </div>
 
 
   <!-- Bootstrap JavaScript Libraries -->
@@ -198,6 +209,7 @@
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
     crossorigin="anonymous"></script>
   <script src="scriptsjs/scriptsProjectPage.js"></script>
+  <script src="scriptsjs/scriptCard.js"></script>
 </body>
 
 </html>

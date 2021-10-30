@@ -1,3 +1,12 @@
+:root {
+  --scrollbarBg: #adb5bd;
+  --scrollbarThumb: rgba(255, 255, 255, 0.8);
+  --scrollbarWidth: 15px;
+  --scrollbarBorder: 3px solid var(--scrollbarBg);
+  --scrollbarBorderRadius: calc(var(--scrollbarWidth) / 2);
+}
+
+
 *{
     box-sizing: border-box;
 }
@@ -153,6 +162,23 @@ aside
       height: 100%;
     }
 
+    .col-my {
+      scrollbar-width: var(--scrollbarWidth);
+      scrollbar-color: var(--scrollbarThumb) var(--scrollbarBg);
+    }
+    .col-my::-webkit-scrollbar {
+      width: var(--scrollbarWidth);
+    }
+    .col-my::-webkit-scrollbar-track {
+      background: var(--scrollbarBg);
+      border-radius: var(--scrollbarBorderRadius);
+    }
+    .col-my::-webkit-scrollbar-thumb {
+      background-color: var(--scrollbarThumb);
+      border-radius: var(--scrollbarBorderRadius);
+      border: var(--scrollbarBorder);
+    }
+
     .col-my{
       border-width: 1px;
       border-radius: 6px;
@@ -167,8 +193,8 @@ aside
       width: 30%;
 
       .col-header{
-        padding: 8px !important;
-            vertical-align: middle !important;
+        padding: 8px;
+        vertical-align: middle;
 
         .number-cards{
           display: inline-block;
@@ -185,10 +211,10 @@ aside
         }
 
         .name-column{
-          display: inline !important;
-          font-size: 14px !important;
-          padding: 4px !important;
-          margin: 0 !important;
+          display: inline;
+          font-size: 14px;
+          padding: 4px;
+          margin: 0;
           font-weight: 600;
         }
 
@@ -400,8 +426,27 @@ aside
   height: 100%;
   background-color: #00000066;
 
+  .form-card {
+    scrollbar-width: var(--scrollbarWidth);
+    scrollbar-color: var(--scrollbarThumb) var(--scrollbarBg);
+  }
+  .form-card::-webkit-scrollbar {
+    width: var(--scrollbarWidth);
+  }
+  .form-card::-webkit-scrollbar-track {
+    background: var(--scrollbarBg);
+    border-radius: var(--scrollbarBorderRadius);
+  }
+  .form-card::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbarThumb);
+    border-radius: var(--scrollbarBorderRadius);
+    border: var(--scrollbarBorder);
+  }
+
+
   .form-card{
     position: fixed;
+    overflow: hidden;
     top: 50%;
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
@@ -413,6 +458,7 @@ aside
     border-radius: 30px ;
     border: 1px solid #d0d7de ;
     padding: 20px;
+    overflow-y: auto;
 
     .header{
       display: block;
@@ -467,7 +513,8 @@ aside
           width: 120px;
 
           &:hover{
-            background-color: red;
+            background-color: gray;
+            color: #fff;
           }
         }
 
@@ -480,7 +527,8 @@ aside
           left: -4.5px;
 
           &:hover{
-            background-color: red;
+            background-color: gray;
+            color: #fff;
           }
         }
       }
@@ -496,12 +544,66 @@ aside
 
     .comments{
       display: block;
+      width: 70%;
+      float: left;
+      margin-top: 15px;
+
       .new{
         display: block;
+
+        textarea {
+          font-size: .8rem;
+          letter-spacing: 1px;
+          padding: 5px;
+          width: 100%;
+          max-height: 120px;
+          line-height: 1.5;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+          //box-shadow: 1px 1px 1px #999;
+        }
       }
 
       .old{
         display: flex;
+        height: auto;
+        flex-direction: column;
+        //border: 1px solid black;
+
+
+        .elem-comment{
+          border-radius: 5px;
+          border: 1px solid black;
+          width: 100%;
+          height: auto;
+          margin-top: 5px;
+
+          .info-comment{
+            display: inline-flex;
+            margin: 5px;
+
+            #userCommen{
+              font-size: 20px;
+              font-family: cursive;
+              margin-bottom: 2px;
+            }
+
+            #dataComment{
+              position: relative;
+              top: 5px;
+              font-size: 15px;
+              margin-left: 10px;
+              margin-bottom: 2px;
+            }
+          }
+
+          .content-comment{
+            margin: 5px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+          }
+        }
       }
     }
 
@@ -511,6 +613,25 @@ aside
       width: 28%;
       float: right;
       text-align: center;
+
+      h4{
+        font-size: 25px;
+      }
+
+      button{
+        border: 1px solid black;
+
+        &:hover{
+          background-color: gray;
+          border-radius: 5px;
+          color: #fff;
+        }
+      }
+
+      *{
+        margin-bottom: 2px;
+        font-size: 13px;
+      }
     }
   }
 }

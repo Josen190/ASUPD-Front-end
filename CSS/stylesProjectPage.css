@@ -1,3 +1,11 @@
+:root {
+  --scrollbarBg: #adb5bd;
+  --scrollbarThumb: rgba(255, 255, 255, 0.8);
+  --scrollbarWidth: 15px;
+  --scrollbarBorder: 3px solid var(--scrollbarBg);
+  --scrollbarBorderRadius: calc(var(--scrollbarWidth) / 2);
+}
+
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -159,6 +167,22 @@ aside .button:hover {
   height: 100%;
 }
 #board .col-my {
+  scrollbar-width: var(--scrollbarWidth);
+  scrollbar-color: var(--scrollbarThumb) var(--scrollbarBg);
+}
+#board .col-my::-webkit-scrollbar {
+  width: var(--scrollbarWidth);
+}
+#board .col-my::-webkit-scrollbar-track {
+  background: var(--scrollbarBg);
+  border-radius: var(--scrollbarBorderRadius);
+}
+#board .col-my::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbarThumb);
+  border-radius: var(--scrollbarBorderRadius);
+  border: var(--scrollbarBorder);
+}
+#board .col-my {
   border-width: 1px;
   border-radius: 6px;
   background-color: #e9ecef;
@@ -171,8 +195,8 @@ aside .button:hover {
   width: 30%;
 }
 #board .col-my .col-header {
-  padding: 8px !important;
-  vertical-align: middle !important;
+  padding: 8px;
+  vertical-align: middle;
 }
 #board .col-my .col-header .number-cards {
   display: inline-block;
@@ -188,10 +212,10 @@ aside .button:hover {
   border-radius: 2em;
 }
 #board .col-my .col-header .name-column {
-  display: inline !important;
-  font-size: 14px !important;
-  padding: 4px !important;
-  margin: 0 !important;
+  display: inline;
+  font-size: 14px;
+  padding: 4px;
+  margin: 0;
   font-weight: 600;
 }
 #board .col-my .col-header .button-new-card {
@@ -381,7 +405,24 @@ aside .button:hover {
   background-color: #00000066;
 }
 #card .form-card {
+  scrollbar-width: var(--scrollbarWidth);
+  scrollbar-color: var(--scrollbarThumb) var(--scrollbarBg);
+}
+#card .form-card::-webkit-scrollbar {
+  width: var(--scrollbarWidth);
+}
+#card .form-card::-webkit-scrollbar-track {
+  background: var(--scrollbarBg);
+  border-radius: var(--scrollbarBorderRadius);
+}
+#card .form-card::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbarThumb);
+  border-radius: var(--scrollbarBorderRadius);
+  border: var(--scrollbarBorder);
+}
+#card .form-card {
   position: fixed;
+  overflow: hidden;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
@@ -392,6 +433,7 @@ aside .button:hover {
   border-radius: 30px;
   border: 1px solid #d0d7de;
   padding: 20px;
+  overflow-y: auto;
 }
 #card .form-card .header {
   display: block;
@@ -440,7 +482,8 @@ aside .button:hover {
   width: 120px;
 }
 #card .form-card .content .mode #viewingCardContents:hover {
-  background-color: red;
+  background-color: gray;
+  color: #fff;
 }
 #card .form-card .content .mode #changeCardContents {
   border: 2px solid black;
@@ -451,7 +494,8 @@ aside .button:hover {
   left: -4.5px;
 }
 #card .form-card .content .mode #changeCardContents:hover {
-  background-color: red;
+  background-color: gray;
+  color: #fff;
 }
 #card .form-card .content .filling {
   display: block;
@@ -462,14 +506,63 @@ aside .button:hover {
 }
 #card .form-card .comments {
   display: block;
+  width: 70%;
+  float: left;
+  margin-top: 15px;
 }
 #card .form-card .comments .new {
   display: block;
+}
+#card .form-card .comments .new textarea {
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  padding: 5px;
+  width: 100%;
+  max-height: 120px;
+  line-height: 1.5;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 #card .form-card .comments .old {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  height: auto;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+#card .form-card .comments .old .elem-comment {
+  border-radius: 5px;
+  border: 1px solid black;
+  width: 100%;
+  height: auto;
+  margin-top: 5px;
+}
+#card .form-card .comments .old .elem-comment .info-comment {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  margin: 5px;
+}
+#card .form-card .comments .old .elem-comment .info-comment #userCommen {
+  font-size: 20px;
+  font-family: cursive;
+  margin-bottom: 2px;
+}
+#card .form-card .comments .old .elem-comment .info-comment #dataComment {
+  position: relative;
+  top: 5px;
+  font-size: 15px;
+  margin-left: 10px;
+  margin-bottom: 2px;
+}
+#card .form-card .comments .old .elem-comment .content-comment {
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 #card .form-card .actions {
   display: -webkit-box;
@@ -482,4 +575,19 @@ aside .button:hover {
   width: 28%;
   float: right;
   text-align: center;
+}
+#card .form-card .actions h4 {
+  font-size: 25px;
+}
+#card .form-card .actions button {
+  border: 1px solid black;
+}
+#card .form-card .actions button:hover {
+  background-color: gray;
+  border-radius: 5px;
+  color: #fff;
+}
+#card .form-card .actions * {
+  margin-bottom: 2px;
+  font-size: 13px;
 }
