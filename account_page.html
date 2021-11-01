@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Личный кабинет</title>
+  <link rel="stylesheet" type="text/css" href="css/styles-account.css">
+</head>
+
+<body>
+  <header>
+    <nav>
+      <div class="header-block"><a href="#">Банк проектных приложений</a></div>
+      <div class="header-block" style="text-align: right;"><a href="#">Личный кабинет</a></div>
+    </nav>
+  </header>
+  <main>
+    <h2 style="text-align: center;">
+      <b>Личный кабинет</b>
+    </h2>
+    <div class="block1 user-card">
+      <div class="block2 avatar">
+        <img src="priroda-zhivotnye-kotenok.jpg" alt="avatar">
+      </div>
+      <div class="block2 personal-info">
+        <p>Фамилия Имя Отчество</p>
+        <p>Место работы</p>
+        <p>Должность</p>
+        <p>Дата рождения</p>
+        <p>Телефон</p>
+      </div>
+      <div class="block2 btn-panel">
+        <button type="button" onclick="alert('Настройки')">Изменить данные</button>
+        <button type="button" onclick="alert('Вы вышли!')">Выйти из системы</button>
+      </div>
+    </div>
+    <div class="block1">
+      <div class="my-projects">
+        <p>Мои проекты:</p>
+        <ul id="projects-list">
+          <li><a href="#">проект 1</a></li>
+          <li><a href="#">проект 2</a></li>
+          <li><a href="#">проект 3</a></li>
+          <li><a href="#">проект 4</a></li>
+          <li><a href="#">проект 5</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="block1">
+      <div class="access-btn">
+        <button type="button" onclick="alert('Заявка на повышение прав отправлена!')">Повысить права пользователя</button>
+      </div>
+    </div>
+  </main>
+
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+header {
+  height: 30px;
+  background: rgb(10, 43, 189);
+  color: #fff;
+  padding: 0;
+  border: solid 1px black;
+}
+
+header .header-block {
+  width: 49%;
+  float: left;
+  padding: 5px;
+  font-size: large;
+}
+
+header a {
+  color: white;
+}
+
+main {
+  padding-left: 20px;
+  padding-right: 20px;
+  border: solid 2px black;
+}
+
+.block1 {
+  width: 100%;
+  height: 200px;
+  background: #ccc;
+  padding: 0;
+  border: solid 1px black;
+}
+
+.block2 {
+  height: 100%;
+  float: left;
+  background: #fff;
+  text-align: center;
+  border: solid 1px black;
+}
+
+.personal-info {
+  width: 60%;
+}
+
+.avatar {
+  width: 15%;
+}
+
+.btn-panel {
+  width: 24%;
+}
+
+.block2 img {
+  height: 50%;
+  position: relative;
+  top: 25%;
+  border-radius: 50%;
+}
+
+.personal-info p {
+  text-align: left;
+  margin-bottom: -10px;
+}
+
+.block1 .my-projects {
+  width: 95%;
+  height: 100%;
+  padding-left: 5%;
+  background-color: aquamarine;
+}
+
+.block1 .access-btn {
+  background-color: aqua;
+  width: 100%;
+  height: 100%;
+}
+
+.access-btn button {
+  height: 30px;
+  position: relative;
+  float: right;
+}
