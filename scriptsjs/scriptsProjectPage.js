@@ -13,7 +13,7 @@ function SaveStatusFunction(){
     }
 }
 
-
+//  логика класов HTML
 function hasClass(ele,cls) {
   return !!ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
 }
@@ -67,6 +67,14 @@ function addCard(idCard = "тестовая_карточка"){
   }
 }
 
+// Main
+let addColumnBtn = document.getElementById("createColumn");
+
+addColumnBtn.addEventListener('click', ()=>{
+  new ListForCards(root);
+  console.log("Добавить колонку");
+})
+
 //Логика карточек
 let root = document.getElementById("board");
 
@@ -76,19 +84,22 @@ class ListForCards{
     this.title=title;
     this.cardList=[];
 
-    this.render();
+    this.render(title);
   }
 
-  render(){
-    this.createListForCards();
-    this.place.append(this.divCol);
+  render(name){
+    this.createListForCards(name);
+    let addColumnRender = document.getElementById("addColumn");
+    addColumnRender.insertAdjacentElement('beforeBegin', this.divCol);
+
+    //this.place.insertBefore(this.divCol, addColumnRender);
   }
 
   addCardFunc(){
     this.cardList.push(new Card(this.divListContent, this));
   }
 
-  createListForCards(){
+  createListForCards(name){
     this.divCol = document.createElement('div');
     this.divCol.classList.add('col-my');
     this.divCol.classList.add('col-3');
@@ -112,7 +123,7 @@ class ListForCards{
                                   '</svg>';
 
     this.divHeader.innerHTML = '<span title="0" data-view-component="true" class="number-cards">0</span>' +
-                                '<h3 class="name-column"><span>To do</span></h3>' +
+                                '<h3 class="name-column"><span>'+ name +'</span></h3>' +
                                 '<details class="column-menu">' +
                                   '<summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">' +
                                     '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal">' +
@@ -160,11 +171,3 @@ class Card{
                           '<small class="add-info color-fg-muted">Добавлено<a class="color-text-primary" href="#" draggable="false">Josen190</a></small>';
   }
 }
-
-// Main
-let addColumnBtn = document.getElementById("addColumn");
-
-addColumnBtn.addEventListener('click', ()=>{
-  new ListForCards(root);
-  console.log("Добавить колонку");
-})
