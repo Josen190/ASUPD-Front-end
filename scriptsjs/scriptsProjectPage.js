@@ -32,20 +32,46 @@ function removeClass(id,cls) {
   }
 }
 
-function addCard(){
-  const btnAddCard = document.querySelector('.button-new-card');
-  const contentOfCard = document.querySelector('.card-content');
 
-  btnAddCard.addEventListener('click', () => {
-    contentOfCard.style.display = 'block';
-  })
+//мое создание колонок и картточки
+// я ничего не менял в твоем коде
+// прсто закометировал <82> строку с <new ListForCards(root);>
+// что бы все вернуть на место коментируещь мой код и убираешь коментирование с <82> строки
+function addColumn(idName, idCollumn = "тестовая_колонка") {
+  if ('content' in document.createElement('template')) {
+    let template = document.getElementById("tempColumn");
+    let clone = template.content.cloneNode(true);
+    clone.setAttribute("id", idCollumn);
+
+    let name = document.getElementById(idName).value;
+    clone.getElementById("nameColum").innerHTML = name;
+
+
+    let listComent = document.getElementById("addColumn");
+    listComent.before(clone);
+  }
+}
+
+
+function addCard(idCard = "тестовая_карточка"){
+  if ('content' in document.createElement('template')) {
+    let template = document.getElementById("tempCard");
+    let clone = template.content.cloneNode(true);
+
+    clone.setAttribute("id", idCard);
+    let name = document.getElementById(idName).value;
+    clone.getElementById("nameColum").innerHTML = name;
+
+    let listComent = document.getElementById("addColumn");
+    listComent.before(clone);
+  }
 }
 
 //Логика карточек
 let root = document.getElementById("board");
 
 class ListForCards{
-  constructor(place, title="To do"){    
+  constructor(place, title="To do"){
     this.place=place;
     this.title=title;
     this.cardList=[];
@@ -74,10 +100,10 @@ class ListForCards{
     this.AddCardBtn.type = "button";
     this.AddCardBtn.classList.add('button-new-card');
     this.AddCardBtn.ariaLabel = "Добавить новую карточку";
-    
+
     this.AddCardBtn.ariaExpanded = false;
         this.AddCardBtn.addEventListener('click', ()=>{
-      console.log("Новая карточка");  
+      console.log("Новая карточка");
       this.addCardFunc(this.ListForCards);
     })
 
@@ -86,15 +112,15 @@ class ListForCards{
                                   '</svg>';
 
     this.divHeader.innerHTML = '<span title="0" data-view-component="true" class="number-cards">0</span>' +
-                                '<h3 class="name-column"><span>To do</span></h3>' + 
+                                '<h3 class="name-column"><span>To do</span></h3>' +
                                 '<details class="column-menu">' +
                                   '<summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">' +
                                     '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal">' +
                                       '<path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>' +
-                                    '</svg>' + 
-                                  '</summary>' + 
+                                    '</svg>' +
+                                  '</summary>' +
                                   '<div class="open">' +
-                                    '<button type="button" name="button">удалить столбец</button>' + 
+                                    '<button type="button" name="button">удалить столбец</button>' +
                                   '</div>' +
                                 '</details>';
 
@@ -104,8 +130,8 @@ class ListForCards{
     this.divListContent.classList.add('col-content');
 
 
-    this.divCol.append(this.divHeader);    
-    this.divCol.append(this.divListContent);  
+    this.divCol.append(this.divHeader);
+    this.divCol.append(this.divListContent);
   }
 }
 
