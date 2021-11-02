@@ -245,7 +245,6 @@ aside .button:hover {
 
 #board .col-my .col-header .button-new-card {
   padding: 4px;
-  float: right;
   display: inline-block;
   line-height: 1;
   background: transparent;
@@ -293,6 +292,20 @@ aside .button:hover {
 
 #board .col-my .col-content .card:hover {
   background-color: #f2f4fb;
+}
+
+#board .col-my .col-content .card .button-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+#board .col-my .col-content .card .button-wrapper button {
+  width: 25px;
+  height: 25px;
 }
 
 #board .col-my .col-content .card .card-svg {
@@ -401,7 +414,6 @@ aside .button:hover {
 }
 
 .create-column .form-column .form-header .form-close {
-  float: right;
   display: inline-block;
   -webkit-column-width: 1;
           column-width: 1;
@@ -441,38 +453,39 @@ aside .button:hover {
   display: flex;
 }
 
-#card {
-  position: absolute;
-  z-index: 4;
+.card-wrapper {
+  background-color: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background-color: #00000066;
 }
 
-#card .form-card {
+.card-wrapper .form-card {
   scrollbar-width: var(--scrollbarWidth);
   scrollbar-color: var(--scrollbarThumb) var(--scrollbarBg);
 }
 
-#card .form-card::-webkit-scrollbar {
+.card-wrapper .form-card::-webkit-scrollbar {
   width: var(--scrollbarWidth);
 }
 
-#card .form-card::-webkit-scrollbar-track {
+.card-wrapper .form-card::-webkit-scrollbar-track {
   background: var(--scrollbarBg);
   border-radius: var(--scrollbarBorderRadius);
 }
 
-#card .form-card::-webkit-scrollbar-thumb {
+.card-wrapper .form-card::-webkit-scrollbar-thumb {
   background-color: var(--scrollbarThumb);
   border-radius: var(--scrollbarBorderRadius);
   border: var(--scrollbarBorder);
 }
 
-#card .form-card {
+.card-wrapper .form-card {
   position: fixed;
   overflow: hidden;
-  top: 50%;
+  top: 51%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
@@ -485,67 +498,67 @@ aside .button:hover {
   overflow-y: auto;
 }
 
-#card .form-card .header {
+.card-wrapper .form-card .header {
   display: block;
   height: 80px;
   width: 100%;
 }
 
-#card .form-card .header .info {
+.card-wrapper .form-card .header .info {
   display: block;
   float: left;
   width: 50%;
 }
 
-#card .form-card .header .info * {
+.card-wrapper .form-card .header .info * {
   margin: 0;
   margin-bottom: 1px;
 }
 
-#card .form-card .header .close {
+.card-wrapper .form-card .header .close {
   display: block;
   float: right;
   width: 25px;
   height: 25px;
 }
 
-#card .form-card .header .last-change {
+.card-wrapper .form-card .header .last-change {
   display: block;
-  text-align: right;
+  text-align: end;
   position: relative;
   top: 33%;
   right: 3%;
 }
 
-#card .form-card .header .last-change p {
+.card-wrapper .form-card .header .last-change p {
   margin: 0;
   font-size: 12px;
 }
 
-#card .form-card .content {
+.card-wrapper .form-card .content {
   display: block;
   float: left;
   width: 70%;
 }
 
-#card .form-card .content .mode {
+.card-wrapper .form-card .content .mode {
   display: inline-block;
   margin: 0;
 }
 
-#card .form-card .content .mode #viewingCardContents {
+.card-wrapper .form-card .content .mode #viewingCardContents {
   border: 2px solid black;
   border-bottom: 0;
   border-right: 1px solid black;
   width: 120px;
 }
 
-#card .form-card .content .mode #viewingCardContents:not([disabled]):hover {
+.card-wrapper .form-card .content .mode #viewingCardContents:not([disabled]):hover {
   background-color: gray;
   color: #fff;
 }
 
-#card .form-card .content .mode #changeCardContents {
+.card-wrapper .form-card .content .mode #changeCardContents {
   border: 2px solid black;
   border-bottom: 0;
   border-left: 1px solid black;
@@ -553,18 +566,18 @@ aside .button:hover {
   position: relative;
 }
 
-#card .form-card .content .mode #changeCardContents:not([disabled]):hover {
+.card-wrapper .form-card .content .mode #changeCardContents:not([disabled]):hover {
   background-color: gray;
   color: #fff;
 }
 
-#card .form-card .content .filling {
+.card-wrapper .form-card .content .filling {
   display: block;
   height: 300px;
   border: 2px solid black;
 }
 
-#card .form-card .content .filling textarea {
+.card-wrapper .form-card .content .filling textarea {
   resize: none;
   width: 100%;
   height: 100%;
@@ -576,18 +589,18 @@ aside .button:hover {
   font-size: 18px;
 }
 
-#card .form-card .comments {
+.card-wrapper .form-card .comments {
   display: block;
   width: 70%;
   float: left;
   margin-top: 15px;
 }
 
-#card .form-card .comments .new {
+.card-wrapper .form-card .comments .new {
   display: block;
 }
 
-#card .form-card .comments .new textarea {
+.card-wrapper .form-card .comments .new textarea {
   font-size: .8rem;
   letter-spacing: 1px;
   padding: 5px;
@@ -598,7 +611,7 @@ aside .button:hover {
   border: 1px solid #ccc;
 }
 
-#card .form-card .comments .new button {
+.card-wrapper .form-card .comments .new button {
   margin-left: 73%;
   border-radius: 5px;
   border: 1px solid black;
@@ -607,7 +620,7 @@ aside .button:hover {
   border-color: #1b1f2426;
 }
 
-#card .form-card .comments .old {
+.card-wrapper .form-card .comments .old {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -618,7 +631,7 @@ aside .button:hover {
           flex-direction: column;
 }
 
-#card .form-card .comments .old .elem-comment {
+.card-wrapper .form-card .comments .old .elem-comment {
   border-radius: 5px;
   border: 1px solid black;
   width: 100%;
@@ -626,20 +639,20 @@ aside .button:hover {
   margin-top: 5px;
 }
 
-#card .form-card .comments .old .elem-comment .info-comment {
+.card-wrapper .form-card .comments .old .elem-comment .info-comment {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
   margin: 5px;
 }
 
-#card .form-card .comments .old .elem-comment .info-comment #userCommen {
+.card-wrapper .form-card .comments .old .elem-comment .info-comment #userCommen {
   font-size: 20px;
   font-family: cursive;
   margin-bottom: 2px;
 }
 
-#card .form-card .comments .old .elem-comment .info-comment #dataComment {
+.card-wrapper .form-card .comments .old .elem-comment .info-comment #dataComment {
   position: relative;
   top: 5px;
   font-size: 15px;
@@ -647,14 +660,14 @@ aside .button:hover {
   margin-bottom: 2px;
 }
 
-#card .form-card .comments .old .elem-comment .content-comment {
+.card-wrapper .form-card .comments .old .elem-comment .content-comment {
   margin: 5px;
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
-#card .form-card .actions {
+.card-wrapper .form-card .actions {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -667,26 +680,36 @@ aside .button:hover {
   text-align: center;
 }
 
-#card .form-card .actions h4 {
+.card-wrapper .form-card .actions h4 {
   font-size: 25px;
 }
 
-#card .form-card .actions button {
+.card-wrapper .form-card .actions button {
   border: 1px solid black;
 }
 
-#card .form-card .actions button:hover {
+.card-wrapper .form-card .actions button:hover {
   background-color: gray;
   border-radius: 5px;
   color: #fff;
 }
 
-#card .form-card .actions * {
+.card-wrapper .form-card .actions * {
   margin-bottom: 2px;
   font-size: 13px;
 }
 
-#card .form-estimate {
+.pop-outer {
+  background-color: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.pop-outer .form-estimate {
   position: fixed;
   overflow: hidden;
   top: 50%;
@@ -702,20 +725,20 @@ aside .button:hover {
   z-index: 5;
 }
 
-#card .form-estimate .header {
+.pop-outer .form-estimate .header {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-#card .form-estimate .header button {
+.pop-outer .form-estimate .header button {
   position: relative;
   left: 30%;
   height: 25px;
   width: 25px;
 }
 
-#card .form-estimate .estimate {
+.pop-outer .form-estimate .estimate {
   display: block;
   position: fixed;
   overflow: hidden;
@@ -726,17 +749,17 @@ aside .button:hover {
   font-size: 20px;
 }
 
-#card .form-estimate .estimate input {
+.pop-outer .form-estimate .estimate input {
   border: 2px solid black;
 }
 
-#card .form-estimate .estimate button {
+.pop-outer .form-estimate .estimate button {
   position: relative;
   left: 25%;
   margin-top: 8px;
 }
 
-#card .form-max-estimate {
+.pop-outer .form-status {
   position: fixed;
   overflow: hidden;
   top: 50%;
@@ -744,78 +767,28 @@ aside .button:hover {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   background-color: #fff;
-  width: 25%;
-  height: 30%;
+  width: 35%;
+  height: 40%;
   border-radius: 30px;
   border: 1px solid black;
   padding: 20px;
   z-index: 5;
 }
 
-#card .form-max-estimate .header {
+.pop-outer .form-status .header {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-#card .form-max-estimate .header button {
-  position: relative;
-  left: 30%;
-  height: 25px;
-  width: 25px;
-}
-
-#card .form-max-estimate .estimate {
-  display: block;
-  position: fixed;
-  overflow: hidden;
-  top: 60%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  font-size: 20px;
-}
-
-#card .form-max-estimate .estimate input {
-  border: 2px solid black;
-}
-
-#card .form-max-estimate .estimate button {
-  position: relative;
-  left: 25%;
-  margin-top: 8px;
-}
-
-#card .form-status {
-  position: fixed;
-  overflow: hidden;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  width: 25%;
-  height: 30%;
-  border-radius: 30px;
-  border: 1px solid black;
-  padding: 20px;
-  z-index: 5;
-}
-
-#card .form-status .header {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-#card .form-status .header button {
+.pop-outer .form-status .header button {
   position: relative;
   left: 40%;
   height: 25px;
   width: 25px;
 }
 
-#card .form-status .status {
+.pop-outer .form-status .status {
   display: block;
   position: fixed;
   overflow: hidden;
@@ -824,41 +797,4 @@ aside .button:hover {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   font-size: 25px;
-}
-
-#card .form-delete {
-  position: fixed;
-  overflow: hidden;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  width: 20%;
-  height: 30%;
-  border-radius: 30px;
-  border: 1px solid black;
-  padding: 20px;
-  z-index: 5;
-}
-
-#card .form-delete .header {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-#card .form-delete .delete {
-  display: block;
-  position: fixed;
-  overflow: hidden;
-  top: 60%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  font-size: 25px;
-}
-
-#card .form-delete .delete * {
-  margin: 8px;
 }

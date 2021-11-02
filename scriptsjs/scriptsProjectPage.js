@@ -38,43 +38,6 @@ function removeClass(id,cls) {
   }
 }
 
-
-//мое создание колонок и картточки
-// я ничего не менял в твоем коде
-// прсто закометировал <82> строку с <new ListForCards(root);>
-// что бы все вернуть на место коментируещь мой код и убираешь коментирование с <82> строки
-// function addColumn(idName) {
-//   if ('content' in document.createElement('template')) {
-//     let template = document.getElementById("tempColumn");
-//     let clone = template.content.cloneNode(true);
-
-//     let name = document.getElementById(idName).value;
-
-//     clone.getElementById("nameColum").innerHTML = name;
-//     let listComent = document.getElementById("addColumn");
-//     listComent.before(clone);
-//   }
-// }
-
-
-// function addCard(){
-//   if ('content' in document.createElement('template')) {
-//     let template = document.getElementById("tempCard");
-//     let clone = template.content.cloneNode(true);
-
-//     let name = document.getElementById(idName).value;
-
-//     clone.getElementById("nameColum").innerHTML = name;
-//     let listComent = document.getElementById("addColumn");
-//     listComent.before(clone);
-//   }
-// }
-
-// здесть кончается мой код
-
-//что то там у димы
-
-// Main
 let addColumnBtn = document.getElementById("createColumn");
 
 addColumnBtn.addEventListener('click', ()=>{
@@ -175,12 +138,18 @@ class Card{
     this.place = place;
     this.listForCards = listForCards;
 
+    var today = new Date();
+    var date = today.getDate() + '/' + (today.getMonth()+1) + '/' + today.getFullYear();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
     //Здесь хранится информация о карточке
     this.cardEntity = {
       title: "",
+      status: "В процессе",
       description: "Click to write a description...",
-      comments: [],
-      date: new Date().toLocaleDateString()
+      commentList : [],
+      lastChangeDate : String(time + ' ' + date),
+      mark : ""
     }
 
     this.render();
@@ -261,7 +230,8 @@ class Card{
 
     //Кнопка удалить карточку
     this.DeleteCardBtn = document.createElement('button');
-    this.DeleteCardBtn.innerText = "X";
+    this.DeleteCardBtn.classList.add('button');
+    this.DeleteCardBtn.innerText = "x";
     this.DeleteCardBtn.addEventListener('click', (e)=>{
       e.stopPropagation(); //Убираем открытие карточки, при нажатии на кнопку внутри карточки
       this.listForCards.numberOfCards.innerText = Number(this.listForCards.numberOfCards.innerText) - 1;
@@ -271,15 +241,19 @@ class Card{
       console.log("Была удалена карточка");
     });
 
-    //Собираем объекты
-    this.card.innerHTML = '<span class="card-svg">' +
+    //Собираем объекты        
+    this.card.insertAdjacentHTML('beforeend',
+                          '<span class="card-svg">' +
                             '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-note">' +
                               '<path fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H1.75zM3.5 6.25a.75.75 0 01.75-.75h7a.75.75 0 010 1.5h-7a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h4a.75.75 0 000-1.5h-4z"></path>' +
                             '</svg>' +
                           '</span>' +
-                          '<div class="card-content">' + this.cardName.innerText + '</div>' +
-                          '<small class="add-info color-fg-muted">Добавлено<a class="color-text-primary" href="#" draggable="false">Josen190</a></small>';
-    this.card.append(this.DeleteCardBtn)
+                          '<span class="card-content">' + this.cardName.innerText + '</span>' +
+                          '<small class="add-info color-fg-muted">Добавлено<a class="color-text-primary" href="#" draggable="false">Josen190</a></small>');   
+    this.btnWrapper = document.createElement('div');
+    this.btnWrapper.classList.add('button-wrapper');
+    this.btnWrapper.append(this.DeleteCardBtn);
+    this.card.append(this.btnWrapper); 
 
     this.formCard.remove(); //Удаляем форму для создания карточки
     this.place.append(this.card); //Вместно неё добавляем обычную карточку
@@ -289,11 +263,11 @@ class Card{
   //Окно, вызываемое при отркытии карточки
   showCard(){
     //Затемнённая область позади карточки
-    this.divCardContainer = document.createElement('card');
-    setAttributes(this.divCardContainer, {"id":"card","class":"card"});
+    this.divCardContainer = document.createElement('div');
+    this.divCardContainer.classList.add('card-wrapper');
     //Будем закрывать карточку, если нажимаем на затемнённую область
     this.divCardContainer.addEventListener('click', (e)=>{
-      if(e.target.classList.contains("card")){
+      if(e.target.classList.contains("card-wrapper")){
         this.divCardContainer.remove();
       }
     })
@@ -317,12 +291,12 @@ class Card{
     this.divHeader.insertAdjacentHTML('beforeend',
           '<div class="info">' +
             '<h3 id = "nameCard" class="name">' + this.cardEntity.title + '</h3>' +
-            '<p id = "inColumn">В этапе</p>' +
+            '<p id = "statusOfCard">' + this.cardEntity.status + '</p>' +
           '</div>');          
     this.divHeader.append(this.closeCardBtn);
     this.divHeader.insertAdjacentHTML('beforeend',
           '<div class="last-change">' +
-            '<p id = "lastData">Последнее изменение: ' + this.cardEntity.date + '</p>' +
+            '<p id = "lastData">Последнее изменение: ' + this.cardEntity.lastChangeDate + '</p>' +
             '<p id = "lastUser">Изменил: lastUser</p>' +
           '</div>');
     //================================================================================================//
@@ -366,6 +340,10 @@ class Card{
     this.textAreaForCard.addEventListener('change', (e)=> {
       console.log("Введённое значение было сохранено");
       this.cardEntity.description = this.textAreaForCard.value;
+      var today = new Date();
+      var date = today.getDate() + '/' + (today.getMonth()+1) + '/' + today.getFullYear();
+      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      this.cardEntity.lastChangeDate = String(time + ' ' + date);
       this.ContentBtn.click();
     });
     //Собираем эту часть карточки
@@ -385,14 +363,87 @@ class Card{
     this.estimateBtn = document.createElement('button');
     setAttributes(this.estimateBtn, {"type":"button", "name":"estimate"});
     this.estimateBtn.innerText = "Оценить";
+    this.estimateBtn.addEventListener('click', ()=>{
+      //Создадим модальное окно
+      this.estimateWindow = document.createElement('div');
+      setAttributes(this.estimateWindow, {"class":"pop-outer", "id":"estimateWindow"})
+      this.estimateWindow.insertAdjacentHTML('beforeend',
+         '<div class="form-estimate">' +
+            '<div class="header">' +
+              '<h3>Оценить карточку</h3>' +
+            '</div>' +
+            '<div class="estimate">' +
+                '<input id="inputMark" type="text" name="" placeholder="Оценка">' +
+                '<button id="buttonSaveMark" type="button" name="button">Сохранить</button>' +
+            '</div>' +
+          '</div>');
+      this.estimateWindow.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        if(e.target.id == "estimateWindow"){
+          this.estimateWindow.remove();
+        }        
+      })
+      //Кнопка "Сохранить"
+      this.estimateWindow.querySelector('#buttonSaveMark').addEventListener('click', ()=>{
+        this.estimateWindow.remove();
+        
+        this.cardEntity.mark = String(this.estimateWindow.querySelector('#inputMark').value);
+        this.markDiv.innerText = "Оценка: " + String(this.estimateWindow.querySelector('#inputMark').value);        
+      })
 
-    this.maxEstimateBtn = document.createElement('button');
-    setAttributes(this.estimateBtn, {"type":"button", "name":"max_estimate"});
-    this.maxEstimateBtn.innerText = "Поставить максимальную оценку";
+      document.getElementById('showCardContaier').append(this.estimateWindow);
+    })
 
+    //Кнопка "Изменить статус"
     this.status = document.createElement('button');
     setAttributes(this.estimateBtn, {"type":"button", "name":"status"});
     this.status.innerText = "Изменить статус";
+    this.status.addEventListener('click',()=>{
+      this.statusWindowWrapper = document.createElement('div');
+      setAttributes(this.statusWindowWrapper, {"class":"pop-outer", "id":"statusWindow"})
+      this.statusWindowWrapper.insertAdjacentHTML('beforeend',
+      '<div id = "form-status" class="form-status">' +
+          '<div class="header">' +
+            '<h3>Изменить статус</h3>' +
+            '<button type="button" name="close" class="button">x</button>' +
+          '</div>' +
+          '<div class="status">' +
+            '<div>' +
+              '<input id="inProcess" type="radio" name="status" value="В процессе"> В процессе' +
+            '</div>' +
+            '<div>' +
+              '<input id="Checking" type="radio" name="status" value="На проверке"> На проверке' +
+            '</div>' +
+            '<div>' +
+              '<input id="Completed" type="radio" name="status" value="Завершён"> Завершён' +
+            '</div>' +
+          '</div>' +
+        '</div>');
+
+        this.statusWindowWrapper.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          if(e.target.id == "statusWindow"){
+            this.statusWindowWrapper.remove();
+          }        
+        })
+        this.statusWindowWrapper.querySelector('.button').addEventListener('click', ()=>{
+          this.statusWindowWrapper.remove();       
+        })
+        this.statusWindowWrapper.querySelector('#inProcess').addEventListener('click', ()=>{
+          this.divCard.querySelector('#statusOfCard').innerText = this.statusWindowWrapper.querySelector('#inProcess').value;
+          this.cardEntity.status = this.statusWindowWrapper.querySelector('#inProcess').value;
+        });
+        this.statusWindowWrapper.querySelector('#Checking').addEventListener('click', ()=>{
+          this.divCard.querySelector('#statusOfCard').innerText = this.statusWindowWrapper.querySelector('#Checking').value;
+          this.cardEntity.status = this.statusWindowWrapper.querySelector('#Checking').value;
+        });
+        this.statusWindowWrapper.querySelector('#Completed').addEventListener('click', ()=>{
+          this.divCard.querySelector('#statusOfCard').innerText = this.statusWindowWrapper.querySelector('#Completed').value;
+          this.cardEntity.status = this.statusWindowWrapper.querySelector('#Completed').value;
+        });
+  
+        document.getElementById('showCardContaier').append(this.statusWindowWrapper);
+    })
 
     this.delete = document.createElement('button');
     setAttributes(this.estimateBtn, {"type":"button", "name":"delete"});
@@ -406,8 +457,12 @@ class Card{
       console.log("Была удалена карточка");
     });
 
+    //Оценка
+    this.markDiv = document.createElement('div');
+    this.markDiv.innerText = "Оценка: " + this.cardEntity.mark;
+
     //Собираем эту часть карточки
-    this.actionsBtns.append(this.estimateBtn, this.maxEstimateBtn, this.status, this.delete);    
+    this.actionsBtns.append(this.estimateBtn, this.status, this.delete, this.markDiv);    
     //================================================================================================//
 
     //Коментарии
@@ -427,25 +482,20 @@ class Card{
     this.saveCommentBtn.innerText = "Сохранить";
     this.saveCommentBtn.addEventListener('click', ()=>{
       if (this.textAreaComment.value != ""){
-        this.cardEntity.comments.push(this.textAreaComment.value);
+        var today = new Date();
+        var date = today.getDate() + '/' + (today.getMonth()+1) + '/' + today.getFullYear();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        this.cardEntity.commentList.push([this.textAreaComment.value, String(time + ' ' + date)]);
+        console.log()
         this.textAreaComment.value = "";
         this.renderComments();
       }
     })
-    
     //Контейнер для старых комментариев
     this.oldCommentsContainer = document.createElement('div');
-    setAttributes(this.oldCommentsContainer, {"class":"old", "id":"commentList"});
-    this.oldCommentsContainer.insertAdjacentHTML('beforeend',
-              '<div class="elem-comment">' +
-                '<div class="info-comment">' +
-                  '<a id = "userCommen">кто</a>' +
-                  '<data id = "dataComment">' + this.cardEntity.date + '</data>' +
-                '</div>' +
-                '<div class="content-comment">' +
-                  '<p id = "contentComment" >' + this.cardEntity.comments +'</p>' +
-                '</div>' +
-              '</div>');
+    setAttributes(this.oldCommentsContainer, {"class":"old", "id":"commentList"});        
+
+    this.renderComments();
     //Собираем данный элемент карточки
     this.inputCommentContainer.append(this.textAreaComment, this.saveCommentBtn, this.oldCommentsContainer);
     this.divComments.append(this.inputCommentContainer);
@@ -454,7 +504,7 @@ class Card{
     //Собираем карточку
     this.divCard.append(this.divHeader, this.divContent, this.actionsBtns, this.divComments);
     this.divCardContainer.append(this.divCard);
-    document.getElementById('bodyId').append(this.divCardContainer);
+    document.getElementById('showCardContaier').append(this.divCardContainer);
   }
 
   renderComments(){
@@ -464,36 +514,32 @@ class Card{
         commentDOM.remove();
       });
 
-    this.cardEntity.comments.forEach(comment =>{
-      new Comment(comment, this.oldCommentsContainer, this.cardEntity.comments);
+    this.cardEntity.commentList.forEach(comment =>{
+      new Comment(comment, this.oldCommentsContainer);
     });
   }
 }
 
 class Comment{
-    constructor(text, place, listOfComments){
-        this.text = text;
+    constructor(comment, place){
         this.place = place;
-        this.listOfComments = listOfComments;
+        this.comment = comment[0];
+        this.date = comment[1];
 
         this.render();
     }
 
     render(){
         this.div = document.createElement('div');
-        this.div.className = "comment";
-        this.div.innerText = this.text;
-
-        //Кнопка для удаления комментария
-        this.DeleteCommentBtn = document.createElement('button');
-        this.DeleteCommentBtn.innerText = "X";
-        this.DeleteCommentBtn.addEventListener('click', (e)=>{
-          this.div.remove();
-          let i = this.listOfComments.indexOf(this);
-          this.listOfComments.splice(i,1);
-        });
-        this.div.append(this.DeleteCommentBtn);
-
+        this.div.className = "elem-comment";
+        this.div.insertAdjacentHTML('beforeend',
+                '<div class="info-comment">' +
+                  '<a id = "userCommen">User</a>' +
+                  '<data id = "dataComment">' + this.date + '</data>' +
+                '</div>' +
+                '<div class="content-comment">' +
+                  '<p id = "contentComment" >' + this.comment +'</p>' +
+                '</div>')    
         this.place.append(this.div);
     }
 }
