@@ -49,11 +49,7 @@ addColumnBtn.addEventListener('click', ()=>{
 let root = document.getElementById("addColumn");
 
 class ListForCards{
-  constructor(place, title="новая колонка"){
-    let name = document.getElementById("nameColum");
-    if (name.value != "") title = name.value;
-    name.value = "";
-
+  constructor(place, title="To do"){
     this.place=place;
     this.title=title;
     this.cardList=[];
@@ -216,7 +212,7 @@ class Card{
     })
 
     //Название карточки
-    this.cardName = document.createElement('div');    
+    this.cardName = document.createElement('div');
     if (this.textAreaOfCardForm.value != "")
     {
       this.cardName.innerText = this.textAreaOfCardForm.value;
@@ -241,7 +237,7 @@ class Card{
       console.log("Была удалена карточка");
     });
 
-    //Собираем объекты        
+    //Собираем объекты
     this.card.insertAdjacentHTML('beforeend',
                           '<span class="card-svg">' +
                             '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-note">' +
@@ -249,11 +245,11 @@ class Card{
                             '</svg>' +
                           '</span>' +
                           '<span class="card-content">' + this.cardName.innerText + '</span>' +
-                          '<small class="add-info color-fg-muted">Добавлено<a class="color-text-primary" href="#" draggable="false">Josen190</a></small>');   
+                          '<small class="add-info color-fg-muted">Добавлено<a class="color-text-primary" href="#" draggable="false">Josen190</a></small>');
     this.btnWrapper = document.createElement('div');
     this.btnWrapper.classList.add('button-wrapper');
     this.btnWrapper.append(this.DeleteCardBtn);
-    this.card.append(this.btnWrapper); 
+    this.card.append(this.btnWrapper);
 
     this.formCard.remove(); //Удаляем форму для создания карточки
     this.place.append(this.card); //Вместно неё добавляем обычную карточку
@@ -292,7 +288,7 @@ class Card{
           '<div class="info">' +
             '<h3 id = "nameCard" class="name">' + this.cardEntity.title + '</h3>' +
             '<p id = "statusOfCard">' + this.cardEntity.status + '</p>' +
-          '</div>');          
+          '</div>');
     this.divHeader.append(this.closeCardBtn);
     this.divHeader.insertAdjacentHTML('beforeend',
           '<div class="last-change">' +
@@ -303,7 +299,7 @@ class Card{
 
 
     //Содержимое карточки
-    //================================================================================================//    
+    //================================================================================================//
     this.divContent = document.createElement('div');
     this.divContent.classList.add('content');
     //Контейнер для кнопок Содержание и Изменить
@@ -328,11 +324,11 @@ class Card{
       this.ChangeContentBtn.parentNode.childNodes[0].removeAttribute('disabled');
       this.ChangeContentBtn.parentNode.childNodes[1].setAttribute("disabled", "true");
       this.ChangeContentBtn.parentNode.nextSibling.childNodes[0].removeAttribute('disabled');
-    });    
+    });
     //Контейнер для текстового поля
     this.divTextContainer = document.createElement('div');
     setAttributes(this.divTextContainer, {"class":"filling", "placeholder":"Введите содержание карточки"});
-    this.divTextContainer.classList.add('filling');    
+    this.divTextContainer.classList.add('filling');
     //Текстовое поле
     this.textAreaForCard  = document.createElement('textarea');
     this.textAreaForCard.setAttribute('disabled', 'true');
@@ -348,8 +344,8 @@ class Card{
     });
     //Собираем эту часть карточки
     this.btnContainer.append(this.ContentBtn, this.ChangeContentBtn);
-    this.divTextContainer.append(this.textAreaForCard);   
-    this.divContent.append(this.btnContainer, this.divTextContainer);    
+    this.divTextContainer.append(this.textAreaForCard);
+    this.divContent.append(this.btnContainer, this.divTextContainer);
     //================================================================================================//
 
 
@@ -381,14 +377,14 @@ class Card{
         e.stopPropagation();
         if(e.target.id == "estimateWindow"){
           this.estimateWindow.remove();
-        }        
+        }
       })
       //Кнопка "Сохранить"
       this.estimateWindow.querySelector('#buttonSaveMark').addEventListener('click', ()=>{
         this.estimateWindow.remove();
-        
+
         this.cardEntity.mark = String(this.estimateWindow.querySelector('#inputMark').value);
-        this.markDiv.innerText = "Оценка: " + String(this.estimateWindow.querySelector('#inputMark').value);        
+        this.markDiv.innerText = "Оценка: " + String(this.estimateWindow.querySelector('#inputMark').value);
       })
 
       document.getElementById('showCardContaier').append(this.estimateWindow);
@@ -424,10 +420,10 @@ class Card{
           e.stopPropagation();
           if(e.target.id == "statusWindow"){
             this.statusWindowWrapper.remove();
-          }        
+          }
         })
         this.statusWindowWrapper.querySelector('.button').addEventListener('click', ()=>{
-          this.statusWindowWrapper.remove();       
+          this.statusWindowWrapper.remove();
         })
         this.statusWindowWrapper.querySelector('#inProcess').addEventListener('click', ()=>{
           this.divCard.querySelector('#statusOfCard').innerText = this.statusWindowWrapper.querySelector('#inProcess').value;
@@ -441,7 +437,7 @@ class Card{
           this.divCard.querySelector('#statusOfCard').innerText = this.statusWindowWrapper.querySelector('#Completed').value;
           this.cardEntity.status = this.statusWindowWrapper.querySelector('#Completed').value;
         });
-  
+
         document.getElementById('showCardContaier').append(this.statusWindowWrapper);
     })
 
@@ -462,7 +458,7 @@ class Card{
     this.markDiv.innerText = "Оценка: " + this.cardEntity.mark;
 
     //Собираем эту часть карточки
-    this.actionsBtns.append(this.estimateBtn, this.status, this.delete, this.markDiv);    
+    this.actionsBtns.append(this.estimateBtn, this.status, this.delete, this.markDiv);
     //================================================================================================//
 
     //Коментарии
@@ -493,7 +489,7 @@ class Card{
     })
     //Контейнер для старых комментариев
     this.oldCommentsContainer = document.createElement('div');
-    setAttributes(this.oldCommentsContainer, {"class":"old", "id":"commentList"});        
+    setAttributes(this.oldCommentsContainer, {"class":"old", "id":"commentList"});
 
     this.renderComments();
     //Собираем данный элемент карточки
@@ -539,7 +535,7 @@ class Comment{
                 '</div>' +
                 '<div class="content-comment">' +
                   '<p id = "contentComment" >' + this.comment +'</p>' +
-                '</div>')    
+                '</div>')
         this.place.append(this.div);
     }
 }

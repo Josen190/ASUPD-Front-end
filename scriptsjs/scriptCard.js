@@ -1,3 +1,4 @@
+
 function lastEdit(userId = 'тест', data = '01.11.2021') {
   document.getElementById("lastData").innerHTML = "Последнее изменение: " + data;
   document.getElementById("lastUser").innerHTML = "Изменил: " + userId;

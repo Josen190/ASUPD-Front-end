@@ -25,11 +25,9 @@ header {
   color: white;
   top: 0;
 }
-
 header .navbar {
   background-color: #164ACF;
 }
-
 header a, header a:link, header a:visited {
   text-decoration: none;
   color: white;
@@ -48,7 +46,6 @@ button {
   width: 100%;
   border-radius: 10px;
 }
-
 .button:hover {
   -webkit-box-shadow: 10px 5px 5px gray;
           box-shadow: 10px 5px 5px gray;
@@ -104,13 +101,11 @@ aside {
   padding: 12px;
   text-align: center;
 }
-
 @media (max-width: 449px) {
   aside {
     top: 70px;
   }
 }
-
 aside div.form > input {
   margin-bottom: 15px;
   width: 100%;
@@ -121,14 +116,12 @@ aside div.form > input {
   outline: 0;
   text-align: center;
 }
-
 aside div.form > input:focus {
   border: 2px solid blue;
   -webkit-box-shadow: none;
           box-shadow: none;
   text-align: start;
 }
-
 aside .button {
   cursor: pointer;
   background-color: white;
@@ -136,7 +129,6 @@ aside .button {
   width: 100%;
   border-radius: 10px;
 }
-
 aside .button:hover {
   -webkit-box-shadow: 10px 5px 5px gray;
           box-shadow: 10px 5px 5px gray;
@@ -154,19 +146,16 @@ aside .button:hover {
   overflow-x: auto;
   padding: 16px;
 }
-
 @media (max-width: 449px) {
   #board {
     top: 70px;
   }
 }
-
 @media (max-width: 768px) {
   #board {
     left: 1%;
   }
 }
-
 #board .row-my {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -182,27 +171,22 @@ aside .button:hover {
           align-items: flex-start;
   height: 100%;
 }
-
 #board .col-my {
   scrollbar-width: var(--scrollbarWidth);
   scrollbar-color: var(--scrollbarThumb) var(--scrollbarBg);
 }
-
 #board .col-my::-webkit-scrollbar {
   width: var(--scrollbarWidth);
 }
-
 #board .col-my::-webkit-scrollbar-track {
   background: var(--scrollbarBg);
   border-radius: var(--scrollbarBorderRadius);
 }
-
 #board .col-my::-webkit-scrollbar-thumb {
   background-color: var(--scrollbarThumb);
   border-radius: var(--scrollbarBorderRadius);
   border: var(--scrollbarBorder);
 }
-
 #board .col-my {
   border-width: 1px;
   border-radius: 6px;
@@ -215,12 +199,10 @@ aside .button:hover {
   max-height: 95%;
   width: 30%;
 }
-
 #board .col-my .col-header {
   padding: 8px;
   vertical-align: middle;
 }
-
 #board .col-my .col-header .number-cards {
   display: inline-block;
   min-width: 40px;
@@ -234,7 +216,6 @@ aside .button:hover {
   border: 1px solid transparent;
   border-radius: 2em;
 }
-
 #board .col-my .col-header .name-column {
   display: inline;
   font-size: 14px;
@@ -242,9 +223,9 @@ aside .button:hover {
   margin: 0;
   font-weight: 600;
 }
-
 #board .col-my .col-header .button-new-card {
   padding: 4px;
+  float: right;
   display: inline-block;
   line-height: 1;
   background: transparent;
@@ -256,16 +237,13 @@ aside .button:hover {
           align-items: center;
   border: 0px;
 }
-
 #board .col-my .col-header .button-new-card:hover {
   background-color: #f2f4fb;
 }
-
 #board .col-my .col-header .column-menu {
   float: right;
   display: inline;
 }
-
 #board .col-my .col-header .column-menu .open {
   position: absolute;
   z-index: 2;
@@ -276,11 +254,9 @@ aside .button:hover {
   top: 0;
   margin-top: 32px;
 }
-
 #board .col-my .col-content {
   padding: 8px;
 }
-
 #board .col-my .col-content .card {
   margin-bottom: 8px;
   overflow: hidden;
@@ -289,42 +265,26 @@ aside .button:hover {
   border-width: 1px;
   border-radius: 6px;
 }
-
 #board .col-my .col-content .card:hover {
   background-color: #f2f4fb;
 }
-
-#board .col-my .col-content .card .button-wrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-}
-
-#board .col-my .col-content .card .button-wrapper button {
-  width: 25px;
-  height: 25px;
-}
-
 #board .col-my .col-content .card .card-svg {
   position: absolute;
 }
-
 #board .col-my .col-content .card .card-content {
   font-size: 14px;
   margin-left: 24px;
   margin-top: 2px;
 }
-
 #board .col-my .col-content .card .add-info {
   font-size: 10px;
   margin-left: 24px;
   margin-top: 2px;
 }
-
-#board .col-my .col-content .form .flex {
+#board .col-my .col-content .add-card {
+  margin-top: 4px;
+}
+#board .col-my .col-content .add-card .form .flex {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -342,24 +302,20 @@ aside .button:hover {
           flex-direction: row;
   margin: 0.5rem;
 }
-
-#board .col-my .col-content .form .flex .btn {
+#board .col-my .col-content .add-card .form .flex .btn {
   color: #ffffff;
   background-color: #2da44e;
   border-color: #1b1f2426;
   -webkit-transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
   transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
 }
-
-#board .col-my .col-content .form .flex .btn:hover {
+#board .col-my .col-content .add-card .form .flex .btn:hover {
   background-color: #2c974b;
 }
-
 #board .add-column {
   display: block;
   width: 320px;
 }
-
 #board .add-column .add-column-btn {
   width: 315px;
   border-color: #d0d7de;
@@ -376,7 +332,6 @@ aside .button:hover {
   border-radius: 6px;
   border: 1px solid #d0d7de;
 }
-
 #board .add-column .add-column-btn:hover {
   background-color: #f2f4fb;
 }
@@ -388,7 +343,6 @@ aside .button:hover {
   height: 100%;
   background-color: #00000066;
 }
-
 .create-column .form-column {
   position: fixed;
   top: 40%;
@@ -401,21 +355,20 @@ aside .button:hover {
   border-radius: 30px;
   border: 1px solid #d0d7de;
 }
-
 .create-column .form-column .form-header {
   display: block;
   padding: 16px;
 }
-
 .create-column .form-column .form-header .name {
   padding: 4px;
   display: inline-block;
   line-height: 1;
 }
-
 .create-column .form-column .form-header .form-close {
+  float: right;
   display: inline-block;
   -webkit-column-width: 1;
+     -moz-column-width: 1;
           column-width: 1;
   background: transparent;
   width: 50px;
@@ -426,15 +379,12 @@ aside .button:hover {
           align-items: center;
   border: 0px;
 }
-
 .create-column .form-column .form-header .form-close:hover {
   background-color: #f2f4fb;
 }
-
 .create-column .form-column .content {
   padding: 16px;
 }
-
 .create-column .form-column .content .input_text {
   border-radius: 30px;
   margin: 0 auto 15px;
@@ -442,50 +392,43 @@ aside .button:hover {
   background-color: inherit;
   width: 100%;
   background-clip: padding-box;
-  border: 1px  solid #d0d7de;
+  border: 1px solid #d0d7de;
   height: 35px;
   padding: inherit;
 }
-
 .create-column .form-column .content .create-column-btn {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.card-wrapper {
-  background-color: rgba(0, 0, 0, 0.8);
-  position: fixed;
-  top: 0;
-  left: 0;
+#card {
+  position: absolute;
+  z-index: 4;
   width: 100%;
   height: 100%;
+  background-color: #00000066;
 }
-
-.card-wrapper .form-card {
+#card .form-card {
   scrollbar-width: var(--scrollbarWidth);
   scrollbar-color: var(--scrollbarThumb) var(--scrollbarBg);
 }
-
-.card-wrapper .form-card::-webkit-scrollbar {
+#card .form-card::-webkit-scrollbar {
   width: var(--scrollbarWidth);
 }
-
-.card-wrapper .form-card::-webkit-scrollbar-track {
+#card .form-card::-webkit-scrollbar-track {
   background: var(--scrollbarBg);
   border-radius: var(--scrollbarBorderRadius);
 }
-
-.card-wrapper .form-card::-webkit-scrollbar-thumb {
+#card .form-card::-webkit-scrollbar-thumb {
   background-color: var(--scrollbarThumb);
   border-radius: var(--scrollbarBorderRadius);
   border: var(--scrollbarBorder);
 }
-
-.card-wrapper .form-card {
+#card .form-card {
   position: fixed;
   overflow: hidden;
-  top: 51%;
+  top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
@@ -497,87 +440,74 @@ aside .button:hover {
   padding: 20px;
   overflow-y: auto;
 }
-
-.card-wrapper .form-card .header {
+#card .form-card .header {
   display: block;
   height: 80px;
   width: 100%;
 }
-
-.card-wrapper .form-card .header .info {
+#card .form-card .header .info {
   display: block;
   float: left;
   width: 50%;
 }
-
-.card-wrapper .form-card .header .info * {
+#card .form-card .header .info * {
   margin: 0;
   margin-bottom: 1px;
 }
-
-.card-wrapper .form-card .header .close {
+#card .form-card .header .close {
   display: block;
   float: right;
   width: 25px;
   height: 25px;
 }
-
-.card-wrapper .form-card .header .last-change {
+#card .form-card .header .last-change {
   display: block;
-  text-align: end;
+  text-align: right;
   position: relative;
   top: 33%;
   right: 3%;
 }
-
-.card-wrapper .form-card .header .last-change p {
+#card .form-card .header .last-change p {
   margin: 0;
   font-size: 12px;
 }
-
-.card-wrapper .form-card .content {
+#card .form-card .content {
   display: block;
   float: left;
   width: 70%;
 }
-
-.card-wrapper .form-card .content .mode {
+#card .form-card .content .mode {
   display: inline-block;
   margin: 0;
 }
-
-.card-wrapper .form-card .content .mode #viewingCardContents {
+#card .form-card .content .mode #viewingCardContents {
   border: 2px solid black;
   border-bottom: 0;
   border-right: 1px solid black;
   width: 120px;
 }
-
-.card-wrapper .form-card .content .mode #viewingCardContents:not([disabled]):hover {
+#card .form-card .content .mode #viewingCardContents:not([disabled]):hover {
   background-color: gray;
   color: #fff;
 }
-
-.card-wrapper .form-card .content .mode #changeCardContents {
+#card .form-card .content .mode #changeCardContents {
   border: 2px solid black;
   border-bottom: 0;
   border-left: 1px solid black;
   width: 120px;
   position: relative;
+  left: -4.5px;
 }
-
-.card-wrapper .form-card .content .mode #changeCardContents:not([disabled]):hover {
+#card .form-card .content .mode #changeCardContents:not([disabled]):hover {
   background-color: gray;
   color: #fff;
 }
-
-.card-wrapper .form-card .content .filling {
+#card .form-card .content .filling {
   display: block;
   height: 300px;
   border: 2px solid black;
 }
-
-.card-wrapper .form-card .content .filling textarea {
+#card .form-card .content .filling textarea {
   resize: none;
   width: 100%;
   height: 100%;
@@ -588,20 +518,17 @@ aside .button:hover {
   color: black;
   font-size: 18px;
 }
-
-.card-wrapper .form-card .comments {
+#card .form-card .comments {
   display: block;
   width: 70%;
   float: left;
   margin-top: 15px;
 }
-
-.card-wrapper .form-card .comments .new {
+#card .form-card .comments .new {
   display: block;
 }
-
-.card-wrapper .form-card .comments .new textarea {
-  font-size: .8rem;
+#card .form-card .comments .new textarea {
+  font-size: 0.8rem;
   letter-spacing: 1px;
   padding: 5px;
   width: 100%;
@@ -610,8 +537,7 @@ aside .button:hover {
   border-radius: 5px;
   border: 1px solid #ccc;
 }
-
-.card-wrapper .form-card .comments .new button {
+#card .form-card .comments .new button {
   margin-left: 73%;
   border-radius: 5px;
   border: 1px solid black;
@@ -619,8 +545,7 @@ aside .button:hover {
   background-color: #2da44e;
   border-color: #1b1f2426;
 }
-
-.card-wrapper .form-card .comments .old {
+#card .form-card .comments .old {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -630,44 +555,38 @@ aside .button:hover {
       -ms-flex-direction: column;
           flex-direction: column;
 }
-
-.card-wrapper .form-card .comments .old .elem-comment {
+#card .form-card .comments .old .elem-comment {
   border-radius: 5px;
   border: 1px solid black;
   width: 100%;
   height: auto;
   margin-top: 5px;
 }
-
-.card-wrapper .form-card .comments .old .elem-comment .info-comment {
+#card .form-card .comments .old .elem-comment .info-comment {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
   margin: 5px;
 }
-
-.card-wrapper .form-card .comments .old .elem-comment .info-comment #userCommen {
+#card .form-card .comments .old .elem-comment .info-comment #userCommen {
   font-size: 20px;
   font-family: cursive;
   margin-bottom: 2px;
 }
-
-.card-wrapper .form-card .comments .old .elem-comment .info-comment #dataComment {
+#card .form-card .comments .old .elem-comment .info-comment #dataComment {
   position: relative;
   top: 5px;
   font-size: 15px;
   margin-left: 10px;
   margin-bottom: 2px;
 }
-
-.card-wrapper .form-card .comments .old .elem-comment .content-comment {
+#card .form-card .comments .old .elem-comment .content-comment {
   margin: 5px;
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
-
-.card-wrapper .form-card .actions {
+#card .form-card .actions {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -679,37 +598,22 @@ aside .button:hover {
   float: right;
   text-align: center;
 }
-
-.card-wrapper .form-card .actions h4 {
+#card .form-card .actions h4 {
   font-size: 25px;
 }
-
-.card-wrapper .form-card .actions button {
+#card .form-card .actions button {
   border: 1px solid black;
 }
-
-.card-wrapper .form-card .actions button:hover {
+#card .form-card .actions button:hover {
   background-color: gray;
   border-radius: 5px;
   color: #fff;
 }
-
-.card-wrapper .form-card .actions * {
+#card .form-card .actions * {
   margin-bottom: 2px;
   font-size: 13px;
 }
-
-.pop-outer {
-  background-color: rgba(0, 0, 0, 0.8);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-.pop-outer .form-estimate {
+#card .form-estimate {
   position: fixed;
   overflow: hidden;
   top: 50%;
@@ -724,21 +628,18 @@ aside .button:hover {
   padding: 20px;
   z-index: 5;
 }
-
-.pop-outer .form-estimate .header {
+#card .form-estimate .header {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
-
-.pop-outer .form-estimate .header button {
+#card .form-estimate .header button {
   position: relative;
   left: 30%;
   height: 25px;
   width: 25px;
 }
-
-.pop-outer .form-estimate .estimate {
+#card .form-estimate .estimate {
   display: block;
   position: fixed;
   overflow: hidden;
@@ -748,18 +649,15 @@ aside .button:hover {
   transform: translate(-50%, -50%);
   font-size: 20px;
 }
-
-.pop-outer .form-estimate .estimate input {
+#card .form-estimate .estimate input {
   border: 2px solid black;
 }
-
-.pop-outer .form-estimate .estimate button {
+#card .form-estimate .estimate button {
   position: relative;
   left: 25%;
   margin-top: 8px;
 }
-
-.pop-outer .form-status {
+#card .form-max-estimate {
   position: fixed;
   overflow: hidden;
   top: 50%;
@@ -767,28 +665,69 @@ aside .button:hover {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   background-color: #fff;
-  width: 35%;
-  height: 40%;
+  width: 25%;
+  height: 30%;
   border-radius: 30px;
   border: 1px solid black;
   padding: 20px;
   z-index: 5;
 }
-
-.pop-outer .form-status .header {
+#card .form-max-estimate .header {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
-
-.pop-outer .form-status .header button {
+#card .form-max-estimate .header button {
+  position: relative;
+  left: 30%;
+  height: 25px;
+  width: 25px;
+}
+#card .form-max-estimate .estimate {
+  display: block;
+  position: fixed;
+  overflow: hidden;
+  top: 60%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+}
+#card .form-max-estimate .estimate input {
+  border: 2px solid black;
+}
+#card .form-max-estimate .estimate button {
+  position: relative;
+  left: 25%;
+  margin-top: 8px;
+}
+#card .form-status {
+  position: fixed;
+  overflow: hidden;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 25%;
+  height: 30%;
+  border-radius: 30px;
+  border: 1px solid black;
+  padding: 20px;
+  z-index: 5;
+}
+#card .form-status .header {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+#card .form-status .header button {
   position: relative;
   left: 40%;
   height: 25px;
   width: 25px;
 }
-
-.pop-outer .form-status .status {
+#card .form-status .status {
   display: block;
   position: fixed;
   overflow: hidden;
@@ -797,4 +736,37 @@ aside .button:hover {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   font-size: 25px;
+}
+#card .form-delete {
+  position: fixed;
+  overflow: hidden;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 20%;
+  height: 30%;
+  border-radius: 30px;
+  border: 1px solid black;
+  padding: 20px;
+  z-index: 5;
+}
+#card .form-delete .header {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+#card .form-delete .delete {
+  display: block;
+  position: fixed;
+  overflow: hidden;
+  top: 60%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-size: 25px;
+}
+#card .form-delete .delete * {
+  margin: 8px;
 }
