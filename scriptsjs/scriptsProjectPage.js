@@ -49,7 +49,11 @@ addColumnBtn.addEventListener('click', ()=>{
 let root = document.getElementById("addColumn");
 
 class ListForCards{
-  constructor(place, title="To do"){
+  constructor(place, title="новая колонка"){
+    let name = document.getElementById("nameColum");
+    if (name.value != "") title = name.value;
+    name.value = "";
+    
     this.place=place;
     this.title=title;
     this.cardList=[];
