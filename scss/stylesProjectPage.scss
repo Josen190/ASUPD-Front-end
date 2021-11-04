@@ -214,14 +214,20 @@ aside
                 background-color: peachpuff;
                 border: 1px solid transparent;
                 border-radius: 2em;
+                position: relative;
+                bottom: 13px;
             }
 
             .name-column{
-                display: inline;
+                display: inline-block;
                 font-size: 14px;
                 padding: 4px;
                 margin: 0;
                 font-weight: 600;
+                width: 185px;
+                height: 40px;
+                overflow: auto;
+                align-items: center;
             }
 
             .button-new-card{
@@ -235,7 +241,7 @@ aside
                 align-items: center;
                 border: 0px;
                 position: relative;
-                left: 53%;
+                bottom: 21px;
 
                 &:hover
                 {

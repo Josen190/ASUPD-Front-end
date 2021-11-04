@@ -215,13 +215,21 @@ aside .button:hover {
   background-color: peachpuff;
   border: 1px solid transparent;
   border-radius: 2em;
+  position: relative;
+  bottom: 13px;
 }
 #board .col-my .col-header .name-column {
-  display: inline;
+  display: inline-block;
   font-size: 14px;
   padding: 4px;
   margin: 0;
   font-weight: 600;
+  width: 185px;
+  height: 40px;
+  overflow: auto;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 #board .col-my .col-header .button-new-card {
   padding: 4px;
@@ -236,7 +244,7 @@ aside .button:hover {
           align-items: center;
   border: 0px;
   position: relative;
-  left: 53%;
+  bottom: 21px;
 }
 #board .col-my .col-header .button-new-card:hover {
   background-color: #f2f4fb;
