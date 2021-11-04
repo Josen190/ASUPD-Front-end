@@ -226,7 +226,6 @@ aside
 
         .button-new-card{
           padding: 4px;
-          float: right;
           display: inline-block;
           line-height: 1;
           background: transparent;
@@ -267,6 +266,15 @@ aside
               background-color: #f2f4fb;
           }
 
+          .button-wrapper{
+            display: flex;
+            justify-content: flex-end;
+            button{
+              width: 25px;
+              height: 25px;
+            }
+          }
+
           margin-bottom: 8px;
           overflow: hidden;
           padding: 4px 8px;
@@ -291,9 +299,6 @@ aside
           }
         }
 
-        .add-card{
-          margin-top: 4px;
-
           .form{
             .flex{
               display: flex;
@@ -316,9 +321,6 @@ aside
               }
             }
           }
-
-
-        }
       }
     }
 
@@ -382,7 +384,6 @@ aside
           line-height: 1;
         }
         .form-close{
-          float: right;
           display: inline-block;
           column-width: 1;
           background: transparent;
@@ -402,9 +403,6 @@ aside
       .content{
         padding: 16px;
 
-        .name{
-
-        }
 
         .input_text{
           border-radius: 30px;
