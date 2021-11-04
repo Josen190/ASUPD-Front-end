@@ -28,8 +28,6 @@
 
     <div class="containter-fluid">
       <div id="board" class="row-my row flex-nowrap">
-        <!-- колонки -->
-
         <div id = "addColumn" class="add-column">
           <!-- кнопка создать колонку -->
           <button id="add-column-btn" class="add-column-btn" aria-expanded="false" onclick="removeClass('create-column', 'display-none')">
@@ -95,7 +93,7 @@
         <div class="content">
           <h4 class="name">Имя колонки</h4>
           <input id = "nameColum" type="text" class="input_text" name="" value="">
-          <button id= "createColumn"type="submit" data-view-component="true" class="create-column-btn flex-auto btn-primary btn" onclick="addClass('create-column', 'display-none')">
+          <button id="createColumn" type="submit" data-view-component="true" class="create-column-btn flex-auto btn-primary btn" onclick="addClass('create-column', 'display-none')">
             Создать колонку
           </button>
         </div>
@@ -135,7 +133,7 @@
           <button type="button" name="delete" onclick="removeClass('form-delete', 'display-none')">Удалить</button>
         </div>
         <div class="comments">
-          <h5>Коментарии</h4>
+          <h4>Коментарии</h4>
           <div class="new">
             <textarea name="comment" rows="3" required></textarea>
             <button id = "sendComment" type="button" name="sendСomment" class="btn" onclick="addComent(this.parentNode)">Отправить</button>
@@ -163,8 +161,8 @@
           <button type="button" name="close" class="button" onclick="addClass('form-estimate', 'display-none')">x</button>
         </div>
         <div class="estimate">
-            <input type="text" name="" placeholder="Оценка">
-            <button type="button" name="button">Сохранить</button>
+          <input type="text" name="" placeholder="Оценка">
+          <button type="button" name="button">Сохранить</button>
         </div>
       </div>
 
