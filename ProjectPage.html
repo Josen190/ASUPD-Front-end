@@ -97,7 +97,116 @@
           </button>
         </div>
       </div>
-    </div>    
+    </div>
+
+    <!-- окно карти -->
+    <div id = "card" class="card">
+      <div class="form-card">
+        <div class="header">
+          <div class="info">
+            <h3 id = "nameCard" class="name">Название</h3>
+            <p id = "inColumn">В этапе</p>
+          </div>
+          <div class="close">
+            <button type="button" name="close" class="button" onclick="addClass('card', 'display-none')">x</button>
+          </div>
+          <div class="last-change">
+            <p id = "lastData">Последнее изменение: lastData</p>
+            <p id = "lastUser">Изменил: lastUser</p>
+          </div>
+        </div>
+        <div class="content">
+          <div class="mode">
+            <button id = "viewingCardContents" type="button" name="viewing" onclick="viewingContentCard(this.parentNode.parentNode)" disabled>Содержание</button>
+            <button id="changeCardContents" type="button" name="change" onclick="eidtContentCard(this.parentNode.parentNode)">Изменить</button>
+          </div>
+          <div class="filling">
+            <textarea disabled="true"></textarea>
+          </div>
+        </div>
+        <div class="actions">
+          <h4>Действия</h4>
+          <button type="button" name="estimate" onclick="removeClass('form-estimate', 'display-none')">Оценить</button>
+          <button type="button" name="max_estimate" onclick="removeClass('form-max-estimate', 'display-none')">Поставить макс оценку</button>
+          <button type="button" name="status" onclick="removeClass('form-status', 'display-none')">Измениьт статус</button>
+          <button type="button" name="delete" onclick="removeClass('form-delete', 'display-none')">Удалить</button>
+        </div>
+        <div class="comments">
+          <h5>Коментарии</h4>
+            <div class="new">
+              <textarea name="comment" rows="3" required></textarea>
+              <button id = "sendComment" type="button" name="sendСomment" class="btn" onclick="addComent(this.parentNode)">Отправить</button>
+            </div>
+            <div id = "commentList" class="old">
+              <template id="tempComment">
+                <div class="elem-comment">
+                  <div class="info-comment">
+                    <a id = "userCommen">кто</a>
+                    <data id = "dataComment">дата</data>
+                  </div>
+                  <div class="content-comment">
+                    <p id = "contentComment" >текст коментария</p>
+                  </div>
+                </div>
+              </template>
+            </div>
+        </div>
+      </div>
+
+      <!-- окно оценки -->
+      <div id = "form-estimate" class="form-estimate display-none">
+        <div class="header">
+          <h3>Оценить карточку</h3>
+          <button type="button" name="close" class="button" onclick="addClass('form-estimate', 'display-none')">x</button>
+        </div>
+        <div class="estimate">
+          <input type="text" name="" placeholder="Оценка">
+          <button type="button" name="button">Сохранить</button>
+        </div>
+      </div>
+
+      <!-- окно максимальной оценки -->
+      <div id = "form-max-estimate" class="form-max-estimate display-none">
+        <div class="header">
+          <h3>Оценить карточку</h3>
+          <button type="button" name="close" class="button" onclick="addClass('form-max-estimate', 'display-none')">x</button>
+        </div>
+        <div class="estimate">
+          <input type="text" name="" placeholder="Максимальная оценка">
+          <button type="button" name="button">Сохранить</button>
+        </div>
+      </div>
+
+      <!-- окно изменения статуса -->
+      <div id = "form-status" class="form-status display-none">
+        <div class="header">
+          <h3>Изменить статус</h3>
+          <button type="button" name="close" class="button" onclick="addClass('form-status', 'display-none')">x</button>
+        </div>
+        <div class="status">
+          <div>
+            <input type="radio" name="" value="В процессе"> В процессе
+          </div>
+          <div>
+            <input type="radio" name="" value="На проверке"> На проверке
+          </div>
+          <div>
+            <input type="radio" name="" value="Завершён"> Завершён
+          </div>
+        </div>
+      </div>
+
+      <!-- окно удаления карточки -->
+      <div id = "form-delete" class="form-delete display-none">
+        <div class="header">
+          <h3>Удалить?</h3>
+        </div>
+        <div class="delete">
+          <button type="button" name="button">ДА</button>
+          <button type="button" name="button" onclick="addClass('form-delete', 'display-none')">НЕТ</button>
+        </div>
+      </div>
+    </div>
 
     <div id="showCardContaier"></div> 
  
