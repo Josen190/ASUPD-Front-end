@@ -1,83 +1,81 @@
-header {
-  height: 30px;
-  background: rgb(10, 43, 189);
-  color: #fff;
-  padding: 0;
-  border: solid 1px black;
+body {
+  background-color: #f2f4fb;
 }
-
-header .header-block {
-  width: 49%;
-  float: left;
-  padding: 5px;
-  font-size: large;
+small {
+  font-size: 90%;
 }
-
-header a {
-  color: white;
-}
-
-main {
+main{
+  margin-top: 50px;
   padding-left: 20px;
-  padding-right: 20px;
-  border: solid 2px black;
+  padding-right: 100px;
 }
-
-.block1 {
+.block{
+  background-color: white;
+  border: solid 1px black;
+  margin: 20px;
+}
+header {
+  position: fixed;
   width: 100%;
-  height: 200px;
-  background: #ccc;
-  padding: 0;
-  border: solid 1px black;
+  color: white;
+  top: 0;
 }
-
-.block2 {
-  height: 100%;
-  float: left;
-  background: #fff;
-  text-align: center;
-  border: solid 1px black;
+header .navbar {
+  background-color: #164ACF;
 }
-
-.personal-info {
-  width: 60%;
+header a, header a:link, header a:visited {
+  text-decoration: none;
+  color: white;
+  margin: 0 20px;
 }
-
-.avatar {
-  width: 15%;
-}
-
-.btn-panel {
-  width: 24%;
-}
-
-.block2 img {
-  height: 50%;
+.avatar img{
+  width: 100%;
   position: relative;
-  top: 25%;
+  padding: 10%;
   border-radius: 50%;
 }
-
 .personal-info p {
   text-align: left;
-  margin-bottom: -10px;
+  margin: 10px;
 }
-
-.block1 .my-projects {
-  width: 95%;
+.my-projects {
   height: 100%;
-  padding-left: 5%;
-  background-color: aquamarine;
 }
-
-.block1 .access-btn {
-  background-color: aqua;
+.access-btn{
+}
+button {
+  -webkit-transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+}
+.button {
+  cursor: pointer;
+  background-color: white;
+  border: 0px;
   width: 100%;
-  height: 100%;
+  border-radius: 10px;
+}
+.button:hover {
+  -webkit-box-shadow: 10px 5px 5px gray;
+          box-shadow: 10px 5px 5px gray;
+  background-color: #f2f4fb;
 }
 
-.access-btn button {
-  height: 30px;
-  position: relative;
+.pull-left {
+  float: left;
+}
+
+.pull-right {
   float: right;
+}
+
+.color-text-primary {
+  color: #24292f;
+}
+
+.color-fg-muted {
+  color: #57606a;
+}
+
+.display-none {
+  display: none;
 }
