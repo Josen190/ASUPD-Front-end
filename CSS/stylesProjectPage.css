@@ -202,10 +202,13 @@ aside .button:hover {
 #board .col-my .col-header {
   padding: 8px;
   vertical-align: middle;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 #board .col-my .col-header .number-cards {
-  display: inline-block;
-  min-width: 40px;
+  width: 40px;
+  height: 20px;
   padding: 0 6px;
   font-size: 15px;
   font-weight: 500;
@@ -215,16 +218,13 @@ aside .button:hover {
   background-color: peachpuff;
   border: 1px solid transparent;
   border-radius: 2em;
-  position: relative;
-  bottom: 13px;
 }
 #board .col-my .col-header .name-column {
-  display: inline-block;
   font-size: 14px;
   padding: 4px;
   margin: 0;
   font-weight: 600;
-  width: 185px;
+  width: calc(100% - 85px);
   height: 40px;
   overflow: auto;
   -webkit-box-align: center;
@@ -233,7 +233,6 @@ aside .button:hover {
 }
 #board .col-my .col-header .button-new-card {
   padding: 4px;
-  display: inline-block;
   line-height: 1;
   background: transparent;
   width: 25px;
@@ -243,15 +242,14 @@ aside .button:hover {
       -ms-flex-align: center;
           align-items: center;
   border: 0px;
-  position: relative;
-  bottom: 21px;
 }
 #board .col-my .col-header .button-new-card:hover {
   background-color: #f2f4fb;
 }
 #board .col-my .col-header .column-menu {
-  float: right;
-  display: inline;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
 }
 #board .col-my .col-header .column-menu .open {
   position: absolute;
