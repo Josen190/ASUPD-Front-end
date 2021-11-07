@@ -4,18 +4,13 @@ body {
 small {
   font-size: 90%;
 }
-main{
-  margin-top: 50px;
-  padding-left: 20px;
-  padding-right: 100px;
-}
+
 .block{
   background-color: white;
-  border: solid 1px black;
-  margin: 20px;
+  border-radius: 20px;
 }
+
 header {
-  position: fixed;
   width: 100%;
   color: white;
   top: 0;
@@ -39,6 +34,9 @@ header a, header a:link, header a:visited {
   margin: 10px;
 }
 .my-projects {
+  padding-top: 10px;
+  padding-left: 20px;
+  text-align: left;
   height: 100%;
 }
 .access-btn{

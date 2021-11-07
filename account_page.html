@@ -24,10 +24,7 @@
   </header>
 
   <main>
-    <h2 style="margin: 10px; text-align: center;">
-      <b>Личный кабинет</b>
-    </h2>
-    <div id="user-card" class="container block">
+    <div id="user-card" class="container m-3 py-2 px-4 block">
       <div class="row align-items-center">
         <div class="col-3">
           <div class="avatar">
@@ -37,7 +34,7 @@
         <div class="col-5">
           <div class="personal-info">
             <p>
-              Фамилия Имя Отчество<br>
+              <h3 style="margin-bottom: -10px;">Фамилия Имя Отчество</h3><br>
               Место работы<br>
               Должность<br>
               Дата рождения<br>
@@ -47,15 +44,18 @@
         </div>
         <div class="col-4">
           <div class="btn-panel">
-            <button class="btn btn-primary btn-sm" onclick="alert('Настройки')">Изменить данные</button>
-            <button class="btn btn-light btn-sm" onclick="alert('Вы вышли!')">Выйти из системы</button>
+            <button class="btn btn-primary btn-sm pull-right" onclick="alert('Настройки')">Изменить данные</button>
+            <br>
+            <br>
+            <br>
+            <button class="btn btn-light btn-sm pull-right" onclick="alert('Вы вышли!')">Выйти из системы</button>
           </div>
         </div>
       </div>
     </div>
-    <div class="container block">
+    <div class="container m-3 py-2 block">
       <div class="my-projects">
-        <p>Мои проекты:</p>
+        <p><i>Мои проекты:</i></p>
         <ul id="projects-list">
           <li><a href="#">проект 1</a></li>
           <li><a href="#">проект 2</a></li>
@@ -65,7 +65,7 @@
         </ul>
       </div>
     </div>
-    <div class="container">
+    <div class="container m-3">
       <div class="access-btn">
         <button class="btn btn-light btn-sm pull-right" onclick="alert('Заявка на повышение прав отправлена!')">Повысить права пользователя</button>
       </div>
