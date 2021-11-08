@@ -12,6 +12,7 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="css/stylesProjectBank.css">
 
+
   </head>
 
   <body id="bodyId">
@@ -35,132 +36,21 @@
         <input type="text">
       </div>
       <hr>
-      <div class="bank">
-        <div class="project">
+      <div id = "bank" class="bank">
+        <template id ="temp_project_card">
+          <div id = "testProject" class="project-card">
             <div class="info">
               <img src="img/1.jpg">
             </div>
             <div class="name">
-              <p ib="name">
-                имя проекта
-              </p>
+              <p ib="name"></p>
             </div>
-        </div>
-        <div class="project">
-          <div class="info">
-            <img src="img/3.jpg">
+            <div class="listen" ></div>
           </div>
-          <div class="name">
-            <p ib="name">
-              имя проекта
-            </p>
-          </div>
-        </div>
-        <div class="project">
-          <div class="info">
-            <img src="img/4.jpg">
-          </div>
-          <div class="name">
-            <p ib="name">
-              имя проекта
-            </p>
-          </div>
-        </div>
-        <div class="project">
-          <div class="info">
-            <img src="img/1.jpg">
-          </div>
-          <div class="name">
-            <p ib="name">
-              имя проекта
-            </p>
-          </div>
-        </div>
-        <div class="project">
-          <div class="info">
-            <img src="img/3.jpg">
-          </div>
-          <div class="name">
-            <p ib="name">
-              имя проекта
-            </p>
-          </div>
-        </div>
-        <div class="project">
-          <div class="info">
-            <img src="img/5.jpg">
-          </div>
-          <div class="name">
-            <p ib="name">
-              имя проекта
-            </p>
-          </div>
-        </div>
-        <div class="project">
-          <div class="info">
-            <img src="img/2.jpg">
-          </div>
-          <div class="name">
-            <p ib="name">
-              имя проекта
-            </p>
-          </div>
-        </div>
-        <div class="project">
-          <div class="info">
-            <img src="img/4.jpg">
-          </div>
-          <div class="name">
-            <p ib="name">
-              имя проекта
-            </p>
-          </div>
-        </div>
-        <div class="project">
-          <div class="info">
-            <img src="img/1.jpg">
-          </div>
-          <div class="name">
-            <p ib="name">
-              имя проекта
-            </p>
-          </div>
-        </div>
-        <div class="project">
-          <div class="info">
-            <img src="img/6.jpg">
-          </div>
-          <div class="name">
-            <p ib="name">
-              имя проекта
-            </p>
-          </div>
-        </div>
-        <div class="project">
-          <div class="info">
-            <img src="img/5.jpg">
-          </div>
-          <div class="name">
-            <p ib="name">
-              имя проекта
-            </p>
-          </div>
-        </div>
-        <div class="project">
-          <div class="info">
-            <img src="img/2.jpg">
-          </div>
-          <div class="name">
-            <p ib="name">
-              имя проекта
-            </p>
-          </div>
-        </div>
-
-      </div>
+        </template>
     </main>
 
-    <div class="project-proposal" style="display: none">
+    <div id = "project-proposal" class="project-proposal" style="display: none">
       <div class="form">
         <div class="name">
           <h2>Название</h2>
@@ -201,6 +91,16 @@
       </div>
     </div>
 
+    <div id = "load_circle" class="load" style="display: none">
+      <div class="cssload-loader">
+        <div class="cssload-inner cssload-one"></div>
+        <div class="cssload-inner cssload-two"></div>
+        <div class="cssload-inner cssload-three"></div>
+      </div>
+    </div>
 
+    <input type="button" onclick="newProjectCard('projectID', 'name')" value="создать">
+
+    <script src="scriptsjs/scriptProjectBank.js"></script>
   </body>
 </html>
