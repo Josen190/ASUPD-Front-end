@@ -10,9 +10,11 @@ header {
   color: white;
   top: 0;
 }
+
 header .navbar {
   background-color: #164ACF;
 }
+
 header a, header a:link, header a:visited {
   text-decoration: none;
   color: white;
@@ -33,10 +35,12 @@ main {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
+
 main .search-form:focus-within {
   outline: thick double #32a1ce;
   border: 0;
 }
+
 main .search-form {
   height: 35px;
   width: 100%;
@@ -50,7 +54,8 @@ main .search-form {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
-main .search-form input[type=text] {
+
+main .search-form input[type="text"] {
   height: 100%;
   width: calc(100% - 30px);
   border: 0;
@@ -61,6 +66,7 @@ main .search-form input[type=text] {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
+
 main .search-form .con {
   margin-top: 4px;
   margin-bottom: 2px;
@@ -70,13 +76,16 @@ main .search-form .con {
           align-items: center;
   width: 25px;
 }
+
 main .search-form .con svg {
   height: 100%;
   width: 100%;
 }
+
 main hr {
   margin: 10px -15px;
 }
+
 main .bank {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -87,6 +96,7 @@ main .bank {
       -ms-flex-pack: center;
           justify-content: center;
 }
+
 main .bank .project {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -106,15 +116,18 @@ main .bank .project {
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
 }
+
 main .bank .project:hover {
   background-color: rgba(206, 237, 208, 0.3);
 }
+
 main .bank .project .info {
   height: calc(100% - 40px);
   width: 101%;
   margin: 0;
   overflow: hidden;
 }
+
 main .bank .project .name {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -132,6 +145,7 @@ main .bank .project .name {
   padding: 5px;
   padding: var(--padding-size);
 }
+
 main .bank .project .name p {
   font-size: 25px;
   margin: 0;
@@ -146,6 +160,7 @@ main .bank .project .name p {
   height: 100%;
   z-index: 3;
 }
+
 .project-proposal .form {
   position: fixed;
   top: 50%;
@@ -162,9 +177,11 @@ main .bank .project .name p {
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
 }
+
 .project-proposal .form > div {
   margin-bottom: 10px;
 }
+
 .project-proposal .form dl {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -180,6 +197,7 @@ main .bank .project .name p {
           align-items: flex-start;
   margin: 0;
 }
+
 .project-proposal .form dl dt {
   background: #fff;
   border: 1px solid black;
@@ -192,6 +210,7 @@ main .bank .project .name p {
   line-height: 1;
   margin-bottom: 5px;
 }
+
 .project-proposal .form .name {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -200,6 +219,7 @@ main .bank .project .name p {
       -ms-flex-pack: center;
           justify-content: center;
 }
+
 .project-proposal .form .basic-info {
   padding: 5px;
   font-size: 15px;
@@ -207,6 +227,7 @@ main .bank .project .name p {
   height: 140px;
   border: 1px solid black;
 }
+
 .project-proposal .form .stages dl {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -216,9 +237,11 @@ main .bank .project .name p {
       -ms-flex-direction: row;
           flex-direction: row;
 }
+
 .project-proposal .form .stages dl dt {
   margin-right: 5px;
 }
+
 .project-proposal .form .s-m {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -227,6 +250,7 @@ main .bank .project .name p {
       -ms-flex-pack: justify;
           justify-content: space-between;
 }
+
 .project-proposal .form .s-m > div {
   width: 100%;
   height: 117px;
@@ -234,6 +258,7 @@ main .bank .project .name p {
   overflow-y: auto;
   padding: 5px;
 }
+
 .project-proposal .form .button {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -246,6 +271,7 @@ main .bank .project .name p {
   margin-left: 15px;
   margin-right: 15px;
 }
+
 .project-proposal .form .button > input {
   width: 100px;
   height: 25px;
@@ -255,6 +281,7 @@ main .bank .project .name p {
   border-top-right-radius: 15px;
   border: 1px solid black;
 }
+
 .project-proposal .form .button > input:hover {
   background-color: gray;
   color: #fff;
