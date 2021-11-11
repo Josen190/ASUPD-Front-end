@@ -14,113 +14,19 @@
 
   </head>
 
-  <body>
+  <body id="bodyId">
 
     <header>
       <nav class="navbar">
         <div class="container-fluid">
-          <a href="#">Банк проектных предложений</a>
-          <a href="#">Личный кабинет</a>
+          <a href="projectBank.html">Банк проектных предложений</a>
+          <a href="account_page.html">Личный кабинет</a>
         </div>
       </nav>
     </header>
 
-
     <div class="containter-fluid">
       <div id="board" class="row-my row flex-nowrap">
-        <!-- шаблон калонки -->
-        <template id="tempColumn">
-            <div id = "тестовая_колонка" class="col-my col-3">
-              <div class="col-header">
-                <span class="number-cards">0</span>
-                <h3 class="name-column">
-                  <span id = "nameColum">Название Колонки</span>
-                </h3>
-                <details class="column-menu">
-                  <summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">
-                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal">
-                      <path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
-                    </svg>
-                  </summary>
-                  <div class="open">
-                    <button type="button">Удалить столбец</button>
-                  </div>
-                </details>
-                <button type="button" aria-label="Добавить новую карточку" aria-expanded="false" class="button-new-card">
-                  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-plus">
-                    <path fill-rule="evenodd" d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"></path>
-                  </svg>
-                </button>
-              </div>
-              <div class="col-content">
-
-              </div>
-            </div>
-        </template>
-
-        <!-- шаблон карточки -->
-        <template id="tempCard">
-          <div id = "тестовая_карточка" class="card">
-            <span class="card-svg">
-              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-note">
-                <path fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H1.75zM3.5 6.25a.75.75 0 01.75-.75h7a.75.75 0 010 1.5h-7a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h4a.75.75 0 000-1.5h-4z"></path>
-              </svg>
-            </span>
-            <div class="card-content">
-              sdfsdfs
-            </div>
-            <small class="add-info color-fg-muted">
-              Добавлено
-              <a class="color-text-primary" href="#" draggable="false">Josen190</a>
-            </small>
-          </div>
-        </template>
-
-        <!-- колонки -->
-        <div class="col-my col-3">
-          <div class="col-header">
-            <span title="0" data-view-component="true" class="number-cards">0</span>
-            <h3 class="name-column">
-              <span id = "nameColum">Имя колонки</span>
-            </h3>
-            <details class="column-menu">
-              <summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">
-                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal">
-                  <path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
-                </svg>
-              </summary>
-              <div class="open">
-                <button type="button" name="button">удалить столбец</button>
-              </div>
-            </details>
-            <button type="button" class="button-new-card" aria-label="Добавить новую карточку" aria-expanded="false" onclick="removeClass('add-card', 'display-none')">
-              <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-plus">
-                <path fill-rule="evenodd" d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"></path>
-              </svg>
-            </button>
-          </div>
-
-          <div class="col-content">
-
-            <div id = "add-card" class="add-card display-none">
-              <div class="form" accept-charset="UTF-8">
-                <input type="hidden" name="content_type" value="Note">
-                <input type="hidden" name="client_uid" value="75de466ef3aa261df45a6fddefb6c289">
-                <textarea name="note" required="" autofocus="" aria-label="Введите заметку" class="form-control input-block js-quick-submit js-size-to-fit js-note-text js-length-limited-input" data-input-max-length="256" data-warning-length="99" data-warning-text="{{remaining}} remaining" placeholder="Введите заметку" spellcheck="false"></textarea>
-                <div class="flex">
-                  <button type="submit" class="btn" onclick="addCardFunc()">
-                        Добавлят
-                  </button>
-                  <button type="button" class="btn" onclick="addClass('add-card', 'display-none')">
-                        Отмена
-                  </button>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
         <div id = "addColumn" class="add-column">
           <!-- кнопка создать колонку -->
           <button id="add-column-btn" class="add-column-btn" aria-expanded="false" onclick="removeClass('create-column', 'display-none')">
@@ -155,18 +61,21 @@
           <div class="modal-body">
             <div class="container-fluid">
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioStatus" id="flexRadioInProcess" value="В процессе">В процессе
+                <input class="form-check-input" type="radio" name="flexRadioStatus" id="flexRadioInProcess" value="В процессе">
+                <label for="flexRadioInProcess">В процессе</label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioStatus" id="flexRadioStop" value="Приостановлен">Приостановлен
+                <input class="form-check-input" type="radio" name="flexRadioStatus" id="flexRadioStop" value="Приостановлен">
+                <label for="flexRadioStop">Приостановлен</label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioStatus" id="flexRadioDone" value="Завершён">Завершён
+                <input class="form-check-input" type="radio" name="flexRadioStatus" id="flexRadioDone" value="Завершён">
+                <label for="flexRadioDone">Завершён</label>
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button id="saveStatusbtn" onclick="SaveStatusFunction()" type="button" class="align-items-center button">Сохранить</button>
+            <button id="saveStatusbtn" onclick="SaveStatusFunction()" type="button" class="align-items-center button" data-bs-dismiss="modal">Сохранить</button>
           </div>
         </div>
       </div>
@@ -186,7 +95,7 @@
         <div class="content">
           <h4 class="name">Имя колонки</h4>
           <input id = "nameColum" type="text" class="input_text" name="" value="">
-          <button id= "createColumn"type="submit" data-view-component="true" class="create-column-btn flex-auto btn-primary btn" onclick="addClass('create-column', 'display-none')">
+          <button id="createColumn" type="submit" data-view-component="true" class="create-column-btn flex-auto btn-primary btn" onclick="addClass('create-column', 'display-none')" >
             Создать колонку
           </button>
         </div>
@@ -194,7 +103,7 @@
     </div>
 
     <!-- окно карти -->
-    <div id = "card" class="card">
+    <div id = "card" class="card display-none">
       <div class="form-card">
         <div class="header">
           <div class="info">
@@ -226,24 +135,24 @@
           <button type="button" name="delete" onclick="removeClass('form-delete', 'display-none')">Удалить</button>
         </div>
         <div class="comments">
-          <h5>Коментарии</h4>
-          <div class="new">
-            <textarea name="comment" rows="3" required></textarea>
-            <button id = "sendComment" type="button" name="sendСomment" class="btn" onclick="addComent(this.parentNode)">Отправить</button>
-          </div>
-          <div id = "commentList" class="old">
-            <template id="tempComment">
-              <div class="elem-comment">
-                <div class="info-comment">
-                  <a id = "userCommen">кто</a>
-                  <data id = "dataComment">дата</data>
+          <h4>Коментарии</h4>
+            <div class="new">
+              <textarea name="comment" rows="3" required></textarea>
+              <button id = "sendComment" type="button" name="sendСomment" class="btn" onclick="addComent(this.parentNode)">Отправить</button>
+            </div>
+            <div id = "commentList" class="old">
+              <template id="tempComment">
+                <div class="elem-comment">
+                  <div class="info-comment">
+                    <a id = "userCommen">кто</a>
+                    <data id = "dataComment">дата</data>
+                  </div>
+                  <div class="content-comment">
+                    <p id = "contentComment" >текст коментария</p>
+                  </div>
                 </div>
-                <div class="content-comment">
-                  <p id = "contentComment" >текст коментария</p>
-                </div>
-              </div>
-            </template>
-          </div>
+              </template>
+            </div>
         </div>
       </div>
 
@@ -254,8 +163,8 @@
           <button type="button" name="close" class="button" onclick="addClass('form-estimate', 'display-none')">x</button>
         </div>
         <div class="estimate">
-            <input type="text" name="" placeholder="Оценка">
-            <button type="button" name="button">Сохранить</button>
+          <input type="text" name="" placeholder="Оценка">
+          <button type="button" name="button">Сохранить</button>
         </div>
       </div>
 
@@ -266,8 +175,8 @@
           <button type="button" name="close" class="button" onclick="addClass('form-max-estimate', 'display-none')">x</button>
         </div>
         <div class="estimate">
-            <input type="text" name="" placeholder="Максимальная оценка">
-            <button type="button" name="button">Сохранить</button>
+          <input type="text" name="" placeholder="Максимальная оценка">
+          <button type="button" name="button">Сохранить</button>
         </div>
       </div>
 
@@ -279,13 +188,13 @@
         </div>
         <div class="status">
           <div>
-            <input type="radio" name="" value="В процессе"> В процессе
+            <input id = "In_process" type="radio" name="" value="В процессе"> <label for="In_process"> В процессе</label>
           </div>
           <div>
-            <input type="radio" name="" value="На проверке"> На проверке
+            <input id = "On_inspection" type="radio" name="" value="На проверке"> <label for="On_inspection"> На проверке</label>
           </div>
           <div>
-            <input type="radio" name="" value="Завершён"> Завершён
+            <input id = "Completed" type="radio" name="" value="Завершён"> <label for="Completed"> Завершён</label>
           </div>
         </div>
       </div>
@@ -296,19 +205,24 @@
           <h3>Удалить?</h3>
         </div>
         <div class="delete">
-            <button type="button" name="button">ДА</button>
-            <button type="button" name="button" onclick="addClass('form-delete', 'display-none')">НЕТ</button>
+          <button type="button" name="button">ДА</button>
+          <button type="button" name="button" onclick="addClass('form-delete', 'display-none')">НЕТ</button>
         </div>
       </div>
     </div>
 
+    <div id="showCardContaier"></div>
 
-  <!-- Bootstrap JavaScript Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
     integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
     crossorigin="anonymous"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
     crossorigin="anonymous"></script>
   <script src="scriptsjs/scriptsProjectPage.js"></script>
   <script src="scriptsjs/scriptCard.js"></script>
