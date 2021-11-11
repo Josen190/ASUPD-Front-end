@@ -25,45 +25,43 @@
         <a href="password_recovery.html">Забыли пароль?</a>
         <a href="registration.html">Регистрация</a>
       </div>
-      <script type="text/javascript">
-        function sendForm() {
-          let login = document.getElementById('login_1').value;
-          let password = document.getElementById('password_1').value;
-
-          var myHeaders = new Headers();
-          myHeaders.append("login", login);
-          myHeaders.append("password", password);
-          myHeaders.append("Content-Type", "application/json");
-
-          var raw = JSON.stringify({
-            "firstName": "pidor",
-            "lastName": "ya",
-            "patronymic": "pidorovich",
-            "birthDate": "2001-02-16",
-            "phoneNumber": "049275345",
-            "status": "lox",
-            "workPlace": "skb Kontur"
-          });
-
-          var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-          };
-
-          fetch("http://localhost:8080/auth/sign_up", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
-        };
-      </script>
       <div class="send">
         <input id="send_1" type="submit" class="btn btn-outline-secondary input_submit" name="send" value="Войти"
           onclick="sendForm()">
       </div>
     </div>
   </div>
+
+  <script>
+    async function sendForm() {
+      var myHeaders = new Headers();
+      myHeaders.append("login", document.getElementById('login_1').value);
+      myHeaders.append("password", document.getElementById('password_1').value);
+      myHeaders.append("Authorization", "");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      fetch("http://localhost:8080/auth/sign_in", requestOptions)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Ошибочный запрос');            
+          }
+          return response.text();
+        })
+        .then((result) => {
+          document.location.href = "account_page.html"
+          sessionStorage.setItem('token', result);
+        })
+        .catch(error => {
+          console.log('error', error);
+          alert('Ошибочный запрос');
+        });
+    }
+  </script>
 </body>
 
 </html>

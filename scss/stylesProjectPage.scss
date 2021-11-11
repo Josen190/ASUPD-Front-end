@@ -201,10 +201,12 @@ aside
         .col-header{
             padding: 8px;
             vertical-align: middle;
+            display: flex;
+
 
             .number-cards{
-                display: inline-block;
-                min-width: 40px;
+                width: 40px;
+                height: 20px;
                 padding: 0 6px;
                 font-size: 15px;
                 font-weight: 500;
@@ -214,17 +216,14 @@ aside
                 background-color: peachpuff;
                 border: 1px solid transparent;
                 border-radius: 2em;
-                position: relative;
-                bottom: 13px;
             }
 
             .name-column{
-                display: inline-block;
                 font-size: 14px;
                 padding: 4px;
                 margin: 0;
                 font-weight: 600;
-                width: 185px;
+                width: calc(100% - 85px);;
                 height: 40px;
                 overflow: auto;
                 align-items: center;
@@ -232,7 +231,6 @@ aside
 
             .button-new-card{
                 padding: 4px;
-                display: inline-block;
                 line-height: 1;
                 background: transparent;
                 width: 25px;
@@ -240,8 +238,6 @@ aside
                 margin-right: 5px;
                 align-items: center;
                 border: 0px;
-                position: relative;
-                bottom: 21px;
 
                 &:hover
                 {
@@ -250,8 +246,9 @@ aside
             }
 
             .column-menu{
-                float: right;
-                display: inline;
+                width: 20px;
+                height: 20px;
+                display: inline-block;
 
                 .open{
                     position: absolute;
