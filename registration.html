@@ -163,16 +163,16 @@
             };
 
             let response = await fetch("http://localhost:8080/auth/sign_up", requestOptions)
-              .then((response) => {     
+              .then((response) => {
                 if (!response.ok){
                   alert("Заебало");
                   throw new Error('Ошибочный запрос');
-                }      
+                }
                 return response.text();
               })
               .then((result) => {
                 sessionStorage.setItem('token', result);
-                document.location.href = "authorization.html"
+                document.location.href = "account_page.html"
               })
               .catch(error => console.log('error', error))
 
