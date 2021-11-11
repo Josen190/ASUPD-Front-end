@@ -97,7 +97,7 @@ function newProjectCard(projectID = "project_card", name = "Новый прое�
     let clone = template.content.cloneNode(true);
 
     clone.querySelector("p").innerHTML = name;
-    clone.querySelector("img").src = "img/" + (1 + getRandomInt(6)) + ".jpg";
+    clone.querySelector("img").src = "img/Bg_PB/" + (1 + getRandomInt(6)) + ".jpg";
     clone.id = projectID;
     clone.querySelector(".listen").addEventListener("click", function(){
               loadCircle.removeAttribute("style");

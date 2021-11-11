@@ -1,14 +1,8 @@
-prepros.config
-.vscode/launch.json
+
 .vs
-.vs/ASUPD/config/applicationhost.config
-.vs/ASUPD/v16/.suo
 .vs/ProjectSettings.json
 .vs/slnx.sqlite
 .vs/VSWorkspaceState.json
 *.iml
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
-.idea/workspace.xml
-.idea/.gitignore
+.idea
+.idea\*
