@@ -1,79 +1,79 @@
 body {
-    background-color: #f2f4fb;
-  }
-  small {
-    font-size: 90%;
-  }
-  
-  .block{
-    background-color: white;
-    border-radius: 20px;
-  }
-  
-  header {
-    width: 100%;
-    color: white;
-    top: 0;
-  }
-  header .navbar {
-    background-color: #164ACF;
-  }
-  header a, header a:link, header a:visited {
-    text-decoration: none;
-    color: white;
-    margin: 0 20px;
-  }
-  .avatar img{
-    width: 100%;
-    position: relative;
-    padding: 10%;
-    border-radius: 50%;
-  }
-  .personal-info p {
-    text-align: left;
-    margin: 10px;
-  }
-  .my-projects {
-    padding-top: 10px;
-    padding-left: 20px;
-    text-align: left;
-    height: 100%;
-  }
-  .access-btn{
-  }
-  button {
-    -webkit-transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
-    transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
-  }
-  .button {
-    cursor: pointer;
-    background-color: white;
-    border: 0px;
-    width: 100%;
-    border-radius: 10px;
-  }
-  .button:hover {
-    -webkit-box-shadow: 10px 5px 5px gray;
-            box-shadow: 10px 5px 5px gray;
-    background-color: #f2f4fb;
-  }
-  
-  .pull-left {
-    float: left;
-  }
-  
-  .pull-right {
-    float: right;
-  }
-  
-  .color-text-primary {
-    color: #24292f;
-  }
-  
-  .color-fg-muted {
-    color: #57606a;
-  }
-  
-  .display-none {
-    display: none;
-  }
+  background-color: #f2f4fb;
+}
+small {
+  font-size: 90%;
+}
+
+.block{
+  background-color: white;
+  border-radius: 20px;
+}
+
+header {
+  width: 100%;
+  color: white;
+  top: 0;
+}
+header .navbar {
+  background-color: #164ACF;
+}
+header a, header a:link, header a:visited {
+  text-decoration: none;
+  color: white;
+  margin: 0 20px;
+}
+.avatar img{
+  width: 100%;
+  position: relative;
+  padding: 10%;
+  border-radius: 50%;
+}
+.personal-info p {
+  text-align: left;
+  margin: 10px;
+}
+.my-projects {
+  padding-top: 10px;
+  padding-left: 20px;
+  text-align: left;
+  height: 100%;
+}
+.access-btn{
+}
+button {
+  -webkit-transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+}
+.button {
+  cursor: pointer;
+  background-color: white;
+  border: 0px;
+  width: 100%;
+  border-radius: 10px;
+}
+.button:hover {
+  -webkit-box-shadow: 10px 5px 5px gray;
+          box-shadow: 10px 5px 5px gray;
+  background-color: #f2f4fb;
+}
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}
+
+.color-text-primary {
+  color: #24292f;
+}
+
+.color-fg-muted {
+  color: #57606a;
+}
+
+.display-none {
+  display: none;
+}
