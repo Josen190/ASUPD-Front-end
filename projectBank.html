@@ -14,13 +14,13 @@
 
   </head>
 
-  <body id="bodyId">
+  <body id="bodyId" onload="sendForm()">
 
     <header>
       <nav class="navbar">
         <div class="container-fluid">
           <a href="#">Банк проектных предложений</a>
-          <a href="#">Личный кабинет</a>
+          <a href="account_page.html">Личный кабинет</a>
         </div>
       </nav>
     </header>
@@ -200,7 +200,35 @@
         </div>
       </div>
     </div>
-
+    
+    <script>
+      async function sendForm() {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", sessionStorage.getItem('token'));
+        var requestOptions = {
+          method: 'GET',
+          headers: myHeaders,
+          redirect: 'follow'
+        };
+  
+        fetch("http://localhost:8080/user/self", requestOptions)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Ошибочный запрос');
+            }
+            return response.json();
+          })
+          .catch(error => {
+            console.log('error', error);
+            alert('Нет токена');
+            document.location.href = "authorization.html"
+          });
+      }
+      function logOut(){
+        sessionStorage.removeItem('token');
+        document.location.href = "authorization.html";
+      }
+    </script>
 
   </body>
 </html>
