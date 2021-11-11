@@ -10,11 +10,9 @@ header {
   color: white;
   top: 0;
 }
-
 header .navbar {
   background-color: #164ACF;
 }
-
 header a, header a:link, header a:visited {
   text-decoration: none;
   color: white;
@@ -35,12 +33,10 @@ main {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
-
 main .search-form:focus-within {
   outline: thick double #32a1ce;
   border: 0;
 }
-
 main .search-form {
   height: 35px;
   width: 100%;
@@ -54,8 +50,7 @@ main .search-form {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
-
-main .search-form input[type="text"] {
+main .search-form input[type=text] {
   height: 100%;
   width: calc(100% - 30px);
   border: 0;
@@ -66,7 +61,6 @@ main .search-form input[type="text"] {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
-
 main .search-form .con {
   margin-top: 4px;
   margin-bottom: 2px;
@@ -76,16 +70,13 @@ main .search-form .con {
           align-items: center;
   width: 25px;
 }
-
 main .search-form .con svg {
   height: 100%;
   width: 100%;
 }
-
 main hr {
   margin: 10px -15px;
 }
-
 main .bank {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -96,8 +87,7 @@ main .bank {
       -ms-flex-pack: center;
           justify-content: center;
 }
-
-main .bank .project {
+main .bank .project-card {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -116,19 +106,25 @@ main .bank .project {
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
 }
-
-main .bank .project:hover {
+main .bank .project-card:hover {
   background-color: rgba(206, 237, 208, 0.3);
 }
-
-main .bank .project .info {
+main .bank .project-card .listen {
+  position: absolute;
+  width: 240px;
+  height: 120px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+main .bank .project-card .info {
   height: calc(100% - 40px);
   width: 101%;
   margin: 0;
   overflow: hidden;
 }
-
-main .bank .project .name {
+main .bank .project-card .name {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -145,8 +141,7 @@ main .bank .project .name {
   padding: 5px;
   padding: var(--padding-size);
 }
-
-main .bank .project .name p {
+main .bank .project-card .name p {
   font-size: 25px;
   margin: 0;
 }
@@ -159,8 +154,8 @@ main .bank .project .name p {
   width: 100%;
   height: 100%;
   z-index: 3;
+  opacity: 0;
 }
-
 .project-proposal .form {
   position: fixed;
   top: 50%;
@@ -177,11 +172,9 @@ main .bank .project .name p {
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
 }
-
 .project-proposal .form > div {
   margin-bottom: 10px;
 }
-
 .project-proposal .form dl {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -197,7 +190,6 @@ main .bank .project .name p {
           align-items: flex-start;
   margin: 0;
 }
-
 .project-proposal .form dl dt {
   background: #fff;
   border: 1px solid black;
@@ -210,7 +202,6 @@ main .bank .project .name p {
   line-height: 1;
   margin-bottom: 5px;
 }
-
 .project-proposal .form .name {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -219,7 +210,6 @@ main .bank .project .name p {
       -ms-flex-pack: center;
           justify-content: center;
 }
-
 .project-proposal .form .basic-info {
   padding: 5px;
   font-size: 15px;
@@ -227,7 +217,6 @@ main .bank .project .name p {
   height: 140px;
   border: 1px solid black;
 }
-
 .project-proposal .form .stages dl {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -237,11 +226,9 @@ main .bank .project .name p {
       -ms-flex-direction: row;
           flex-direction: row;
 }
-
 .project-proposal .form .stages dl dt {
   margin-right: 5px;
 }
-
 .project-proposal .form .s-m {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -250,7 +237,6 @@ main .bank .project .name p {
       -ms-flex-pack: justify;
           justify-content: space-between;
 }
-
 .project-proposal .form .s-m > div {
   width: 100%;
   height: 117px;
@@ -258,7 +244,6 @@ main .bank .project .name p {
   overflow-y: auto;
   padding: 5px;
 }
-
 .project-proposal .form .button {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -271,7 +256,6 @@ main .bank .project .name p {
   margin-left: 15px;
   margin-right: 15px;
 }
-
 .project-proposal .form .button > input {
   width: 100px;
   height: 25px;
@@ -281,8 +265,130 @@ main .bank .project .name p {
   border-top-right-radius: 15px;
   border: 1px solid black;
 }
-
 .project-proposal .form .button > input:hover {
   background-color: gray;
   color: #fff;
+}
+
+.load {
+  background-color: rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+}
+.load .cssload-loader {
+  position: fixed;
+  left: calc(50% - 56px);
+  top: calc(50% - 56px);
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  -o-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-perspective: 1400px;
+          perspective: 1400px;
+}
+.load .cssload-inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  border-radius: 50%;
+  -o-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+}
+.load .cssload-inner.cssload-one {
+  left: 0%;
+  top: 0%;
+  animation: cssload-rotate-one 1.15s linear infinite;
+  -o-animation: cssload-rotate-one 1.15s linear infinite;
+  -ms-animation: cssload-rotate-one 1.15s linear infinite;
+  -webkit-animation: cssload-rotate-one 1.15s linear infinite;
+  -moz-animation: cssload-rotate-one 1.15s linear infinite;
+  border-bottom: 5px solid red;
+}
+.load .cssload-inner.cssload-two {
+  right: 0%;
+  top: 0%;
+  animation: cssload-rotate-two 1.15s linear infinite;
+  -o-animation: cssload-rotate-two 1.15s linear infinite;
+  -ms-animation: cssload-rotate-two 1.15s linear infinite;
+  -webkit-animation: cssload-rotate-two 1.15s linear infinite;
+  -moz-animation: cssload-rotate-two 1.15s linear infinite;
+  border-right: 5px solid #00ff09;
+}
+.load .cssload-inner.cssload-three {
+  right: 0%;
+  bottom: 0%;
+  animation: cssload-rotate-three 1.15s linear infinite;
+  -o-animation: cssload-rotate-three 1.15s linear infinite;
+  -ms-animation: cssload-rotate-three 1.15s linear infinite;
+  -webkit-animation: cssload-rotate-three 1.15s linear infinite;
+  -moz-animation: cssload-rotate-three 1.15s linear infinite;
+  border-top: 5px solid #000dff;
+}
+@keyframes cssload-rotate-one {
+  0% {
+    -webkit-transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+            transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+  }
+  100% {
+    -webkit-transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+            transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+  }
+}
+@-webkit-keyframes cssload-rotate-one {
+  0% {
+    -webkit-transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+  }
+  100% {
+    -webkit-transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+  }
+}
+@keyframes cssload-rotate-two {
+  0% {
+    -webkit-transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+            transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+  }
+  100% {
+    -webkit-transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+            transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+  }
+}
+@-webkit-keyframes cssload-rotate-two {
+  0% {
+    -webkit-transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+  }
+  100% {
+    -webkit-transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+  }
+}
+@keyframes cssload-rotate-three {
+  0% {
+    -webkit-transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+            transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+  }
+  100% {
+    -webkit-transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+            transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+  }
+}
+@-webkit-keyframes cssload-rotate-three {
+  0% {
+    -webkit-transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+  }
+  100% {
+    -webkit-transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+  }
 }
