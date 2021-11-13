@@ -1,129 +1,104 @@
 <!doctype html>
 <html lang="ru">
 
-  <head>
-    <title>Банк проектных предложений</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+  <title>Банк проектных предложений</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS v5.0.2 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="..\css\stylesProjectBank.css">
+  <!-- Bootstrap CSS v5.0.2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="..\css\stylesProjectBank.css">
 
-  </head>
+</head>
 
-  <body id="bodyId" onload="sendForm()">
+<body id="bodyId" onload="checkToken()">
 
-    <header>
-      <nav class="navbar">
-        <div class="container-fluid">
-          <a href="#">Банк проектных предложений</a>
-          <a href="account.html">Личный кабинет</a>
-        </div>
-      </nav>
-    </header>
-
-    <main>
-      <div class="search-form">
-        <div class="con">
-          <svg>
-            <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
-          </svg>
-        </div>
-        <input type="text">
+  <header>
+    <nav class="navbar">
+      <div class="container-fluid">
+        <a href="#">Банк проектных предложений</a>
+        <a href="account.html">Личный кабинет</a>
       </div>
-      <hr>
-      <div class="bank">
-        <template id ="temp_project_card">
-          <div id = "testProject" class="project-card">
-            <div class="info">
-              <img src="../img/Bg_PB/1.jpg">
-            </div>
-            <div class="name">
-              <p ib="name"></p>
-            </div>
-            <div class="listen" ></div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="search-form">
+      <div class="con">
+        <svg>
+          <path
+            d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z">
+          </path>
+        </svg>
+      </div>
+      <input type="text">
+    </div>
+    <hr>
+    <div id="bank" class="bank">
+      <template id="temp_project_card">
+        <div id="testProject" class="project-card">
+          <div class="info">
+            <img src="../img/Bg_PB/1.jpg">
           </div>
-        </template>
+          <div class="name">
+            <p ib="name"></p>
+          </div>
+          <div class="listen"></div>
+        </div>
+      </template>
 
+    </div>
+  </main>
+
+  <div id="project-proposal" class="project-proposal" style="display: none">
+    <div class="form">
+      <div class="name">
+        <h2>Название</h2>
       </div>
-    </main>
-
-    <div class="project-proposal" style="display: none">
-      <div class="form">
-        <div class="name">
-          <h2>Название</h2>
-        </div>
-        <div class="basic-info">
-          Основная информация
-        </div>
-        <div class="stages">
+      <div class="basic-info">
+        Основная информация
+      </div>
+      <div class="stages">
+        <dl>
+          <dt>стадия 1</dt>
+          <dt>стадия 2</dt>
+          <dt>стадия 3</dt>
+        </dl>
+      </div>
+      <div class="s-m">
+        <div class="supervisors">
           <dl>
-            <dt>стадия 1</dt>
-            <dt>стадия 2</dt>
-            <dt>стадия 3</dt>
+            <dt>руководитель 1</dt>
+            <dt>руководитель 2</dt>
+            <dt>руководитель 3</dt>
           </dl>
         </div>
-        <div class="s-m">
-          <div class="supervisors">
-            <dl>
-              <dt>руководитель 1</dt>
-              <dt>руководитель 2</dt>
-              <dt>руководитель 3</dt>
-            </dl>
-          </div>
-          <div class="mentors">
-            <dl>
-              <dt>наставник 1</dt>
-              <dt>наставник 2</dt>
-              <dt>наставник 3</dt>
-              <dt>наставник 3</dt>
-              <dt>наставник 3</dt>
-              <dt>наставник 3</dt>
-            </dl>
-          </div>
-        </div>
-        <div class="button">
-          <input type="button" name="close" value="Отмена">
-          <input type="button" name="create" value="Создать">
+        <div class="mentors">
+          <dl>
+            <dt>наставник 1</dt>
+            <dt>наставник 2</dt>
+            <dt>наставник 3</dt>
+            <dt>наставник 3</dt>
+            <dt>наставник 3</dt>
+            <dt>наставник 3</dt>
+          </dl>
         </div>
       </div>
+      <div class="button">
+        <input type="button" name="close" value="Отмена">
+        <input type="button" name="create" value="Создать">
+      </div>
     </div>
-    
-    <!-- <script>
-      async function sendForm() {
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", sessionStorage.getItem('token'));
-        var requestOptions = {
-          method: 'GET',
-          headers: myHeaders,
-          redirect: 'follow'
-        };
-  
-        fetch("http://localhost:8080/user/self", requestOptions)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error('Ошибочный запрос');
-            }
-            return response.json();
-          })
-          .catch(error => {
-            console.log('error', error);
-            alert('Нет токена');
-            document.location.href = "authorization.html"
-          });
-      }
-      function logOut(){
-        sessionStorage.removeItem('token');
-        document.location.href = "authorization.html";
-      }
-    </script> -->
+  </div>
 
-    <input type="button" onclick="newProjectCard()" value="создать">
+  <input type="button" onclick="newProjectCard()" value="создать">
 
-    <script src="../scriptsjs/scriptProjectBank.js"></script>
+  <script src="../scriptsjs/scriptProjectBank.js"></script>
+  <script src="../scriptsjs/fetchScripts.js"></script>
 
-  </body>
+</body>
+
 </html>

@@ -13,7 +13,7 @@
   <link rel="stylesheet" type="text/css" href="..\css/styles-account.css">
 </head>
 
-<body onload="sendForm()">
+<body onloadstart="checkToken()" onload="LoadInformationOfUser()">
   <header>
     <nav class="navbar">
       <div class="container-fluid">
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="col-5">
-          <div class="personal-info">
+          <div class="personal-info" onload="">
             <p>
             <h3 id="full_name" style="margin-bottom: -10px;">Фамилия Имя Отчество</h3><br>
             <p id="work_place">Место работы</p><br>
@@ -73,43 +73,13 @@
     </div>
   </main>
 
-  <!-- <script>
-    async function sendForm() {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", sessionStorage.getItem('token'));
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
-      };
-
-      fetch("http://localhost:8080/user/self", requestOptions)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Ошибочный запрос');
-          }
-          return response.json();
-        })
-        .then((result) => {
-          document.getElementById('full_name').innerText =  result['lastName'] + ' ' + result['firstName'] + ' ' + result['patronymic'];
-          document.getElementById('work_place').innerText += ':' + result['workPlace'];
-          document.getElementById('status').innerText += ':' + result['status'];
-          document.getElementById('birthday').innerText += ':' + result['birthDate'];
-          document.getElementById('phone').innerText += ':' + result['phoneNumber'];
-        })
-        .catch(error => {
-          console.log('error', error);
-          alert('Нет токена');
-          document.location.href = "authorization.html"
-        });
-    }
-    function logOut(){
+  <script>
+    function logOut() {
       sessionStorage.removeItem('token');
       document.location.href = "authorization.html";
     }
-  </script> -->
-
-
+  </script>
+  <script src="../scriptsjs/fetchScripts.js"></script>
 </body>
 
 </html>
