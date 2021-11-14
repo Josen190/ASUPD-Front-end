@@ -13,7 +13,18 @@
   <link rel="stylesheet" type="text/css" href="..\css/styles-account.css">
 </head>
 
-<body onloadstart="checkToken()" onload="LoadInformationOfUser()">
+<body>
+  <script src="../scriptsjs/fetchScripts.js"></script>
+  <script type="text/javascript">
+    checkToken()
+    .then((status) => {
+      if (status == false) throw new Error('Ошибочный запрос');
+      LoadInformationOfUser();
+      LoadAllProjectsOfUser();
+    })
+    .catch(error => { document.location.href = "authorization.html"; });
+  </script>
+
   <header>
     <nav class="navbar">
       <div class="container-fluid">
@@ -57,11 +68,11 @@
       <div class="my-projects">
         <p><i>Мои проекты:</i></p>
         <ul id="projects-list">
-          <li><a href="project.html">проект 1</a></li>
+          <!-- <li><a href="project.html">проект 1</a></li>
           <li><a href="project.html">проект 2</a></li>
           <li><a href="project.html">проект 3</a></li>
           <li><a href="project.html">проект 4</a></li>
-          <li><a href="project.html">проект 5</a></li>
+          <li><a href="project.html">проект 5</a></li> -->
         </ul>
       </div>
     </div>
@@ -79,7 +90,6 @@
       document.location.href = "authorization.html";
     }
   </script>
-  <script src="../scriptsjs/fetchScripts.js"></script>
 </body>
 
 </html>

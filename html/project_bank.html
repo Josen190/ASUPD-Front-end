@@ -14,7 +14,16 @@
 
 </head>
 
-<body id="bodyId" onload="checkToken()">
+<body id="bodyId">
+  <script src="../scriptsjs/fetchScripts.js"></script>
+  <script type="text/javascript">
+    checkToken()
+    .then((status) => {
+      if (status == false) throw new Error('Ошибочный запрос');
+      LoadAllProposals();
+    })
+    .catch(error => { document.location.href = "authorization.html"; });
+  </script>
 
   <header>
     <nav class="navbar">
@@ -56,9 +65,9 @@
   <div id="project-proposal" class="project-proposal" style="display: none">
     <div class="form">
       <div class="name">
-        <h2>Название</h2>
+        <h2 id="nameOfProposal">Название</h2>
       </div>
-      <div class="basic-info">
+      <div id="basicInfoAboutProposal" class="basic-info">
         Основная информация
       </div>
       <div class="stages">
@@ -69,7 +78,7 @@
         </dl>
       </div>
       <div class="s-m">
-        <div class="supervisors">
+        <div id="supervisors" class="supervisors">
           <dl>
             <dt>руководитель 1</dt>
             <dt>руководитель 2</dt>
@@ -89,7 +98,8 @@
       </div>
       <div class="button">
         <input type="button" name="close" value="Отмена">
-        <input type="button" name="create" value="Создать">
+        <input onclick="CreateProjectFromProposal(document.querySelector('#project-proposal').dataset.uuidOfProposalWindow, 
+          document.querySelector('#supervisors').textContent)" type="button" name="create" value="Создать проект">
       </div>
     </div>
   </div>
@@ -102,8 +112,7 @@
     </div>
   </div>
 
-  <input type="button" onclick="newProjectCard()" value="создать">
-
+  <input type="button" onclick="newProposalCard()" value="Создать предложение">
   <script src="../scriptsjs/scriptProjectBank.js"></script>
   <script src="../scriptsjs/fetchScripts.js"></script>
 
