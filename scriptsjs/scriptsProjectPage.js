@@ -40,31 +40,38 @@ function removeClass(id,cls) {
 
 let addColumnBtn = document.getElementById("createColumn");
 
-addColumnBtn.addEventListener('click', ()=>{
+function addListForCards(title="новая стадия", uuid=""){
+  if (title == '') title = 'Новая стадия';
+  new ListForCards(title, uuid);
+}
+addColumnBtn.addEventListener('click', async ()=>{
   console.log("Была нажата addColumnBtn");
-  new ListForCards(root);
-})
+  var nameOfStage = document.querySelector('#nameColum').value;
+  let uuidOfStage = await AddStage(nameOfStage)
+  addListForCards(nameOfStage, uuidOfStage);
+});
 
-//Логика карточек. Определяем место, куда будем помещать колонки
+//Логика карточек. Определяем место, куда будем помещать стадии
 let root = document.getElementById("addColumn");
 
 class ListForCards{
-  constructor(place, title="новая колонка"){
+  constructor(title, uuid){
     let name = document.getElementById("nameColum");
     if (name.value != "") title = name.value;
     name.value = "";
     
-    this.place=place;
+    this.place=root;
     this.title=title;
     this.cardList=[];
+    this.uuidOfStage = uuid;
 
     this.render();
   }
 
   render(){
-    this.createListForCards(); //Создаём html форму колонки
+    this.createListForCards(); //Создаём html форму стадии
     root.before(this.divCol);
-    //this.place.append(this.divCol); //Присоеденяем созданную колонку к контейнеру root
+    //this.place.append(this.divCol); //Присоеденяем созданную стадию к контейнеру root
   }
 
   //Создаём форму для заполнения карточки
@@ -74,11 +81,12 @@ class ListForCards{
   }
 
   createListForCards(){
-    // Контейнер-колонка
+    // Контейнер-стадии
     this.divCol = document.createElement('div');
     this.divCol.classList.add('col-my', 'col-3');
+    this.divCol.dataset.uuidOfStage = this.uuidOfStage;
 
-    //Заголовок колонки
+    //Заголовок стадии
     this.divHeader = document.createElement('div');
     this.divHeader.classList.add('col-header');
 
@@ -94,16 +102,17 @@ class ListForCards{
                                       '<path fill-rule="evenodd" d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"></path>' +
                                   '</svg>';
 
-    //Счётчик количества карточек в колонке
+    //Счётчик количества карточек в стадии
     this.numberOfCards = document.createElement('span');
     this.numberOfCards.classList.add('number-cards');
     this.numberOfCards.innerText = 0;
 
-    //Кнопка удалить колонку
+    //Кнопка удалить стадию
     this.DeleteColumnBtn = document.createElement('button');
     setAttributes(this.DeleteColumnBtn, {"type": "button"});
     this.DeleteColumnBtn.innerText = "Удалить столбец";
-    this.DeleteColumnBtn.addEventListener('click', ()=>{
+    this.DeleteColumnBtn.addEventListener('click', async ()=>{
+      await DeleteStage(this.uuidOfStage, sessionStorage.getItem('tokenOfProject'));
       console.log("Была нажата DeleteColumnBtn");
       this.divCol.remove();
     })
@@ -122,11 +131,11 @@ class ListForCards{
     this.divHeader.childNodes[2].childNodes[1].appendChild(this.DeleteColumnBtn); //Помещаем кнопку в <div class="open"></div>
     this.divHeader.append(this.AddCardBtn);
 
-    //Контейнер в колонке, который содержит текст карточки
+    //Контейнер в стадии, который содержит текст карточки
     this.divListContent = document.createElement('div');
     this.divListContent.classList.add('col-content');
 
-    //Дособираем итоговую колонку
+    //Дособираем итоговую стадию
     this.divCol.append(this.divHeader);
     this.divCol.append(this.divListContent);
   }
@@ -134,7 +143,7 @@ class ListForCards{
 
 //Класс, описывающий карточку
 class Card{
-  constructor(place, listForCards){ //listForCards передаём, чтобы увеличивать/уменшать счётчик карточек в колонке
+  constructor(place, listForCards){ //listForCards передаём, чтобы увеличивать/уменшать счётчик карточек в стадии
     this.place = place;
     this.listForCards = listForCards;
 

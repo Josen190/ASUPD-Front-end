@@ -58,7 +58,7 @@
         <input id="regPost" type="text" class="form-control input_text " name="post" placeholder="">
       </div>
 
-
+      <script src="../scriptsjs/fetchScripts.js"></script>
       <script type="text/javascript">
         async function sendForm() {
           let flag = true;
@@ -140,45 +140,8 @@
           }
 
           if (flag) {
-            alert(flag);
-
-            var myHeaders = new Headers();
-            myHeaders.append("login", email);
-            myHeaders.append("password", password);
-            myHeaders.append("Content-Type", "application/json");
-
-            var raw = JSON.stringify({
-              "firstName": first_name,
-              "lastName": last_name,
-              "patronymic": patronymic,
-              "birthDate": data,
-              "phoneNumber": phone,
-              "status": post,
-              "workPlace": place_work
-            });
-
-            var requestOptions = {
-              method: 'POST',
-              headers: myHeaders,
-              body: raw,
-              redirect: 'follow'
-            };
-
-            let response = await fetch("http://localhost:8080/auth/sign_up", requestOptions)
-              .then((response) => {
-                if (!response.ok){
-                  alert("Заебало");
-                  throw new Error('Ошибочный запрос');
-                }
-                return response.text();
-              })
-              .then((result) => {
-                sessionStorage.setItem('token', result);
-                document.location.href = "account.html"
-              })
-              .catch(error => console.log('error', error))
-
-
+            alert(flag);            
+            await Send_Registration_Form(email, password, first_name, last_name, patronymic, data, phone, post, place_work);
           }
           else {
             alert(flag);

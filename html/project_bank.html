@@ -12,9 +12,23 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="..\css\stylesProjectBank.css">
 
+  <style>
+    #cover {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background: #fff;
+      z-index: 9999;
+    }
+  </style>
+
 </head>
 
 <body id="bodyId">
+  <div id="cover"></div>
+
   <script src="../scriptsjs/fetchScripts.js"></script>
   <script type="text/javascript">
     checkToken()
@@ -115,6 +129,13 @@
   <input type="button" onclick="newProposalCard()" value="Создать предложение">
   <script src="../scriptsjs/scriptProjectBank.js"></script>
   <script src="../scriptsjs/fetchScripts.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script>
+    $(window).on('load', function () {
+        $("#cover").hide();
+    });
+  </script>
 
 </body>
 
