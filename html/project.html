@@ -30,12 +30,15 @@
   <div id="cover"></div>
 
   <script src="../scriptsjs/fetchScripts.js"></script>
-  <script type="text/javascript">    
+  <script type="text/javascript">
     checkToken()
       .then((status) => {
         if (status == false) throw new Error('Ошибочный запрос');
       })
-      .then(async () => LoadProjectInformation(sessionStorage.getItem('tokenOfProject')))
+      .then(async () => {        
+        await LoadProjectInformation(sessionStorage.getItem('tokenOfProject'));
+        $("#cover").hide();
+      })
       .catch(error => { document.location.href = "authorization.html"; });
   </script>
 
@@ -272,11 +275,6 @@
   <script src="../scriptsjs/scriptsProjectPage.js"></script>
   <script src="../scriptsjs/scriptCard.js"></script>
   <script src="../scriptsjs/fetchScripts.js"></script>
-  <script>
-    $(window).on('load', function () {
-        $("#cover").hide();
-    });
-  </script>
 </body>
 
 </html>

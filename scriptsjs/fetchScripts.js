@@ -1,5 +1,8 @@
 var URL_link = "http://localhost:8080";
 
+//Функции общего назначения
+//===================================================================================================//
+//Проверка токена
 async function checkToken() {
   var myHeaders = new Headers();
   myHeaders.append("Authorization", sessionStorage.getItem('token'));
@@ -23,7 +26,37 @@ async function checkToken() {
     });
   return status;
 }
+//Возвращает данные пользователя учитывая токен в sessionstorage
+async function GetUser(tokenOfUser) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", tokenOfUser);
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
 
+  const result = await fetch(URL_link + "/user/self", requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+      return response.json();
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в LoadInformationOfUser');
+    });
+  return result;
+}
+//===================================================================================================//
+
+
+//Регистрация и авторизация
+//===================================================================================================//
 async function Send_Registration_Form(email, password, first_name, last_name, patronymic, data, phone, post, place_work) {
   var myHeaders = new Headers();
   myHeaders.append("login", email);
@@ -60,51 +93,68 @@ async function Send_Registration_Form(email, password, first_name, last_name, pa
     })
     .catch(error => console.log('error', error))
 }
-
-//Загружает информацию о пользователе на странице личного кабинета
-async function LoadInformationOfUser() {
+async function sendAuthorizationForm() {
   var myHeaders = new Headers();
-  myHeaders.append("Authorization", sessionStorage.getItem('token'));
+  myHeaders.append("login", document.getElementById('login_1').value);
+  myHeaders.append("password", document.getElementById('password_1').value);
+  myHeaders.append("Authorization", "");
+
   var requestOptions = {
     method: 'GET',
     headers: myHeaders,
     redirect: 'follow'
   };
 
-  fetch(URL_link + "/user/self", requestOptions)
+  fetch(URL_link + '/auth/sign_in', requestOptions)
     .then((response) => {
       if (!response.ok) {
         throw new Error('Ошибочный запрос');
       }
-      return response.json();
+      return response.text();
     })
     .then((result) => {
-      document.getElementById('full_name').innerText = result['lastName'] + ' ' + result['firstName'] + ' ' + result['patronymic'];
-      document.getElementById('work_place').innerText += ': ' + result['workPlace'];
-      document.getElementById('status').innerText += ': ' + result['status'];
-      document.getElementById('birthday').innerText += ': ' + result['birthDate'];
-      document.getElementById('phone').innerText += ': ' + result['phoneNumber'];
-
-      let container = document.querySelector("#projects-list");
-      for (var i = 0; i < Object.keys(result['projectUuidList']).length; i++) {
-        let liElement = document.createElement('li');
-        liElement.insertAdjacentHTML('beforeend', '<div class = "tempObject">' + result['projectUuidList'][i] + '</div>');
-        liElement.dataset.uuidOfProject = result['projectUuidList'][i];
-        liElement.addEventListener('click', () => {
-          sessionStorage.setItem('tokenOfProject', liElement.dataset.uuidOfProject);
-          document.location.href = "project.html";
-        });
-
-        container.appendChild(liElement);
-      }
+      document.location.href = "account.html"
+      sessionStorage.setItem('token', result);
     })
     .catch(error => {
       console.log('error', error);
-      alert('Ошибка в LoadInformationOfUser');
+      alert('Ошибочный запрос');
     });
 }
+//===================================================================================================//
 
-//Загружает предложения в банке проектов 
+
+//Страница личного кабинета
+//===================================================================================================//
+//Загружает информацию о пользователе на странице личного кабинета
+async function LoadInformationOfUserForAccount() {
+  var result = await GetUser(sessionStorage.getItem('token'));
+
+  document.getElementById('full_name').innerText = result['lastName'] + ' ' + result['firstName'] + ' ' + result['patronymic'];
+  document.getElementById('work_place').innerText += ': ' + result['workPlace'];
+  document.getElementById('status').innerText += ': ' + result['status'];
+  document.getElementById('birthday').innerText += ': ' + result['birthDate'];
+  document.getElementById('phone').innerText += ': ' + result['phoneNumber'];
+
+  let container = document.querySelector("#projects-list");
+  for (var i = 0; i < Object.keys(result['projectUuidList']).length; i++) {
+    let liElement = document.createElement('li');
+    liElement.insertAdjacentHTML('beforeend', '<div class = "tempObject">' + result['projectUuidList'][i] + '</div>');
+    liElement.dataset.uuidOfProject = result['projectUuidList'][i];
+    liElement.addEventListener('click', () => {
+      sessionStorage.setItem('tokenOfProject', liElement.dataset.uuidOfProject);
+      document.location.href = "project.html";
+    });
+
+    container.appendChild(liElement);
+  }
+}
+//===================================================================================================//
+
+
+//Банк предложений
+//===================================================================================================//
+//Загружает предложения в банке предложений 
 async function LoadAllProposals() {
   var myHeaders = new Headers();
   myHeaders.append("Authorization", sessionStorage.getItem('token'));
@@ -135,7 +185,7 @@ async function LoadAllProposals() {
       alert('Ошибка в LoadAllProposals');
     });
 }
-
+//Загружает окно при нажатии на проектное предложение
 async function LoadInformationAboutProposal(tokenOfProposal) {
   var myHeaders = new Headers();
   myHeaders.append("Authorization", sessionStorage.getItem('token'));
@@ -189,7 +239,11 @@ async function CreateProjectFromProposal(proposalId, managerId) {
       alert('Ошибка в LoadInformationAboutProposal');
     });
 }
+//===================================================================================================//
 
+
+//Страница проекта
+//===================================================================================================//
 async function LoadProjectInformation() {
   var myHeaders = new Headers();
   myHeaders.append("Authorization", sessionStorage.getItem('token'));
@@ -207,7 +261,7 @@ async function LoadProjectInformation() {
       }
       return response.json();
     })
-    .then((result) => {
+    .then(async (result) => {
       document.querySelector('#nameOfProject').value = result['name'];
       switch (result['projectStatus']) {
         case 'IN_PROCESS':
@@ -222,11 +276,19 @@ async function LoadProjectInformation() {
         default:
           break;
       }
-      document.querySelector('#userCaptain').innerText += " " + result['userCaptain'];
-      document.querySelector('#projectManager').innerText += " " + result['projectManager'];
+      var captainUser = await GetUser(result['userCaptain']);
+      var managerUser = await GetUser(result['projectManager']);
+      document.querySelector('#userCaptain').innerText += " " + captainUser['firstName'] + ' ' + captainUser['lastName'] + ' ' + captainUser['patronymic'];;
+      document.querySelector('#projectManager').innerText += " " + managerUser['firstName'] + ' ' + managerUser['lastName'] + ' ' + managerUser['patronymic'];;
 
       for (var i = 0; i < Object.keys(result['stageUuidList']).length; i++) {
-        LoadStagesOfProject(result['stageUuidList'][i], sessionStorage.getItem('tokenOfProject'));
+        var stage = await LoadStagesOfProject(result['stageUuidList'][i], sessionStorage.getItem('tokenOfProject'));        
+        for (var j = 0; j < Object.keys(stage['cardUuidList']).length; j++) {
+          var card = await LoadCard(stage['cardUuidList'][j]);
+          await LoadCardElementFromDB(result['stageUuidList'][i], stage['cardUuidList'][j], card);
+        }
+        document.querySelector('[data-uuid-of-stage="' + result['stageUuidList'][i] + '"]').querySelector('.number-cards').innerText = 
+          document.querySelector('[data-uuid-of-stage="' + result['stageUuidList'][i] + '"]').querySelector('.col-content').childElementCount;      
       }
     })
     .catch(error => {
@@ -246,7 +308,7 @@ async function LoadStagesOfProject(tokenOfStage) {
     redirect: 'follow'
   };
 
-  fetch(URL_link + '/stage/' + tokenOfStage + '?projectUuid=' + sessionStorage.getItem('tokenOfProject'), requestOptions)
+  const response = await fetch(URL_link + '/stage/' + tokenOfStage + '?projectUuid=' + sessionStorage.getItem('tokenOfProject'), requestOptions)
     .then((response) => {
       if (!response.ok) {
         throw new Error('Ошибочный запрос');
@@ -255,11 +317,13 @@ async function LoadStagesOfProject(tokenOfStage) {
     })
     .then((result) => {
       addListForCards(result['name'], result['id']);
+      return result;
     })
     .catch(error => {
       console.log('error', error);
       alert('Ошибка в LoadStagesOfProject');
     });
+  return response;
 }
 
 async function DeleteStage(tokenOfStage) {
@@ -283,7 +347,6 @@ async function DeleteStage(tokenOfStage) {
       alert('Ошибка в DeleteStage');
     });
 }
-
 async function AddStage(nameOfStage) {
   var myHeaders = new Headers();
   myHeaders.append("Authorization", sessionStorage.getItem('token'));
@@ -316,3 +379,64 @@ async function AddStage(nameOfStage) {
     });
   return response;
 }
+async function LoadCard(tokenOfCard) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", sessionStorage.getItem('token'));
+
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  const response = await fetch(URL_link + "/card/" + tokenOfCard, requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+      return response.json();
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в LoadCard');
+    });
+  return response;
+}
+async function AddCard(tokenOfStage, name, content) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", sessionStorage.getItem('token'));
+  myHeaders.append("Content-Type", "application/json");
+
+  var raw = JSON.stringify({
+    "name": name,
+    "lastModifiedUserId": sessionStorage.getItem('token'),
+    "content": content
+  });
+
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  const response = await fetch(URL_link + "/card/?projectUuid=" + sessionStorage.getItem('tokenOfProject') + "&stageUuid=" + tokenOfStage, requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+      return response.json();
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в AddCard');
+    });
+  return response;
+}
+//===================================================================================================//

@@ -27,41 +27,12 @@
       </div>
       <div class="send">
         <input id="send_1" type="submit" class="btn btn-outline-secondary input_submit" name="send" value="Войти"
-          onclick="sendForm()">
+          onclick="sendAuthorizationForm()">
       </div>
     </div>
   </div>
 
-  <script>
-    async function sendForm() {
-      var myHeaders = new Headers();
-      myHeaders.append("login", document.getElementById('login_1').value);
-      myHeaders.append("password", document.getElementById('password_1').value);
-      myHeaders.append("Authorization", "");
-
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
-      };
-
-      fetch("http://localhost:8080/auth/sign_in", requestOptions)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Ошибочный запрос');            
-          }
-          return response.text();
-        })
-        .then((result) => {
-          document.location.href = "account.html"
-          sessionStorage.setItem('token', result);
-        })
-        .catch(error => {
-          console.log('error', error);
-          alert('Ошибочный запрос');
-        });
-    }
-  </script>
+  <script src="../scriptsjs/fetchScripts.js"></script>
 </body>
 
 </html>

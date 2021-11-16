@@ -138,10 +138,13 @@ function newProposalCard(name = "Новый проект", uuid = "") {
         loadCircle.removeAttribute("style");        
 
         var informationAboutProject = await LoadInformationAboutProposal(proposal_icon_div.getAttribute('data-uuid'));
+        var managerUser = await GetUser(informationAboutProject['projectManagersUuidList'][0]);
+
         document.querySelector('#project-proposal').dataset.uuidOfProposalWindow = informationAboutProject['id'];
         document.querySelector('#nameOfProposal').textContent = informationAboutProject['name'];
         document.querySelector('#basicInfoAboutProposal').textContent = informationAboutProject['information'];
-        document.querySelector('#supervisors').textContent = informationAboutProject['projectManagersUuidList'][0];
+        document.querySelector('#supervisors').textContent = managerUser['firstName'] + ' ' + managerUser['lastName'] + ' ' + managerUser['patronymic'];
+        document.querySelector('#supervisors').dataset.uuidOfManager = informationAboutProject['projectManagersUuidList'][0];
 
         setTimeout(() => {
             loadCircle.setAttribute("style", "display: none");
