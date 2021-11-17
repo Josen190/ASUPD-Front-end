@@ -40,51 +40,57 @@ function removeClass(id, cls) {
 
 let addColumnBtn = document.getElementById("createColumn");
 
-function addListForCards(title = "новая стадия", uuid = "") {
-  if (title == '') title = 'Новая стадия';
-  new ListForCards(title, uuid);
+async function LoadStageAndCardsFromDB(tokenOfStage) {
+  var stageParams = await GetStage(tokenOfStage);
+  var stageEntity = new StageForCards(stageParams['name'], stageParams['id']);
+  for (var i = 0; i < Object.keys(stageParams['cardUuidList']).length; i++) {
+    var cardParams = await GetCard(stageParams['cardUuidList'][i]);
+    stageEntity.pushCardToStage(stageParams['cardUuidList'][i], cardParams);
+  }
+  stageEntity.render();
 }
+
 addColumnBtn.addEventListener('click', async () => {
   console.log("Была нажата addColumnBtn");
   var nameOfStage = document.querySelector('#nameColum').value;
-  let uuidOfStage = await AddStage(nameOfStage)
-  addListForCards(nameOfStage, uuidOfStage);
+  let uuidOfStage = await AddStage(nameOfStage);
+
+  if (nameOfStage == '') nameOfStage = 'Новая стадия';
+  var stageEntity = new StageForCards(nameOfStage, uuidOfStage);
+  stageEntity.render();
 });
 
-//Логика карточек. Определяем место, куда будем помещать стадии
+//Логика стадий. Определяем место, куда будем помещать стадии
 let root = document.getElementById("addColumn");
 
-class ListForCards {
-  constructor(title, uuidOfStage) {
-    let name = document.getElementById("nameColum");
-    if (name.value != "") title = name.value;
-    name.value = "";
+class StageForCards {
+  constructor(title, tokenOfStage) {
+    if (title.value == "") title.value = "Новая стадия";
 
-    this.place = root;
-    this.title = title;
-    this.cardList = [];
-    this.uuidOfStage = uuidOfStage;
+    this.stageEntity = {
+      title: title,
+      uuidOfStage: tokenOfStage,
+      cardList: []
+    }
+  }
 
-    this.render();
+  pushCardToStage(tokenOfCard, cardParams) {
+    this.stageEntity.cardList.push(new Card(tokenOfCard, cardParams));
   }
 
   render() {
-    this.createListForCards(); //Создаём html форму стадии
-    root.before(this.divCol);
-    //this.place.append(this.divCol); //Присоеденяем созданную стадию к контейнеру root
+    this.createStageForCards();
+    for (var i = 0; i < this.stageEntity.cardList.length; i++) {
+      this.stageEntity.cardList[i].render(this);
+    }
   }
 
-  //Создаём форму для заполнения карточки
-  addCardFormFunc() {
-    this.AddCardBtn.setAttribute("style", "display:none"); //Скрываем кнопку, чтобы пользователь не мог бесконечно создавать формы
-    this.cardList.push(new Card(this.divListContent, this, this.uuidOfStage));
-  }
 
-  createListForCards() {
+  createStageForCards() {
     // Контейнер-стадии
-    this.divCol = document.createElement('div');
-    this.divCol.classList.add('col-my', 'col-3');
-    this.divCol.dataset.uuidOfStage = this.uuidOfStage;
+    this.divStage = document.createElement('div');
+    this.divStage.classList.add('col-my', 'col-3');
+    this.divStage.dataset.uuidOfStage = this.stageEntity.uuidOfStage;
 
     //Заголовок стадии
     this.divHeader = document.createElement('div');
@@ -96,7 +102,8 @@ class ListForCards {
     this.AddCardBtn.classList.add('button-new-card');
     this.AddCardBtn.addEventListener('click', () => {
       console.log("Была нажата addCardBtn");
-      this.addCardFormFunc();
+      this.AddCardBtn.setAttribute("style", "display:none"); //Возвращаем кнопку
+      Card.prototype.createCardInputFormElement(this);
     })
     this.AddCardBtn.innerHTML = '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-plus">' +
       '<path fill-rule="evenodd" d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"></path>' +
@@ -110,16 +117,16 @@ class ListForCards {
     //Кнопка удалить стадию
     this.DeleteColumnBtn = document.createElement('button');
     setAttributes(this.DeleteColumnBtn, { "type": "button" });
-    this.DeleteColumnBtn.innerText = "Удалить столбец";
+    this.DeleteColumnBtn.innerText = "Удалить стадию";
     this.DeleteColumnBtn.addEventListener('click', async () => {
-      await DeleteStage(this.uuidOfStage, sessionStorage.getItem('tokenOfProject'));
+      await DeleteStage(this.stageEntity.uuidOfStage, sessionStorage.getItem('tokenOfProject'));
       console.log("Была нажата DeleteColumnBtn");
-      this.divCol.remove();
+      this.divStage.remove();
     })
 
     //"Собираем" заголовок карточки
     this.divHeader.append(this.numberOfCards);
-    this.divHeader.insertAdjacentHTML('beforeend', '<h3 class="name-column"><span>' + this.title + '</span></h3>' +
+    this.divHeader.insertAdjacentHTML('beforeend', '<h3 class="name-column"><span>' + this.stageEntity.title + '</span></h3>' +
       '<details class="column-menu">' +
       '<summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">' +
       '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal">' +
@@ -132,124 +139,79 @@ class ListForCards {
     this.divHeader.append(this.AddCardBtn);
 
     //Контейнер в стадии, который содержит текст карточки
-    this.divListContent = document.createElement('div');
-    this.divListContent.classList.add('col-content');
+    this.divStageContent = document.createElement('div');
+    this.divStageContent.classList.add('col-content');
 
     //Дособираем итоговую стадию
-    this.divCol.append(this.divHeader);
-    this.divCol.append(this.divListContent);
+    this.divStage.append(this.divHeader);
+    this.divStage.append(this.divStageContent);
+
+    root.before(this.divStage);
   }
 }
 
 //Класс, описывающий карточку
 class Card {
-  constructor(place, listForCards, uuidOfStage) { //listForCards передаём, чтобы увеличивать/уменшать счётчик карточек в стадии
-    this.place = place;
-    this.listForCards = listForCards;
-    this.uuidOfStage = uuidOfStage;
-
-    var today = new Date();
-    var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
+  constructor(tokenOfCard, cardParams) { //listForCards передаём, чтобы увеличивать/уменшать счётчик карточек в стадии
+    // var today = new Date();
+    // var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+    // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     //Здесь хранится информация о карточке
     this.cardEntity = {
+      id: "",
       title: "",
-      status: "В процессе",
-      description: "Click to write a description...",
+      status: "",
+      description: "",
       commentList: [],
-      lastChangeDate: String(time + ' ' + date),
+      lastChangeDate: "",
       lastChangeUserUUID: "",
       mark: ""
     }
-
-    this.render();
+    this.init(tokenOfCard, cardParams);
   }
 
-  render() {
-    this.createCardFormElement(); //Создаём форму для заполнения карточки
+  init(tokenOfCard, cardParams) {
+    this.cardEntity = {
+      id: tokenOfCard,
+      title: cardParams["name"],
+      status: cardParams["status"],
+      description: cardParams["content"],
+      commentList: cardParams["commentUuidList"],
+      lastChangeDate: cardParams["lastModifiedDate"],
+      lastChangeUserUUID: cardParams["lastModifiedUserId"],
+      mark: cardParams["mark"]
+    }
   }
 
-  createCardFormElement() {
-    //Создаём контейнер для формы заполнения карточки
-    this.formCard = document.createElement('div');
-    setAttributes(this.formCard, { "class": "form", "accept-charset": "UTF-8" });
-
-    this.inputContentType = document.createElement('input');
-    setAttributes(this.inputContentType, { "type": "hidden", "name": "content_type", "value": "Note" });
-
-    this.inputClientUid = document.createElement('input');
-    setAttributes(this.inputClientUid, { "type": "hidden", "name": "client_uid", "value": "75de466ef3aa261df45a6fddefb6c289" });
-
-    //Поле ввода текста для формы
-    this.textAreaOfCardForm = document.createElement('textarea');
-    setAttributes(this.textAreaOfCardForm, {
-      "name": "note", "required": "", "autofocus": "", "aria-label": "Введите заметку", "class": "form-control input-block js-quick-submit js-size-to-fit js-note-text js-length-limited-input",
-      "data-input-max-length": "256", "data-warning-length": "99", "data-warning-text": "{{remaining}} remaining", "placeholder": "Введите заметку", "spellcheck": "false"
-    });
-
-    //Контейнер для кнопок
-    this.divContainerForBtn = document.createElement('div');
-    this.divContainerForBtn.classList.add('flex');
-
-    //Потвердить создание карточки
-    this.submitCardBtn = document.createElement('button');
-    setAttributes(this.submitCardBtn, { "type": "submit", "class": "btn" });
-    this.submitCardBtn.innerText = "Добавить";
-    this.submitCardBtn.addEventListener('click', () => {
-      console.log("Была нажата кнопка потверждения создания карточки");
-      this.listForCards.numberOfCards.innerText = Number(this.listForCards.numberOfCards.innerText) + 1;
-      this.createCardElement();
-    })
-
-    //Отменить создание карточки
-    this.deleteCardForm = document.createElement('button');
-    setAttributes(this.deleteCardForm, { "type": "button", "class": "btn" });
-    this.deleteCardForm.innerText = "Отмена";
-    this.deleteCardForm.addEventListener('click', () => {
-      console.log("Была нажата кнопка отмены создания карточки");
-      this.formCard.remove(); //Убираем форму
-      this.listForCards.AddCardBtn.setAttribute("style", "display:inline"); //Возвращаем кнопку
-    })
-
-    //Теперь собираем все компоненты воедино
-    this.divContainerForBtn.append(this.submitCardBtn, this.deleteCardForm);
-    this.formCard.append(this.inputContentType, this.inputClientUid, this.textAreaOfCardForm, this.divContainerForBtn);
-
-    this.place.append(this.formCard);
+  render(stageInstance) {
+    this.createCardElement(stageInstance);
   }
 
-  createCardElement() {
+  createCardElement(stageInstance) {
     //Контейнер для карточки
     this.card = document.createElement('div');
     this.card.classList.add('card');
     this.card.addEventListener('click', () => {
       console.log("Была открыта карточка");
-      this.showCard(); //Открываем карточку
+      this.showCard(stageInstance); //Открываем карточку
     })
 
     //Название карточки
     this.cardName = document.createElement('div');
-    if (this.textAreaOfCardForm.value != "") {
-      this.cardName.innerText = this.textAreaOfCardForm.value;
-      this.cardEntity.title = this.textAreaOfCardForm.value;
-    }
-    else {
-      this.cardName.innerText = "Новая карточка";
-      this.cardEntity.title = "Новая карточка";
-    }
+    this.cardName.innerText = this.cardEntity.title;
 
     //Кнопка удалить карточку
     this.DeleteCardBtn = document.createElement('button');
     this.DeleteCardBtn.classList.add('button');
     this.DeleteCardBtn.innerText = "x";
-    this.DeleteCardBtn.addEventListener('click', (e) => {
+    this.DeleteCardBtn.addEventListener('click', async (e) => {
       e.stopPropagation(); //Убираем открытие карточки, при нажатии на кнопку внутри карточки
-      this.listForCards.numberOfCards.innerText = Number(this.listForCards.numberOfCards.innerText) - 1;
+      stageInstance.numberOfCards.innerText = Number(stageInstance.numberOfCards.innerText) - 1;
       this.card.remove();
-      let i = this.listForCards.cardList.indexOf(this);
-      this.listForCards.cardList.splice(i, 1);
-      console.log("Была удалена карточка");      
+      await DeleteCard(this.cardEntity.id);
+      let i = stageInstance.stageEntity.cardList.indexOf(this);
+      stageInstance.stageEntity.cardList.splice(i, 1);
+      console.log("Была удалена карточка");
     });
 
     //Собираем объекты
@@ -266,15 +228,75 @@ class Card {
     this.btnWrapper.append(this.DeleteCardBtn);
     this.card.append(this.btnWrapper);
 
-    this.formCard.remove(); //Удаляем форму для создания карточки
-    this.place.append(this.card); //Вместно неё добавляем обычную карточку
-    this.listForCards.AddCardBtn.setAttribute("style", "display:inline"); //Возвращаем кнопку для создания следующей карточки
+    stageInstance.divStageContent.append(this.card); //Вместно неё добавляем обычную карточку
+  }
 
-    AddCard(this.uuidOfStage, this.cardEntity.title, this.cardEntity.description);
+  createCardInputFormElement(stageInstance) {
+    //Создаём контейнер для формы заполнения карточки
+    this.formCard = document.createElement('div');
+    setAttributes(this.formCard, { "class": "form", "accept-charset": "UTF-8" });
+
+    this.inputContentType = document.createElement('input');
+    setAttributes(this.inputContentType, { "type": "hidden", "name": "content_type", "value": "Note" });
+
+    this.inputClientUid = document.createElement('input');
+    setAttributes(this.inputClientUid, { "type": "hidden", "name": "client_uid" });
+
+    //Поле ввода текста для формы
+    this.textAreaOfCardForm = document.createElement('textarea');
+    setAttributes(this.textAreaOfCardForm, {
+      "name": "note", "required": "", "autofocus": "", "aria-label": "Введите заметку", "class": "form-control input-block js-quick-submit js-size-to-fit js-note-text js-length-limited-input",
+      "data-input-max-length": "256", "data-warning-length": "99", "data-warning-text": "{{remaining}} remaining", "placeholder": "Введите заметку", "spellcheck": "false"
+    });
+
+    //Контейнер для кнопок
+    this.divContainerForBtn = document.createElement('div');
+    this.divContainerForBtn.classList.add('flex');
+
+    //Потвердить создание карточки
+    this.submitCardBtn = document.createElement('button');
+    setAttributes(this.submitCardBtn, { "type": "submit", "class": "btn" });
+    this.submitCardBtn.innerText = "Добавить";
+    this.submitCardBtn.addEventListener('click', async () => {
+      console.log("Была нажата кнопка потверждения создания карточки");
+      stageInstance.numberOfCards.innerText = Number(stageInstance.numberOfCards.innerText) + 1;
+      
+      var tokenOfCard = await AddCard(stageInstance.stageEntity.uuidOfStage, this.textAreaOfCardForm.value, '');
+      var cardParams = {
+        id: tokenOfCard,
+        name: this.textAreaOfCardForm.value,
+        status: "IN_PROCESS",
+        content: "",
+        commentUuidList: [],
+        lastModifiedDate: new Date(),
+        lastModifiedUserId: sessionStorage.getItem('token'),
+        mark: ""
+      };
+      this.init(tokenOfCard, cardParams);
+      this.createCardElement(stageInstance);
+      this.formCard.remove();
+      stageInstance.AddCardBtn.setAttribute("style", "display:inline"); //Возвращаем кнопку
+    })
+
+    //Отменить создание карточки
+    this.deleteCardForm = document.createElement('button');
+    setAttributes(this.deleteCardForm, { "type": "button", "class": "btn" });
+    this.deleteCardForm.innerText = "Отмена";
+    this.deleteCardForm.addEventListener('click', () => {
+      console.log("Была нажата кнопка отмены создания карточки");
+      this.formCard.remove(); //Убираем форму
+      stageInstance.AddCardBtn.setAttribute("style", "display:inline"); //Возвращаем кнопку
+    })
+
+    //Теперь собираем все компоненты воедино
+    this.divContainerForBtn.append(this.submitCardBtn, this.deleteCardForm);
+    this.formCard.append(this.inputContentType, this.inputClientUid, this.textAreaOfCardForm, this.divContainerForBtn);
+
+    stageInstance.divStageContent.insertBefore(this.formCard, stageInstance.divStageContent.firstChild);
   }
 
   //Окно, вызываемое при отркытии карточки
-  showCard() {
+  showCard(stageInstance) {
     //Затемнённая область позади карточки
     this.divCardContainer = document.createElement('div');
     this.divCardContainer.classList.add('card-wrapper');
@@ -310,7 +332,7 @@ class Card {
     this.divHeader.insertAdjacentHTML('beforeend',
       '<div class="last-change">' +
       '<p id = "lastData">Последнее изменение: ' + this.cardEntity.lastChangeDate + '</p>' +
-      '<p id = "lastUser">Изменил: lastUser</p>' +
+      '<p id = "lastUser">Изменил:' + this.cardEntity.lastChangeUserUUID +  'lastUser</p>' +
       '</div>');
     //================================================================================================//
 
@@ -462,11 +484,10 @@ class Card {
     setAttributes(this.estimateBtn, { "type": "button", "name": "delete" });
     this.delete.innerText = "Удалить";
     this.delete.addEventListener('click', (e) => {
-      // this.listForCards.numberOfCards.innerText = Number(this.listForCards.numberOfCards.innerText) - 1;
       this.card.remove();
       this.divCardContainer.remove();
       let i = this.listForCards.cardList.indexOf(this);
-      this.listForCards.cardList.splice(i, 1);
+      stageInstance.cardList.splice(i, 1);
       console.log("Была удалена карточка");
     });
 
@@ -480,38 +501,38 @@ class Card {
 
     //Коментарии
     //================================================================================================//
-    this.divComments = document.createElement('div');
-    this.divComments.classList.add('comments');
-    this.divComments.insertAdjacentHTML('beforeend', '<h5>Коментарии</h5>');
-    //Контейнер для ввода комментария
-    this.inputCommentContainer = document.createElement('div');
-    this.inputCommentContainer.classList.add('new');
-    //textarea для ввода коментария
-    this.textAreaComment = document.createElement('textarea');
-    setAttributes(this.textAreaComment, { "placeholder": "Новый комменатрий", "name": "comment", "rows": "3", "required": "true" });
-    //Кнопка "Сохранить комменатрий"
-    this.saveCommentBtn = document.createElement('button');
-    setAttributes(this.saveCommentBtn, { "type": "button", "name": "sendComment", "class": "btn" });
-    this.saveCommentBtn.innerText = "Сохранить";
-    this.saveCommentBtn.addEventListener('click', () => {
-      if (this.textAreaComment.value != "") {
-        var today = new Date();
-        var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        this.cardEntity.commentList.push([this.textAreaComment.value, String(time + ' ' + date)]);
-        console.log()
-        this.textAreaComment.value = "";
-        this.renderComments();
-      }
-    })
-    //Контейнер для старых комментариев
-    this.oldCommentsContainer = document.createElement('div');
-    setAttributes(this.oldCommentsContainer, { "class": "old", "id": "commentList" });
+    // this.divComments = document.createElement('div');
+    // this.divComments.classList.add('comments');
+    // this.divComments.insertAdjacentHTML('beforeend', '<h5>Коментарии</h5>');
+    // //Контейнер для ввода комментария
+    // this.inputCommentContainer = document.createElement('div');
+    // this.inputCommentContainer.classList.add('new');
+    // //textarea для ввода коментария
+    // this.textAreaComment = document.createElement('textarea');
+    // setAttributes(this.textAreaComment, { "placeholder": "Новый комменатрий", "name": "comment", "rows": "3", "required": "true" });
+    // //Кнопка "Сохранить комменатрий"
+    // this.saveCommentBtn = document.createElement('button');
+    // setAttributes(this.saveCommentBtn, { "type": "button", "name": "sendComment", "class": "btn" });
+    // this.saveCommentBtn.innerText = "Сохранить";
+    // this.saveCommentBtn.addEventListener('click', () => {
+    //   if (this.textAreaComment.value != "") {
+    //     var today = new Date();
+    //     var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+    //     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    //     this.cardEntity.commentList.push([this.textAreaComment.value, String(time + ' ' + date)]);
+    //     console.log()
+    //     this.textAreaComment.value = "";
+    //     this.renderComments();
+    //   }
+    // })
+    // //Контейнер для старых комментариев
+    // this.oldCommentsContainer = document.createElement('div');
+    // setAttributes(this.oldCommentsContainer, { "class": "old", "id": "commentList" });
 
-    this.renderComments();
-    //Собираем данный элемент карточки
-    this.inputCommentContainer.append(this.textAreaComment, this.saveCommentBtn, this.oldCommentsContainer);
-    this.divComments.append(this.inputCommentContainer);
+    // this.renderComments();
+    // //Собираем данный элемент карточки
+    // this.inputCommentContainer.append(this.textAreaComment, this.saveCommentBtn, this.oldCommentsContainer);
+    // this.divComments.append(this.inputCommentContainer);
     //================================================================================================//
 
     //Собираем карточку
@@ -520,92 +541,92 @@ class Card {
     document.getElementById('showCardContaier').append(this.divCardContainer);
   }
 
-  renderComments() {
-    let currentCommentsDOM = Array.from(this.oldCommentsContainer.childNodes);
+  // renderComments() {
+  //   let currentCommentsDOM = Array.from(this.oldCommentsContainer.childNodes);
 
-    currentCommentsDOM.forEach(commentDOM => {
-      commentDOM.remove();
-    });
+  //   currentCommentsDOM.forEach(commentDOM => {
+  //     commentDOM.remove();
+  //   });
 
-    this.cardEntity.commentList.forEach(comment => {
-      new Comment(comment, this.oldCommentsContainer);
-    });
-  }
+  //   this.cardEntity.commentList.forEach(comment => {
+  //     new Comment(comment, this.oldCommentsContainer);
+  //   });
+  // }
 }
 
-class Comment {
-  constructor(comment, place) {
-    this.place = place;
-    this.comment = comment[0];
-    this.date = comment[1];
+// class Comment {
+//   constructor(comment, place) {
+//     this.place = place;
+//     this.comment = comment[0];
+//     this.date = comment[1];
 
-    this.render();
-  }
+//     this.render();
+//   }
 
-  render() {
-    this.div = document.createElement('div');
-    this.div.className = "elem-comment";
-    this.div.insertAdjacentHTML('beforeend',
-      '<div class="info-comment">' +
-      '<a id = "userCommen">User</a>' +
-      '<data id = "dataComment">' + this.date + '</data>' +
-      '</div>' +
-      '<div class="content-comment">' +
-      '<p id = "contentComment" >' + this.comment + '</p>' +
-      '</div>')
-    this.place.append(this.div);
-  }
-}
+//   render() {
+//     this.div = document.createElement('div');
+//     this.div.className = "elem-comment";
+//     this.div.insertAdjacentHTML('beforeend',
+//       '<div class="info-comment">' +
+//       '<a id = "userCommen">User</a>' +
+//       '<data id = "dataComment">' + this.date + '</data>' +
+//       '</div>' +
+//       '<div class="content-comment">' +
+//       '<p id = "contentComment" >' + this.comment + '</p>' +
+//       '</div>')
+//     this.place.append(this.div);
+//   }
+// }
 
-function LoadCardElementFromDB(uuidOfStage, uuidOfCard, cardEntityInput) {  
-  var place = document.querySelector('[data-uuid-of-stage="' + uuidOfStage + '"]').querySelector('.col-content');
-  
-  var cardEntity = {
-    title: cardEntityInput['name'],
-    status: cardEntityInput['status'],
-    description: cardEntityInput['content'],
-    commentList: cardEntityInput['commentUuidList'],
-    lastChangeDate: cardEntityInput['lastModifiedDate'],
-    lastChangeUserUUID: cardEntityInput['lastModifiedUserId'],
-    mark: cardEntityInput['mark']
-  }
+// function LoadCardElementFromDB(uuidOfStage, uuidOfCard, cardEntityInput) {  
+//   var place = document.querySelector('[data-uuid-of-stage="' + uuidOfStage + '"]').querySelector('.col-content');
 
-  //Контейнер для карточки
-  var card = document.createElement('div');
-  card.dataset.uuidOfCard = uuidOfCard;
-  card.classList.add('card');
-  
+//   var cardEntity = {
+//     title: cardEntityInput['name'],
+//     status: cardEntityInput['status'],
+//     description: cardEntityInput['content'],
+//     commentList: cardEntityInput['commentUuidList'],
+//     lastChangeDate: cardEntityInput['lastModifiedDate'],
+//     lastChangeUserUUID: cardEntityInput['lastModifiedUserId'],
+//     mark: cardEntityInput['mark']
+//   }
 
-  //Название карточки
-  var cardName = document.createElement('div');
-  cardName.innerText = cardEntity.title;
+//   //Контейнер для карточки
+//   var card = document.createElement('div');
+//   card.dataset.uuidOfCard = uuidOfCard;
+//   card.classList.add('card');
 
-  //Кнопка удалить карточку
-  var DeleteCardBtn = document.createElement('button');
-  DeleteCardBtn.classList.add('button');
-  DeleteCardBtn.innerText = "x";
-  DeleteCardBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); //Убираем открытие карточки, при нажатии на кнопку внутри карточки
-    // this.listForCards.numberOfCards.innerText = Number(this.listForCards.numberOfCards.innerText) - 1;
-    //this.card.remove();
-    var k = document.querySelector('[data-uuid-of-card="' + uuidOfCard + '"]');
-    k.remove();
-    console.log("Была удалена карточка");
-  });
 
-  //Собираем объекты
-  card.insertAdjacentHTML('beforeend',
-    '<span class="card-svg">' +
-    '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-note">' +
-    '<path fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H1.75zM3.5 6.25a.75.75 0 01.75-.75h7a.75.75 0 010 1.5h-7a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h4a.75.75 0 000-1.5h-4z"></path>' +
-    '</svg>' +
-    '</span>' +
-    '<span class="card-content">' + cardName.innerText + '</span>' +
-    '<small class="add-info color-fg-muted">Добавлено<a class="color-text-primary" href="#" draggable="false">Josen190</a></small>');
-  var btnWrapper = document.createElement('div');
-  btnWrapper.classList.add('button-wrapper');
-  btnWrapper.append(DeleteCardBtn);
-  card.append(btnWrapper);
-  
-  place.append(card); //Вместно неё добавляем обычную карточку
-}
+//   //Название карточки
+//   var cardName = document.createElement('div');
+//   cardName.innerText = cardEntity.title;
+
+//   //Кнопка удалить карточку
+//   var DeleteCardBtn = document.createElement('button');
+//   DeleteCardBtn.classList.add('button');
+//   DeleteCardBtn.innerText = "x";
+//   DeleteCardBtn.addEventListener('click', (e) => {
+//     e.stopPropagation(); //Убираем открытие карточки, при нажатии на кнопку внутри карточки
+//     // this.listForCards.numberOfCards.innerText = Number(this.listForCards.numberOfCards.innerText) - 1;
+//     //this.card.remove();
+//     var k = document.querySelector('[data-uuid-of-card="' + uuidOfCard + '"]');
+//     k.remove();
+//     console.log("Была удалена карточка");
+//   });
+
+//   //Собираем объекты
+//   card.insertAdjacentHTML('beforeend',
+//     '<span class="card-svg">' +
+//     '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-note">' +
+//     '<path fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H1.75zM3.5 6.25a.75.75 0 01.75-.75h7a.75.75 0 010 1.5h-7a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h4a.75.75 0 000-1.5h-4z"></path>' +
+//     '</svg>' +
+//     '</span>' +
+//     '<span class="card-content">' + cardName.innerText + '</span>' +
+//     '<small class="add-info color-fg-muted">Добавлено<a class="color-text-primary" href="#" draggable="false">Josen190</a></small>');
+//   var btnWrapper = document.createElement('div');
+//   btnWrapper.classList.add('button-wrapper');
+//   btnWrapper.append(DeleteCardBtn);
+//   card.append(btnWrapper);
+
+//   place.append(card); //Вместно неё добавляем обычную карточку
+// }

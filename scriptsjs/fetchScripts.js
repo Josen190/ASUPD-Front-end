@@ -48,10 +48,63 @@ async function GetUser(tokenOfUser) {
     })
     .catch(error => {
       console.log('error', error);
-      alert('Ошибка в LoadInformationOfUser');
+      alert('Ошибка в GetUser');
     });
   return result;
 }
+async function GetStage(tokenOfStage) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", sessionStorage.getItem('token'));
+
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  const response = await fetch(URL_link + "/stage/" + tokenOfStage + "?projectUuid=" + sessionStorage.getItem('tokenOfProject'), requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+      return response.json();
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в GetStage');
+    });
+  return response;
+}
+async function GetCard(tokenOfCard) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", sessionStorage.getItem('token'));
+
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  const response = await fetch(URL_link + "/card/" + tokenOfCard, requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+      return response.json();
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в GetCard');
+    });
+  return response;
+}
+
 //===================================================================================================//
 
 
@@ -282,13 +335,9 @@ async function LoadProjectInformation() {
       document.querySelector('#projectManager').innerText += " " + managerUser['firstName'] + ' ' + managerUser['lastName'] + ' ' + managerUser['patronymic'];;
 
       for (var i = 0; i < Object.keys(result['stageUuidList']).length; i++) {
-        var stage = await LoadStagesOfProject(result['stageUuidList'][i], sessionStorage.getItem('tokenOfProject'));        
-        for (var j = 0; j < Object.keys(stage['cardUuidList']).length; j++) {
-          var card = await LoadCard(stage['cardUuidList'][j]);
-          await LoadCardElementFromDB(result['stageUuidList'][i], stage['cardUuidList'][j], card);
-        }
-        document.querySelector('[data-uuid-of-stage="' + result['stageUuidList'][i] + '"]').querySelector('.number-cards').innerText = 
-          document.querySelector('[data-uuid-of-stage="' + result['stageUuidList'][i] + '"]').querySelector('.col-content').childElementCount;      
+        await LoadStageAndCardsFromDB(result['stageUuidList'][i]);
+        document.querySelector('[data-uuid-of-stage="' + result['stageUuidList'][i] + '"]').querySelector('.number-cards').innerText =
+          document.querySelector('[data-uuid-of-stage="' + result['stageUuidList'][i] + '"]').querySelector('.col-content').childElementCount;
       }
     })
     .catch(error => {
@@ -438,5 +487,26 @@ async function AddCard(tokenOfStage, name, content) {
       alert('Ошибка в AddCard');
     });
   return response;
+}
+async function DeleteCard(tokenOfCard) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", sessionStorage.getItem('token'));
+
+  var requestOptions = {
+    method: 'DELETE',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  await fetch(URL_link + "/card/" + tokenOfCard, requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в DeleteCard');
+    });
 }
 //===================================================================================================//
