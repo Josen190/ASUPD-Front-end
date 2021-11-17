@@ -63,7 +63,7 @@
               d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z">
             </path>
           </svg>
-          Добавить колонку
+          Добавить этап
         </button>
       </div>
     </div>
@@ -84,6 +84,7 @@
       <li id="userCaptain">Капитан: </li>
       <li id="projectManager">Преподователь: </li>
     </ul>
+    <div id="mentorsOfProject"></div>
   </aside>
 
   <!-- Модальное окно с выбором статуса -->
@@ -123,7 +124,7 @@
   <div id="create-column" class="create-column display-none">
     <div class="form-column">
       <div class="form-header">
-        <h3 class="name">Добавить стадию</h3>
+        <h3 class="name">Добавить этап</h3>
         <button class="form-close" type="button" aria-label="Close dialog"
           onclick="addClass('create-column', 'display-none')">
           <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true"
@@ -135,11 +136,11 @@
         </button>
       </div>
       <div class="content">
-        <h4 class="name">Имя стадии</h4>
+        <h4 class="name">Имя этапа</h4>
         <input id="nameColum" type="text" class="input_text" name="" value="">
         <button id="createColumn" type="submit" data-view-component="true"
           class="create-column-btn flex-auto btn-primary btn" onclick="addClass('create-column', 'display-none')">
-          Создать стадию
+          Создать этап
         </button>
       </div>
     </div>

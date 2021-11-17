@@ -55,17 +55,17 @@ addColumnBtn.addEventListener('click', async () => {
   var nameOfStage = document.querySelector('#nameColum').value;
   let uuidOfStage = await AddStage(nameOfStage);
 
-  if (nameOfStage == '') nameOfStage = 'Новая стадия';
+  if (nameOfStage == '') nameOfStage = 'Новый этап';
   var stageEntity = new StageForCards(nameOfStage, uuidOfStage);
   stageEntity.render();
 });
 
-//Логика стадий. Определяем место, куда будем помещать стадии
+//Логика этапов. Определяем место, куда будем помещать этапы
 let root = document.getElementById("addColumn");
 
 class StageForCards {
   constructor(title, tokenOfStage) {
-    if (title.value == "") title.value = "Новая стадия";
+    if (title.value == "") title.value = "Новый этап";
 
     this.stageEntity = {
       title: title,
@@ -75,7 +75,9 @@ class StageForCards {
   }
 
   pushCardToStage(tokenOfCard, cardParams) {
-    this.stageEntity.cardList.push(new Card(tokenOfCard, cardParams));
+    var card = new Card();
+    card.init(tokenOfCard, cardParams);
+    this.stageEntity.cardList.push(card);
   }
 
   render() {
@@ -84,15 +86,13 @@ class StageForCards {
       this.stageEntity.cardList[i].render(this);
     }
   }
-
-
   createStageForCards() {
-    // Контейнер-стадии
+    // Контейнер-этапа
     this.divStage = document.createElement('div');
     this.divStage.classList.add('col-my', 'col-3');
     this.divStage.dataset.uuidOfStage = this.stageEntity.uuidOfStage;
 
-    //Заголовок стадии
+    //Заголовок этапа
     this.divHeader = document.createElement('div');
     this.divHeader.classList.add('col-header');
 
@@ -100,24 +100,26 @@ class StageForCards {
     this.AddCardBtn = document.createElement('button');
     setAttributes(this.AddCardBtn, { "type": "button", "aria-label": "Добавить новую карточку", "aria-expanded": "false" });
     this.AddCardBtn.classList.add('button-new-card');
-    this.AddCardBtn.addEventListener('click', () => {
+    this.AddCardBtn.addEventListener('click', async (e) => {
       console.log("Была нажата addCardBtn");
-      this.AddCardBtn.setAttribute("style", "display:none"); //Возвращаем кнопку
-      Card.prototype.createCardInputFormElement(this);
+      this.AddCardBtn.setAttribute("style", "display:none"); 
+
+      var card = new Card();
+      card.createCardInputFormElement(this);
     })
     this.AddCardBtn.innerHTML = '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-plus">' +
       '<path fill-rule="evenodd" d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"></path>' +
       '</svg>';
 
-    //Счётчик количества карточек в стадии
+    //Счётчик количества карточек в этапе
     this.numberOfCards = document.createElement('span');
     this.numberOfCards.classList.add('number-cards');
     this.numberOfCards.innerText = 0;
 
-    //Кнопка удалить стадию
+    //Кнопка удалить этап
     this.DeleteColumnBtn = document.createElement('button');
     setAttributes(this.DeleteColumnBtn, { "type": "button" });
-    this.DeleteColumnBtn.innerText = "Удалить стадию";
+    this.DeleteColumnBtn.innerText = "Удалить этап";
     this.DeleteColumnBtn.addEventListener('click', async () => {
       await DeleteStage(this.stageEntity.uuidOfStage, sessionStorage.getItem('tokenOfProject'));
       console.log("Была нажата DeleteColumnBtn");
@@ -138,11 +140,11 @@ class StageForCards {
     this.divHeader.childNodes[2].childNodes[1].appendChild(this.DeleteColumnBtn); //Помещаем кнопку в <div class="open"></div>
     this.divHeader.append(this.AddCardBtn);
 
-    //Контейнер в стадии, который содержит текст карточки
+    //Контейнер в этапе, который содержит текст карточки
     this.divStageContent = document.createElement('div');
     this.divStageContent.classList.add('col-content');
 
-    //Дособираем итоговую стадию
+    //Дособираем итоговый этап
     this.divStage.append(this.divHeader);
     this.divStage.append(this.divStageContent);
 
@@ -152,7 +154,7 @@ class StageForCards {
 
 //Класс, описывающий карточку
 class Card {
-  constructor(tokenOfCard, cardParams) { //listForCards передаём, чтобы увеличивать/уменшать счётчик карточек в стадии
+  constructor() { //listForCards передаём, чтобы увеличивать/уменшать счётчик карточек в этапе
     // var today = new Date();
     // var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
     // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -167,7 +169,6 @@ class Card {
       lastChangeUserUUID: "",
       mark: ""
     }
-    this.init(tokenOfCard, cardParams);
   }
 
   init(tokenOfCard, cardParams) {
@@ -198,7 +199,7 @@ class Card {
 
     //Название карточки
     this.cardName = document.createElement('div');
-    this.cardName.innerText = this.cardEntity.title;
+    this.cardName.innerText = this.cardEntity.title + "|" + this.cardEntity.id;
 
     //Кнопка удалить карточку
     this.DeleteCardBtn = document.createElement('button');
@@ -208,7 +209,7 @@ class Card {
       e.stopPropagation(); //Убираем открытие карточки, при нажатии на кнопку внутри карточки
       stageInstance.numberOfCards.innerText = Number(stageInstance.numberOfCards.innerText) - 1;
       this.card.remove();
-      await DeleteCard(this.cardEntity.id);
+      DeleteCard(this.cardEntity.id);
       let i = stageInstance.stageEntity.cardList.indexOf(this);
       stageInstance.stageEntity.cardList.splice(i, 1);
       console.log("Была удалена карточка");
@@ -245,8 +246,8 @@ class Card {
     //Поле ввода текста для формы
     this.textAreaOfCardForm = document.createElement('textarea');
     setAttributes(this.textAreaOfCardForm, {
-      "name": "note", "required": "", "autofocus": "", "aria-label": "Введите заметку", "class": "form-control input-block js-quick-submit js-size-to-fit js-note-text js-length-limited-input",
-      "data-input-max-length": "256", "data-warning-length": "99", "data-warning-text": "{{remaining}} remaining", "placeholder": "Введите заметку", "spellcheck": "false"
+      "name": "note", "required": "", "autofocus": "", "aria-label": "Название задачи", "class": "form-control input-block js-quick-submit js-size-to-fit js-note-text js-length-limited-input",
+      "data-input-max-length": "256", "data-warning-length": "99", "data-warning-text": "{{remaining}} remaining", "placeholder": "Название задачи", "spellcheck": "false"
     });
 
     //Контейнер для кнопок
@@ -257,25 +258,27 @@ class Card {
     this.submitCardBtn = document.createElement('button');
     setAttributes(this.submitCardBtn, { "type": "submit", "class": "btn" });
     this.submitCardBtn.innerText = "Добавить";
-    this.submitCardBtn.addEventListener('click', async () => {
-      console.log("Была нажата кнопка потверждения создания карточки");
-      stageInstance.numberOfCards.innerText = Number(stageInstance.numberOfCards.innerText) + 1;
-      
-      var tokenOfCard = await AddCard(stageInstance.stageEntity.uuidOfStage, this.textAreaOfCardForm.value, '');
-      var cardParams = {
-        id: tokenOfCard,
-        name: this.textAreaOfCardForm.value,
-        status: "IN_PROCESS",
-        content: "",
-        commentUuidList: [],
-        lastModifiedDate: new Date(),
-        lastModifiedUserId: sessionStorage.getItem('token'),
-        mark: ""
-      };
-      this.init(tokenOfCard, cardParams);
-      this.createCardElement(stageInstance);
-      this.formCard.remove();
-      stageInstance.AddCardBtn.setAttribute("style", "display:inline"); //Возвращаем кнопку
+    this.submitCardBtn.addEventListener('click', async (e) => {
+      if (!e.detail || e.detail == 1) {
+        console.log("Была нажата кнопка потверждения создания карточки");
+        stageInstance.numberOfCards.innerText = Number(stageInstance.numberOfCards.innerText) + 1;
+
+        var tokenOfCard = await AddCard(stageInstance.stageEntity.uuidOfStage, this.textAreaOfCardForm.value, '');
+        var cardParams = {
+          id: tokenOfCard,
+          name: this.textAreaOfCardForm.value,
+          status: "IN_PROCESS",
+          content: "",
+          commentUuidList: [],
+          lastModifiedDate: new Date(),
+          lastModifiedUserId: sessionStorage.getItem('token'),
+          mark: ""
+        };
+        this.init(tokenOfCard, cardParams);
+        this.createCardElement(stageInstance);
+        this.formCard.remove();
+        stageInstance.AddCardBtn.setAttribute("style", "display:inline"); //Возвращаем кнопку
+      }
     })
 
     //Отменить создание карточки
@@ -332,7 +335,7 @@ class Card {
     this.divHeader.insertAdjacentHTML('beforeend',
       '<div class="last-change">' +
       '<p id = "lastData">Последнее изменение: ' + this.cardEntity.lastChangeDate + '</p>' +
-      '<p id = "lastUser">Изменил:' + this.cardEntity.lastChangeUserUUID +  'lastUser</p>' +
+      '<p id = "lastUser">Изменил:' + this.cardEntity.lastChangeUserUUID + 'lastUser</p>' +
       '</div>');
     //================================================================================================//
 

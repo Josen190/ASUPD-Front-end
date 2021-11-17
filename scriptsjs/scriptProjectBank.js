@@ -124,27 +124,33 @@ function modalFormProject(projectID = "project_card") {
 
 function newProposalCard(name = "Новый проект", uuid = "") {
     var proposal_icon_div = document.createElement('div');
-    setAttributes(proposal_icon_div, { "id": "testProject", "class": "project-card", "data-uuid": uuid });    
+    setAttributes(proposal_icon_div, { "id": "testProject", "class": "project-card", "data-uuid": uuid });
     proposal_icon_div.insertAdjacentHTML('beforeend',
         '<div class="info">' +
-            '<img src = "../img/Bg_PB/1.jpg">' +
+        '<img src = "../img/Bg_PB/1.jpg">' +
         '</div>' +
         '<div class="name">' +
-            '<p ib="name"></p>' +
+        '<p ib="name"></p>' +
         '</div>');
     proposal_icon_div.querySelector("p").innerHTML = name;
     proposal_icon_div.querySelector("img").src = "../img/Bg_PB/" + (1 + getRandomInt(6)) + ".jpg";
     proposal_icon_div.addEventListener('click', async () => {
-        loadCircle.removeAttribute("style");        
+        loadCircle.removeAttribute("style");
 
-        var informationAboutProject = await LoadInformationAboutProposal(proposal_icon_div.getAttribute('data-uuid'));
-        var managerUser = await GetUser(informationAboutProject['projectManagersUuidList'][0]);
+        var informationAboutProposal = await LoadInformationAboutProposal(proposal_icon_div.getAttribute('data-uuid'));
+        var managerUser = await GetUser(informationAboutProposal['projectManagersUuidList'][0]);
 
-        document.querySelector('#project-proposal').dataset.uuidOfProposalWindow = informationAboutProject['id'];
-        document.querySelector('#nameOfProposal').textContent = informationAboutProject['name'];
-        document.querySelector('#basicInfoAboutProposal').textContent = informationAboutProject['information'];
+        document.querySelector('#project-proposal').dataset.uuidOfProposalWindow = informationAboutProposal['id'];
+        document.querySelector('#nameOfProposal').textContent = informationAboutProposal['name'];
+        document.querySelector('#basicInfoAboutProposal').textContent = informationAboutProposal['information'];
         document.querySelector('#supervisors').textContent = managerUser['firstName'] + ' ' + managerUser['lastName'] + ' ' + managerUser['patronymic'];
-        document.querySelector('#supervisors').dataset.uuidOfManager = informationAboutProject['projectManagersUuidList'][0];
+        document.querySelector('#supervisors').dataset.uuidOfManager = informationAboutProposal['projectManagersUuidList'][0];
+        for (var i = 0; i < Object.keys(informationAboutProposal['consultantUuidList']).length; i++) {
+            var divConsultant = document.createElement('div');
+            var user = await GetUser(informationAboutProposal['consultantUuidList'][i]);
+            divConsultant.innerText =  user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic'];
+            document.querySelector('.mentors').appendChild(divConsultant);
+        };
 
         setTimeout(() => {
             loadCircle.setAttribute("style", "display: none");

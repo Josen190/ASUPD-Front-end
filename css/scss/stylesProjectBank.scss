@@ -128,7 +128,7 @@ main{
         padding: 5px;
         padding:var(--padding-size);
         p{
-          font-size: 25px;
+          font-size: 16px;
           margin: 0;
         }
       }
@@ -228,8 +228,9 @@ main{
       margin-right: 15px;
 
       > input{
-        width: 100px;
+        width: 140px;
         height: 25px;
+        margin-bottom: 20px;
         @include Superellipse(15px);
         border: 1px solid black;
 

@@ -339,6 +339,13 @@ async function LoadProjectInformation() {
         document.querySelector('[data-uuid-of-stage="' + result['stageUuidList'][i] + '"]').querySelector('.number-cards').innerText =
           document.querySelector('[data-uuid-of-stage="' + result['stageUuidList'][i] + '"]').querySelector('.col-content').childElementCount;
       }
+
+      for (var i = 0; i < Object.keys(result['usersConsultantsUuidList']).length; i++) {
+            var divConsultant = document.createElement('div');
+            var user = await GetUser(result['usersConsultantsUuidList'][i]);
+            divConsultant.innerText =  user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic'];
+            document.querySelector('#mentorsOfProject').append(divConsultant);
+        };
     })
     .catch(error => {
       console.log('error', error);

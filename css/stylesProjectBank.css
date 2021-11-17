@@ -157,7 +157,7 @@ main .bank .project-card .name {
 }
 
 main .bank .project-card .name p {
-  font-size: 25px;
+  font-size: 16px;
   margin: 0;
 }
 
@@ -284,8 +284,9 @@ main .bank .project-card .name p {
 }
 
 .project-proposal .form .button > input {
-  width: 100px;
+  width: 140px;
   height: 25px;
+  margin-bottom: 20px;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   border-top-left-radius: 15px;
