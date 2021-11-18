@@ -105,6 +105,33 @@ async function GetCard(tokenOfCard) {
   return response;
 }
 
+async function GetProject(tokenOfProject) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", sessionStorage.getItem('token'));
+
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  const response = await fetch(URL_link + "/project/" + tokenOfProject, requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+      return response.json();
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в GetCard');
+    });
+  return response;
+}
+
 //===================================================================================================//
 
 
@@ -165,10 +192,12 @@ async function sendAuthorizationForm() {
       }
       return response.text();
     })
-    .then((result) => {
-      document.location.href = "account.html"
+    .then(async (result) => {
       sessionStorage.setItem('token', result);
+      var user = await GetUser(result);
+      sessionStorage.setItem('fullName', user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic']);
     })
+    .then(() => document.location.href = "account.html")
     .catch(error => {
       console.log('error', error);
       alert('Ошибочный запрос');
@@ -191,8 +220,9 @@ async function LoadInformationOfUserForAccount() {
 
   let container = document.querySelector("#projects-list");
   for (var i = 0; i < Object.keys(result['projectUuidList']).length; i++) {
+    var project = await GetProject(result['projectUuidList'][i]);
     let liElement = document.createElement('li');
-    liElement.insertAdjacentHTML('beforeend', '<div class = "tempObject">' + result['projectUuidList'][i] + '</div>');
+    liElement.insertAdjacentHTML('beforeend', '<div class = "tempObject">' + project['name'] + '</div>');
     liElement.dataset.uuidOfProject = result['projectUuidList'][i];
     liElement.addEventListener('click', () => {
       sessionStorage.setItem('tokenOfProject', liElement.dataset.uuidOfProject);
@@ -341,11 +371,11 @@ async function LoadProjectInformation() {
       }
 
       for (var i = 0; i < Object.keys(result['usersConsultantsUuidList']).length; i++) {
-            var divConsultant = document.createElement('div');
-            var user = await GetUser(result['usersConsultantsUuidList'][i]);
-            divConsultant.innerText =  user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic'];
-            document.querySelector('#mentorsOfProject').append(divConsultant);
-        };
+        var divConsultant = document.createElement('div');
+        var user = await GetUser(result['usersConsultantsUuidList'][i]);
+        divConsultant.innerText = user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic'];
+        document.querySelector('#mentorsOfProject').append(divConsultant);
+      };
     })
     .catch(error => {
       console.log('error', error);
@@ -353,35 +383,6 @@ async function LoadProjectInformation() {
     });
   return response;
 }
-
-async function LoadStagesOfProject(tokenOfStage) {
-  var myHeaders = new Headers();
-  myHeaders.append("Authorization", sessionStorage.getItem('token'));
-
-  var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
-  };
-
-  const response = await fetch(URL_link + '/stage/' + tokenOfStage + '?projectUuid=' + sessionStorage.getItem('tokenOfProject'), requestOptions)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Ошибочный запрос');
-      }
-      return response.json();
-    })
-    .then((result) => {
-      addListForCards(result['name'], result['id']);
-      return result;
-    })
-    .catch(error => {
-      console.log('error', error);
-      alert('Ошибка в LoadStagesOfProject');
-    });
-  return response;
-}
-
 async function DeleteStage(tokenOfStage) {
   var myHeaders = new Headers();
   myHeaders.append("Authorization", sessionStorage.getItem('token'));
@@ -515,5 +516,59 @@ async function DeleteCard(tokenOfCard) {
       console.log('error', error);
       alert('Ошибка в DeleteCard');
     });
+}
+async function EditCard(tokenOfCard, name, status, content, mark) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", sessionStorage.getItem('token'));
+  myHeaders.append("Content-Type", "application/json");
+
+  if (mark == '') mark = null;
+  var raw = JSON.stringify({
+    "name": name,
+    "status": status,
+    "content": content,
+    "mark": mark
+  });
+
+  var requestOptions = {
+    method: 'PUT',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  fetch(URL_link + "/card/" + tokenOfCard, requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+      console.log('Карточка была обновлена');
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в LoadCard');
+    });
+}
+async function EditProject(tokenOfProject, name, projectStatus) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", sessionStorage.getItem('token'));
+  myHeaders.append("Content-Type", "application/json");
+
+  var raw = JSON.stringify({
+    "name": name,
+    "projectStatus": projectStatus
+  });
+
+  var requestOptions = {
+    method: 'PUT',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  fetch(URL_link + "/project/" + tokenOfProject, requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
 }
 //===================================================================================================//

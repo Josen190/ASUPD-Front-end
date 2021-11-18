@@ -513,6 +513,7 @@ aside .button:hover {
   display: block;
   height: 80px;
   width: 100%;
+  margin-bottom: 40px;
 }
 
 .card-wrapper .form-card .header .info {
@@ -531,19 +532,26 @@ aside .button:hover {
   float: right;
   width: 25px;
   height: 25px;
+  position: relative;
+}
+
+.card-wrapper .form-card .header picture {
+  float: right;
 }
 
 .card-wrapper .form-card .header .last-change {
   display: block;
   text-align: end;
-  position: relative;
   top: 33%;
   right: 3%;
+  margin-right: 15px;
 }
 
 .card-wrapper .form-card .header .last-change p {
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
+  float: right;
+  margin: 2px;
 }
 
 .card-wrapper .form-card .content {
@@ -708,6 +716,10 @@ aside .button:hover {
 .card-wrapper .form-card .actions * {
   margin-bottom: 2px;
   font-size: 13px;
+}
+
+.card-wrapper .form-card .actions .mark-div {
+  border: 1px solid black;
 }
 
 .pop-outer {

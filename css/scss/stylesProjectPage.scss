@@ -475,6 +475,7 @@ aside
             display: block;
             height: 80px;
             width: 100%;
+            margin-bottom: 40px;
 
             .info{
                 display: block;
@@ -492,18 +493,25 @@ aside
                 float: right;
                 width: 25px;
                 height: 25px;
+                position: relative;
+            }
+
+            picture{
+                float: right;
             }
 
             .last-change{
                 display: block;
                 text-align: end;
-                position: relative;
                 top: 33%;
                 right: 3%;
+                margin-right: 15px;
 
                 p{
                     margin: 0;
-                    font-size: 12px;
+                    font-size: 14px;
+                    float: right;
+                    margin: 2px;
                 }
             }
         }
@@ -664,6 +672,9 @@ aside
             *{
                 margin-bottom: 2px;
                 font-size: 13px;
+            }
+            .mark-div{
+                border: 1px solid black;
             }
         }
     }

@@ -1,5 +1,20 @@
-function SaveStatusFunction() {
+let o = new Intl.DateTimeFormat("ru" , {
+  timeStyle: "medium",
+  dateStyle: "short",
+  formatMatcher: "best fit"
+});
 
+var dictOfStatus = {
+  "IN_PROCESS" : "В процессе",
+  "FROZEN": "Приостановлен",
+  "DONE": "Завершён",
+  "ACCEPTED": "зачтено",
+  "DENIED": "не зачтено",
+  "CHECK_REQUIRED": "На проверке",
+  "DONE": "Выполнено"
+}
+
+function SaveStatusFunction() {
   let radios = document.getElementsByName('flexRadioStatus');
 
   console.log("Радио");
@@ -24,7 +39,6 @@ function hasClass(ele, cls) {
   return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
 }
 
-
 function addClass(id, cls) {
   ele = document.getElementById(id);
   if (!hasClass(ele, cls)) ele.className += " " + cls;
@@ -38,6 +52,11 @@ function removeClass(id, cls) {
   }
 }
 
+document.querySelector('#nameOfProject').addEventListener('change', (e) => {
+  console.log('Было изменено название проекта');
+  EditProject(sessionStorage.getItem('tokenOfProject'), document.querySelector('#nameOfProject').value, 'IN_PROCESS');
+});
+
 let addColumnBtn = document.getElementById("createColumn");
 
 async function LoadStageAndCardsFromDB(tokenOfStage) {
@@ -45,7 +64,8 @@ async function LoadStageAndCardsFromDB(tokenOfStage) {
   var stageEntity = new StageForCards(stageParams['name'], stageParams['id']);
   for (var i = 0; i < Object.keys(stageParams['cardUuidList']).length; i++) {
     var cardParams = await GetCard(stageParams['cardUuidList'][i]);
-    stageEntity.pushCardToStage(stageParams['cardUuidList'][i], cardParams);
+    await stageEntity.pushCardToStage(stageParams['cardUuidList'][i], cardParams);
+    var k = 2;
   }
   stageEntity.render();
 }
@@ -165,8 +185,7 @@ class Card {
       status: "",
       description: "",
       commentList: [],
-      lastChangeDate: "",
-      lastChangeUserUUID: "",
+      lastChangeDate: null,
       mark: ""
     }
   }
@@ -179,7 +198,6 @@ class Card {
       description: cardParams["content"],
       commentList: cardParams["commentUuidList"],
       lastChangeDate: cardParams["lastModifiedDate"],
-      lastChangeUserUUID: cardParams["lastModifiedUserId"],
       mark: cardParams["mark"]
     }
   }
@@ -264,6 +282,7 @@ class Card {
         stageInstance.numberOfCards.innerText = Number(stageInstance.numberOfCards.innerText) + 1;
 
         var tokenOfCard = await AddCard(stageInstance.stageEntity.uuidOfStage, this.textAreaOfCardForm.value, '');
+        if (this.textAreaOfCardForm.value == "") this.textAreaOfCardForm.value = "Новая карточка";
         var cardParams = {
           id: tokenOfCard,
           name: this.textAreaOfCardForm.value,
@@ -271,7 +290,7 @@ class Card {
           content: "",
           commentUuidList: [],
           lastModifiedDate: new Date(),
-          lastModifiedUserId: sessionStorage.getItem('token'),
+          lastModifiedUserName: sessionStorage.getItem('token'),
           mark: ""
         };
         this.init(tokenOfCard, cardParams);
@@ -328,14 +347,15 @@ class Card {
     this.divHeader.classList.add('header');
     this.divHeader.insertAdjacentHTML('beforeend',
       '<div class="info">' +
-      '<h3 id = "nameCard" class="name">' + this.cardEntity.title + '</h3>' +
-      '<p id = "statusOfCard">' + this.cardEntity.status + '</p>' +
+      '<h3 id = "nameCard" class="name">' + this.cardEntity.title + '|' + this.cardEntity.id + '</h3>' +
+      '<p id = "statusOfCard">' + dictOfStatus[this.cardEntity.status] + '</p>' +
       '</div>');
-    this.divHeader.append(this.closeCardBtn);
+    this.divHeader.append(this.closeCardBtn);    
+
     this.divHeader.insertAdjacentHTML('beforeend',
-      '<div class="last-change">' +
-      '<p id = "lastData">Последнее изменение: ' + this.cardEntity.lastChangeDate + '</p>' +
-      '<p id = "lastUser">Изменил:' + this.cardEntity.lastChangeUserUUID + 'lastUser</p>' +
+      '<div class="last-change">' +      
+      '<p id = "lastData">Последнее изменение: ' + o.format(Date.parse(this.cardEntity.lastChangeDate)) + '</p>' +
+      '<p id = "lastUser">Изменил: ' + sessionStorage.getItem('fullName') + '</p>' +
       '</div>');
     //================================================================================================//
 
@@ -375,14 +395,10 @@ class Card {
     this.textAreaForCard = document.createElement('textarea');
     this.textAreaForCard.setAttribute('disabled', 'true');
     this.textAreaForCard.value = this.cardEntity.description;
-    this.textAreaForCard.addEventListener('change', (e) => {
-      console.log("Введённое значение было сохранено");
-      this.cardEntity.description = this.textAreaForCard.value;
-      var today = new Date();
-      var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      this.cardEntity.lastChangeDate = String(time + ' ' + date);
+    this.textAreaForCard.addEventListener('change', async (e) => {
+      this.cardEntity.description = this.textAreaForCard.value;      
       this.ContentBtn.click();
+      await EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
     });
     //Собираем эту часть карточки
     this.btnContainer.append(this.ContentBtn, this.ChangeContentBtn);
@@ -399,42 +415,42 @@ class Card {
     this.actionsBtns.insertAdjacentHTML('beforeend', '<h4>Действия</h4>');
     //Кнопки
     this.estimateBtn = document.createElement('button');
-    setAttributes(this.estimateBtn, { "type": "button", "name": "estimate" });
-    this.estimateBtn.innerText = "Оценить";
-    this.estimateBtn.addEventListener('click', () => {
-      //Создадим модальное окно
-      this.estimateWindow = document.createElement('div');
-      setAttributes(this.estimateWindow, { "class": "pop-outer", "id": "estimateWindow" })
-      this.estimateWindow.insertAdjacentHTML('beforeend',
-        '<div class="form-estimate">' +
-        '<div class="header">' +
-        '<h3>Оценить карточку</h3>' +
-        '</div>' +
-        '<div class="estimate">' +
-        '<input id="inputMark" type="text" name="" placeholder="Оценка">' +
-        '<button id="buttonSaveMark" type="button" name="button">Сохранить</button>' +
-        '</div>' +
-        '</div>');
-      this.estimateWindow.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (e.target.id == "estimateWindow") {
-          this.estimateWindow.remove();
-        }
-      })
-      //Кнопка "Сохранить"
-      this.estimateWindow.querySelector('#buttonSaveMark').addEventListener('click', () => {
-        this.estimateWindow.remove();
+    setAttributes(this.estimateBtn, { "type": "button", "name": "estimate"});
+    this.estimateBtn.innerText = "Зачесть задание";
+    // this.estimateBtn.addEventListener('click', () => {
+    //   //Создадим модальное окно
+    //   // this.estimateWindow = document.createElement('div');
+    //   // setAttributes(this.estimateWindow, { "class": "pop-outer", "id": "estimateWindow" })
+    //   // this.estimateWindow.insertAdjacentHTML('beforeend',
+    //   //   '<div class="form-estimate">' +
+    //   //   '<div class="header">' +
+    //   //   '<h3>Оценить карточку</h3>' +
+    //   //   '</div>' +
+    //   //   '<div class="estimate">' +
+    //   //   '<input id="inputMark" type="text" name="" placeholder="Оценка">' +
+    //   //   '<button id="buttonSaveMark" type="button" name="button">Сохранить</button>' +
+    //   //   '</div>' +
+    //   //   '</div>');
+    //   this.estimateWindow.addEventListener('click', (e) => {
+    //     e.stopPropagation();
+    //     if (e.target.id == "estimateWindow") {
+    //       this.estimateWindow.remove();
+    //     }
+    //   })
+    //   //Кнопка "Сохранить"
+    //   this.estimateWindow.querySelector('#buttonSaveMark').addEventListener('click', () => {
+    //     this.estimateWindow.remove();
 
-        this.cardEntity.mark = String(this.estimateWindow.querySelector('#inputMark').value);
-        this.markDiv.innerText = "Оценка: " + String(this.estimateWindow.querySelector('#inputMark').value);
-      })
+    //     this.cardEntity.mark = String(this.estimateWindow.querySelector('#inputMark').value);
+    //     this.markDiv.innerText = "Оценка: " + String(this.estimateWindow.querySelector('#inputMark').value);
+    //   })
 
-      document.getElementById('showCardContaier').append(this.estimateWindow);
-    })
+    //   document.getElementById('showCardContaier').append(this.estimateWindow);
+    // })
 
     //Кнопка "Изменить статус"
     this.status = document.createElement('button');
-    setAttributes(this.estimateBtn, { "type": "button", "name": "status" });
+    setAttributes(this.status, { "type": "button", "name": "status"});
     this.status.innerText = "Изменить статус";
     this.status.addEventListener('click', () => {
       this.statusWindowWrapper = document.createElement('div');
@@ -468,16 +484,19 @@ class Card {
         this.statusWindowWrapper.remove();
       })
       this.statusWindowWrapper.querySelector('#inProcess').addEventListener('click', () => {
-        this.divCard.querySelector('#statusOfCard').innerText = this.statusWindowWrapper.querySelector('#inProcess').value;
-        this.cardEntity.status = this.statusWindowWrapper.querySelector('#inProcess').value;
+        this.divCard.querySelector('#statusOfCard').innerText = dictOfStatus['IN_PROCESS'];
+        this.cardEntity.status = 'IN_PROCESS';
+        EdirCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
       });
       this.statusWindowWrapper.querySelector('#Checking').addEventListener('click', () => {
-        this.divCard.querySelector('#statusOfCard').innerText = this.statusWindowWrapper.querySelector('#Checking').value;
-        this.cardEntity.status = this.statusWindowWrapper.querySelector('#Checking').value;
+        this.divCard.querySelector('#statusOfCard').innerText = dictOfStatus['CHECK_REQUIRED'];
+        this.cardEntity.status = 'CHECK_REQUIRED';
+        EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
       });
       this.statusWindowWrapper.querySelector('#Completed').addEventListener('click', () => {
-        this.divCard.querySelector('#statusOfCard').innerText = this.statusWindowWrapper.querySelector('#Completed').value;
-        this.cardEntity.status = this.statusWindowWrapper.querySelector('#Completed').value;
+        this.divCard.querySelector('#statusOfCard').innerText = dictOfStatus['DONE'];
+        this.cardEntity.status = 'DONE';
+        EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
       });
 
       document.getElementById('showCardContaier').append(this.statusWindowWrapper);
@@ -496,7 +515,8 @@ class Card {
 
     //Оценка
     this.markDiv = document.createElement('div');
-    this.markDiv.innerText = "Оценка: " + this.cardEntity.mark;
+    this.markDiv.classList.add('mark-div');
+    this.markDiv.innerText = "Оценка задачи: " + 'задание не проверено';
 
     //Собираем эту часть карточки
     this.actionsBtns.append(this.estimateBtn, this.status, this.delete, this.markDiv);
@@ -539,7 +559,7 @@ class Card {
     //================================================================================================//
 
     //Собираем карточку
-    this.divCard.append(this.divHeader, this.divContent, this.actionsBtns, this.divComments);
+    this.divCard.append(this.divHeader, this.divContent, this.actionsBtns);
     this.divCardContainer.append(this.divCard);
     document.getElementById('showCardContaier').append(this.divCardContainer);
   }
@@ -579,57 +599,4 @@ class Card {
 //       '</div>')
 //     this.place.append(this.div);
 //   }
-// }
-
-// function LoadCardElementFromDB(uuidOfStage, uuidOfCard, cardEntityInput) {  
-//   var place = document.querySelector('[data-uuid-of-stage="' + uuidOfStage + '"]').querySelector('.col-content');
-
-//   var cardEntity = {
-//     title: cardEntityInput['name'],
-//     status: cardEntityInput['status'],
-//     description: cardEntityInput['content'],
-//     commentList: cardEntityInput['commentUuidList'],
-//     lastChangeDate: cardEntityInput['lastModifiedDate'],
-//     lastChangeUserUUID: cardEntityInput['lastModifiedUserId'],
-//     mark: cardEntityInput['mark']
-//   }
-
-//   //Контейнер для карточки
-//   var card = document.createElement('div');
-//   card.dataset.uuidOfCard = uuidOfCard;
-//   card.classList.add('card');
-
-
-//   //Название карточки
-//   var cardName = document.createElement('div');
-//   cardName.innerText = cardEntity.title;
-
-//   //Кнопка удалить карточку
-//   var DeleteCardBtn = document.createElement('button');
-//   DeleteCardBtn.classList.add('button');
-//   DeleteCardBtn.innerText = "x";
-//   DeleteCardBtn.addEventListener('click', (e) => {
-//     e.stopPropagation(); //Убираем открытие карточки, при нажатии на кнопку внутри карточки
-//     // this.listForCards.numberOfCards.innerText = Number(this.listForCards.numberOfCards.innerText) - 1;
-//     //this.card.remove();
-//     var k = document.querySelector('[data-uuid-of-card="' + uuidOfCard + '"]');
-//     k.remove();
-//     console.log("Была удалена карточка");
-//   });
-
-//   //Собираем объекты
-//   card.insertAdjacentHTML('beforeend',
-//     '<span class="card-svg">' +
-//     '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-note">' +
-//     '<path fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H1.75zM3.5 6.25a.75.75 0 01.75-.75h7a.75.75 0 010 1.5h-7a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h4a.75.75 0 000-1.5h-4z"></path>' +
-//     '</svg>' +
-//     '</span>' +
-//     '<span class="card-content">' + cardName.innerText + '</span>' +
-//     '<small class="add-info color-fg-muted">Добавлено<a class="color-text-primary" href="#" draggable="false">Josen190</a></small>');
-//   var btnWrapper = document.createElement('div');
-//   btnWrapper.classList.add('button-wrapper');
-//   btnWrapper.append(DeleteCardBtn);
-//   card.append(btnWrapper);
-
-//   place.append(card); //Вместно неё добавляем обычную карточку
 // }
