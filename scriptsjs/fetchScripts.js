@@ -195,7 +195,6 @@ async function sendAuthorizationForm() {
     .then(async (result) => {
       sessionStorage.setItem('token', result);
       var user = await GetUser(result);
-      sessionStorage.setItem('fullName', user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic']);
     })
     .then(() => document.location.href = "account.html")
     .catch(error => {
@@ -567,8 +566,94 @@ async function EditProject(tokenOfProject, name, projectStatus) {
   };
 
   fetch(URL_link + "/project/" + tokenOfProject, requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
-    .catch(error => console.log('error', error));
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error('Ошибочный запрос');
+    }
+  })
+  .catch(error => {
+    console.log('error', error);
+    alert('Ошибка в EditProject');
+  });
+}
+async function GetAllComments(tokenOfProject, tokenOfCard) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", sessionStorage.getItem('token'));
+
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  const response = await fetch(URL_link + "/comment/get_all?projectUuid=" + tokenOfProject + "&cardUuid=" + tokenOfCard, requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+      return response.json();
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в GetAllComments');
+    });
+  return response;
+}
+async function CreateComment(tokenOfProject, tokenOfCard, contentOfComment) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", sessionStorage.getItem('token'));
+  myHeaders.append("Content-Type", "application/json");
+
+  var raw = JSON.stringify({
+    "content": contentOfComment
+  });
+
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  const response = await fetch(URL_link + "/comment/?projectUuid=" + tokenOfProject + "&cardUuid=" + tokenOfCard, requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+      return response.json();
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в CreateComment');
+    });
+  return response;
+}
+async function DeleteComment(tokenOfProject, tokenOfCard, tokenOfComment) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", sessionStorage.getItem('token'));
+
+  var requestOptions = {
+    method: 'DELETE',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  fetch(URL_link + "/comment/" + tokenOfComment + "?projectUuid=" + tokenOfProject + "&cardUuid=" + tokenOfCard, requestOptions)
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error('Ошибочный запрос');
+    }
+    console.log('Карточка была обновлена');
+  })
+  .catch(error => {
+    console.log('error', error);
+    alert('Ошибка в DeleteComment');
+  });
 }
 //===================================================================================================//

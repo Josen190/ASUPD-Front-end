@@ -145,6 +145,7 @@ function newProposalCard(name = "Новый проект", uuid = "") {
         document.querySelector('#basicInfoAboutProposal').textContent = informationAboutProposal['information'];
         document.querySelector('#supervisors').textContent = managerUser['firstName'] + ' ' + managerUser['lastName'] + ' ' + managerUser['patronymic'];
         document.querySelector('#supervisors').dataset.uuidOfManager = informationAboutProposal['projectManagersUuidList'][0];
+        document.querySelector('.mentors').innerHTML = '';
         for (var i = 0; i < Object.keys(informationAboutProposal['consultantUuidList']).length; i++) {
             var divConsultant = document.createElement('div');
             var user = await GetUser(informationAboutProposal['consultantUuidList'][i]);

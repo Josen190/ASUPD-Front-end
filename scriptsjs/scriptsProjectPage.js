@@ -174,11 +174,7 @@ class StageForCards {
 
 //Класс, описывающий карточку
 class Card {
-  constructor() { //listForCards передаём, чтобы увеличивать/уменшать счётчик карточек в этапе
-    // var today = new Date();
-    // var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-    // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    //Здесь хранится информация о карточке
+  constructor() { 
     this.cardEntity = {
       id: "",
       title: "",
@@ -186,20 +182,23 @@ class Card {
       description: "",
       commentList: [],
       lastChangeDate: null,
+      lastModifiedUserId: null,
       mark: ""
     }
   }
 
-  init(tokenOfCard, cardParams) {
+  async init(tokenOfCard, cardParams) {
     this.cardEntity = {
       id: tokenOfCard,
       title: cardParams["name"],
       status: cardParams["status"],
       description: cardParams["content"],
-      commentList: cardParams["commentUuidList"],
+      commentList: [],
       lastChangeDate: cardParams["lastModifiedDate"],
+      lastModifiedUserId: cardParams['lastModifiedUserId'],
       mark: cardParams["mark"]
     }
+    await this.LoadComments();
   }
 
   render(stageInstance) {
@@ -217,7 +216,7 @@ class Card {
 
     //Название карточки
     this.cardName = document.createElement('div');
-    this.cardName.innerText = this.cardEntity.title + "|" + this.cardEntity.id;
+    this.cardName.innerText = this.cardEntity.title; // + "|" + this.cardEntity.id;
 
     //Кнопка удалить карточку
     this.DeleteCardBtn = document.createElement('button');
@@ -281,8 +280,8 @@ class Card {
         console.log("Была нажата кнопка потверждения создания карточки");
         stageInstance.numberOfCards.innerText = Number(stageInstance.numberOfCards.innerText) + 1;
 
-        var tokenOfCard = await AddCard(stageInstance.stageEntity.uuidOfStage, this.textAreaOfCardForm.value, '');
         if (this.textAreaOfCardForm.value == "") this.textAreaOfCardForm.value = "Новая карточка";
+        var tokenOfCard = await AddCard(stageInstance.stageEntity.uuidOfStage, this.textAreaOfCardForm.value, '');        
         var cardParams = {
           id: tokenOfCard,
           name: this.textAreaOfCardForm.value,
@@ -290,7 +289,7 @@ class Card {
           content: "",
           commentUuidList: [],
           lastModifiedDate: new Date(),
-          lastModifiedUserName: sessionStorage.getItem('token'),
+          lastModifiedUserId: sessionStorage.getItem('token'),
           mark: ""
         };
         this.init(tokenOfCard, cardParams);
@@ -318,7 +317,7 @@ class Card {
   }
 
   //Окно, вызываемое при отркытии карточки
-  showCard(stageInstance) {
+  async showCard(stageInstance) {
     //Затемнённая область позади карточки
     this.divCardContainer = document.createElement('div');
     this.divCardContainer.classList.add('card-wrapper');
@@ -347,15 +346,16 @@ class Card {
     this.divHeader.classList.add('header');
     this.divHeader.insertAdjacentHTML('beforeend',
       '<div class="info">' +
-      '<h3 id = "nameCard" class="name">' + this.cardEntity.title + '|' + this.cardEntity.id + '</h3>' +
+      '<h3 id = "nameCard" class="name">' + this.cardEntity.title  + '</h3>' +  //+ this.cardEntity.id
       '<p id = "statusOfCard">' + dictOfStatus[this.cardEntity.status] + '</p>' +
       '</div>');
     this.divHeader.append(this.closeCardBtn);    
 
+    var user = await GetUser(this.cardEntity.lastModifiedUserId);
     this.divHeader.insertAdjacentHTML('beforeend',
       '<div class="last-change">' +      
       '<p id = "lastData">Последнее изменение: ' + o.format(Date.parse(this.cardEntity.lastChangeDate)) + '</p>' +
-      '<p id = "lastUser">Изменил: ' + sessionStorage.getItem('fullName') + '</p>' +
+      '<p id = "lastUser">Изменил: ' + user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic'] + '</p>' +
       '</div>');
     //================================================================================================//
 
@@ -505,12 +505,13 @@ class Card {
     this.delete = document.createElement('button');
     setAttributes(this.estimateBtn, { "type": "button", "name": "delete" });
     this.delete.innerText = "Удалить";
-    this.delete.addEventListener('click', (e) => {
+    this.delete.addEventListener('click', async (e) => {
+      stageInstance.numberOfCards.innerText = Number(stageInstance.numberOfCards.innerText) - 1;
+      DeleteCard(this.cardEntity.id);
       this.card.remove();
       this.divCardContainer.remove();
-      let i = this.listForCards.cardList.indexOf(this);
-      stageInstance.cardList.splice(i, 1);
-      console.log("Была удалена карточка");
+      let i = stageInstance.stageEntity.cardList.indexOf(this);
+      stageInstance.stageEntity.cardList.splice(i, 1);
     });
 
     //Оценка
@@ -523,80 +524,93 @@ class Card {
     //================================================================================================//
 
     //Коментарии
-    //================================================================================================//
-    // this.divComments = document.createElement('div');
-    // this.divComments.classList.add('comments');
-    // this.divComments.insertAdjacentHTML('beforeend', '<h5>Коментарии</h5>');
-    // //Контейнер для ввода комментария
-    // this.inputCommentContainer = document.createElement('div');
-    // this.inputCommentContainer.classList.add('new');
-    // //textarea для ввода коментария
-    // this.textAreaComment = document.createElement('textarea');
-    // setAttributes(this.textAreaComment, { "placeholder": "Новый комменатрий", "name": "comment", "rows": "3", "required": "true" });
-    // //Кнопка "Сохранить комменатрий"
-    // this.saveCommentBtn = document.createElement('button');
-    // setAttributes(this.saveCommentBtn, { "type": "button", "name": "sendComment", "class": "btn" });
-    // this.saveCommentBtn.innerText = "Сохранить";
-    // this.saveCommentBtn.addEventListener('click', () => {
-    //   if (this.textAreaComment.value != "") {
-    //     var today = new Date();
-    //     var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-    //     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    //     this.cardEntity.commentList.push([this.textAreaComment.value, String(time + ' ' + date)]);
-    //     console.log()
-    //     this.textAreaComment.value = "";
-    //     this.renderComments();
-    //   }
-    // })
-    // //Контейнер для старых комментариев
-    // this.oldCommentsContainer = document.createElement('div');
-    // setAttributes(this.oldCommentsContainer, { "class": "old", "id": "commentList" });
-
-    // this.renderComments();
-    // //Собираем данный элемент карточки
-    // this.inputCommentContainer.append(this.textAreaComment, this.saveCommentBtn, this.oldCommentsContainer);
-    // this.divComments.append(this.inputCommentContainer);
+    //================================================================================================//    
+    this.divComments = document.createElement('div');
+    this.divComments.classList.add('comments');
+    this.divComments.insertAdjacentHTML('beforeend', '<h5>Коментарии</h5>');
+    //Контейнер для ввода комментария
+    this.inputCommentContainer = document.createElement('div');
+    this.inputCommentContainer.classList.add('new');
+    //textarea для ввода коментария
+    this.textAreaComment = document.createElement('textarea');
+    setAttributes(this.textAreaComment, { "placeholder": "Новый комменатрий", "name": "comment", "rows": "3", "required": "true" });
+    //Контейнер для старых комментариев
+    this.oldCommentsContainer = document.createElement('div');
+    setAttributes(this.oldCommentsContainer, { "class": "old", "id": "commentList" });
+    await this.renderComments(this.oldCommentsContainer);
+    //Кнопка "Сохранить комменатрий"
+    this.saveCommentBtn = document.createElement('button');
+    setAttributes(this.saveCommentBtn, { "type": "button", "name": "sendComment", "class": "btn" });
+    this.saveCommentBtn.innerText = "Сохранить";
+    this.saveCommentBtn.addEventListener('click', async () => {
+      if (this.textAreaComment.value != "") {        
+        var tokenOfComment = await CreateComment(sessionStorage.getItem('tokenOfProject'), this.cardEntity.id, this.textAreaComment.value);
+        this.cardEntity.commentList.push(new Comment(this.textAreaComment.value, sessionStorage.getItem('token'), tokenOfComment,
+          o.format(new Date())));
+        this.cardEntity.commentList[this.cardEntity.commentList.length-1].render(this);
+        this.textAreaComment.value = "";
+      }
+    });        
+    //Собираем данный элемент карточки
+    this.inputCommentContainer.append(this.textAreaComment, this.saveCommentBtn, this.oldCommentsContainer);
+    this.divComments.append(this.inputCommentContainer);
     //================================================================================================//
 
     //Собираем карточку
-    this.divCard.append(this.divHeader, this.divContent, this.actionsBtns);
+    this.divCard.append(this.divHeader, this.divContent, this.actionsBtns, this.divComments);
     this.divCardContainer.append(this.divCard);
     document.getElementById('showCardContaier').append(this.divCardContainer);
   }
 
-  // renderComments() {
-  //   let currentCommentsDOM = Array.from(this.oldCommentsContainer.childNodes);
+  async LoadComments() {
+    var listOfComments = await GetAllComments(sessionStorage.getItem('tokenOfProject'), this.cardEntity.id);
+    
+    for (var i = 0; i < Object.keys(listOfComments).length; i++) {
+      this.cardEntity.commentList.push(new Comment(listOfComments[i]['content'], listOfComments[i]['userOwnerUuid'], listOfComments[i]['commentId'],
+        o.format(Date.parse(listOfComments[i]['dateCreated']))));
+    }
+  }
 
-  //   currentCommentsDOM.forEach(commentDOM => {
-  //     commentDOM.remove();
-  //   });
-
-  //   this.cardEntity.commentList.forEach(comment => {
-  //     new Comment(comment, this.oldCommentsContainer);
-  //   });
-  // }
+  async renderComments() {  
+    for (var i = 0; i < this.cardEntity.commentList.length; i++) {
+      this.cardEntity.commentList[i].render(this);
+    }
+  }
 }
 
-// class Comment {
-//   constructor(comment, place) {
-//     this.place = place;
-//     this.comment = comment[0];
-//     this.date = comment[1];
+class Comment {
+  constructor(textOfComment, userOwnerUuid, commentId, date) {
+    this.comment = textOfComment;
+    this.date = date;
+    this.userOwnerUuid = userOwnerUuid;
+    this.commentId = commentId;  
+  }
 
-//     this.render();
-//   }
+  async render(cardInstance) {
+    var user = await GetUser(this.userOwnerUuid);
 
-//   render() {
-//     this.div = document.createElement('div');
-//     this.div.className = "elem-comment";
-//     this.div.insertAdjacentHTML('beforeend',
-//       '<div class="info-comment">' +
-//       '<a id = "userCommen">User</a>' +
-//       '<data id = "dataComment">' + this.date + '</data>' +
-//       '</div>' +
-//       '<div class="content-comment">' +
-//       '<p id = "contentComment" >' + this.comment + '</p>' +
-//       '</div>')
-//     this.place.append(this.div);
-//   }
-// }
+    //Кнопка удалить комментарий
+    this.deleteCommentBtn = document.createElement('button');
+    setAttributes(this.deleteCommentBtn, { "type": "button", "name": "sendComment", "class": "close", "style":"float:right" });
+    this.deleteCommentBtn.innerText = "X";
+    this.deleteCommentBtn.addEventListener('click', async () => {
+      DeleteComment(sessionStorage.getItem('tokenOfProject'), cardInstance.cardEntity.id, this.commentId);
+      this.divContainerOfComment.remove();
+      let i = cardInstance.cardEntity.commentList.indexOf(this);
+      cardInstance.cardEntity.commentList.splice(i, 1);
+    })
+
+    this.divContainerOfComment = document.createElement('div');
+    this.divContainerOfComment.className = "elem-comment";
+    this.divContainerOfComment.append(this.deleteCommentBtn);
+    this.divContainerOfComment.insertAdjacentHTML('beforeend',
+      '<div class="info-comment">' +
+      '<a id = "userCommen">' + user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic'] + '</a>' +
+      '<data id = "dataComment">' + this.date + '</data>' +
+      '</div>' +
+      '<div class="content-comment">' +
+      '<p id = "contentComment" >' + this.comment + '</p>' +
+      '</div>')
+    cardInstance.oldCommentsContainer.insertBefore(this.divContainerOfComment, cardInstance.oldCommentsContainer.firstChild);
+  }
+}

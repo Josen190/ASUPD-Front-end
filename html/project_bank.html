@@ -112,7 +112,7 @@
         </div>
       </div>
       <div class="button">
-        <input type="button" name="close" value="Отмена">
+        <input onclick="document.querySelector('#project-proposal').setAttribute('style','display:none')" type="button" name="close" value="Отмена">
         <input onclick="CreateProjectFromProposal(document.querySelector('#project-proposal').dataset.uuidOfProposalWindow, 
           document.querySelector('#supervisors').dataset.uuidOfManager)" type="button" name="create" value="Создать проект">
       </div>
