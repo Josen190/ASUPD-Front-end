@@ -23,54 +23,53 @@
     </nav>
   </header>
 
-  <main>
-    <div id="user-card" class="container m-3 py-2 px-4 block">
-      <div class="row align-items-center">
-        <div class="col-3">
-          <div class="avatar">
-            <img src="priroda-zhivotnye-kotenok.jpg" alt="avatar">
-          </div>
+  <div id="user-card" class="container my-3 py-3 block">
+    <div class="row align-items-center">
+      <div class="col-sm-6 col-md-6 col-lg-3">
+        <div class="avatar">
+          <img src="priroda-zhivotnye-kotenok.jpg" alt="avatar" class="img-fluid">
         </div>
-        <div class="col-5">
-          <div class="personal-info">
-            <p>
-              <h3 style="margin-bottom: -10px;">Фамилия Имя Отчество</h3><br>
-              Место работы<br>
-              Должность<br>
-              Дата рождения<br>
-              Телефон<br>
-            </p>
-          </div>
+      </div>
+      <div class="col-sm-4 col-md-6 col-lg-6">
+        <div class="personal-info p-3">
+          <p>
+            <h3 style="margin-bottom: -10px;">Фамилия Имя Отчество</h3><br>
+            Место работы<br>
+            Должность<br>
+            Дата рождения<br>
+            Телефон<br>
+          </p>
         </div>
-        <div class="col-4">
-          <div class="btn-panel">
-            <button class="btn btn-primary btn-sm pull-right" onclick="alert('Настройки')">Изменить данные</button>
-            <br>
-            <br>
-            <br>
-            <button class="btn btn-light btn-sm pull-right" onclick="alert('Вы вышли!')">Выйти из системы</button>
-          </div>
+      </div>
+      <div class="col">
+        <div class="container btn-panel py-2">
+          <div class="row gy-2 align-items-center">
+            <a class="btn btn-primary btn-sm btn-block" role="button" href = "edit_profile.html">Изменить данные</a>
+            <div class="w-100"></div>
+            
+            <button class="btn btn-light btn-sm btn-block" onclick="alert('Вы вышли!')">Выйти из системы</button>
+        </div>
+          
         </div>
       </div>
     </div>
-    <div class="container m-3 py-2 block">
-      <div class="my-projects">
-        <p><i>Мои проекты:</i></p>
-        <ul id="projects-list">
-          <li><a href="ProjectPage.html">проект 1</a></li>
-          <li><a href="ProjectPage.html">проект 2</a></li>
-          <li><a href="ProjectPage.html">проект 3</a></li>
-          <li><a href="ProjectPage.html">проект 4</a></li>
-          <li><a href="ProjectPage.html">проект 5</a></li>
-        </ul>
-      </div>
+  </div>
+  <div class="container my-3 py-3 block">
+    <div class="my-projects">
+      <h5><i>Мои проекты:</i></h5>
+      <ul id="projects-list">
+        <li><a href="ProjectPage.html">проект 1</a></li>
+        <li><a href="ProjectPage.html">проект 2</a></li>
+        <li><a href="ProjectPage.html">проект 3</a></li>
+        <li><a href="ProjectPage.html">проект 4</a></li>
+        <li><a href="ProjectPage.html">проект 5</a></li>
+      </ul>
     </div>
-    <div class="container m-3">
-      <div class="access-btn">
-        <button class="btn btn-light btn-sm pull-right" onclick="alert('Заявка на повышение прав отправлена!')">Повысить права пользователя</button>
-      </div>
+  </div>
+  <div class="container mb-5 py-2 access-btn">
+      <button class="btn btn-light btn-sm pull-right" onclick="alert('Заявка на повышение прав отправлена!')">Повысить права пользователя</button>
     </div>
-  </main>
+  </div>
 
 </body>
 

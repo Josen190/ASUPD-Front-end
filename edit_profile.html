@@ -23,87 +23,82 @@
     </nav>
   </header>
 
-  <!-- TO DO: обрезка изображения, чтобы был квадрат -->
-  <!-- Будем ли делать drag and drop? -->
-  <div id="user-card" class="container d-flex my-3 py-2 px-4 block">
+  <!-- TO DO: обрезка изображения, чтобы был квадрат + отображение в окошке-->
+  <div id="user-card" class="container my-3 py-3 block">
     <div class="row align-items-center">
-      <div class="col-3">
+      <div class="col-sm-6 col-md-6 col-lg-3">
         <div class="avatar">
-          <img src="priroda-zhivotnye-kotenok.jpg" alt="avatar">
+          <img src="priroda-zhivotnye-kotenok.jpg" alt="avatar" class="img-fluid">
         </div>
       </div>
-      <div class="col-9">
-        <h2>Изменить аватар</h2>
-        <!-- TO DO: поместить абзац в всплывающую подсказку
-        при наведении на иконку со знаком вопроса -->
-        <p>
-          Максимальный размер файла: 10Мбайт<br>
-          Поддерживаемые типы файлов:<small class="text-muted muted">.gif .jpe .jpeg .jpg
-            .png .svg .svgz
-          </small><br>
-          Чтобы добавить новое изображение, выберите его (в формате JPG или PNG) и нажмите «Обновить профиль».
-          Изображение будет обрезано до квадрата размером 100х100 пикселей.
-        </p>
-
-        <div class="btn-panel">
-          <button class="btn btn-sm btn-outline-secondary" onclick="alert('Выбрать файл')">Загрузить файл</button>
-
-          <button class="btn btn-sm btn-outline-secondary" onclick="alert('Изображение удалено')">Удалить текущее
-            изображение</button>
+      <div class="col">
+        <div class="avatar-change p-3">
+          <h3>Изменить аватар</h3>
+          <p>
+            Максимальный размер файла: 10Мбайт<br>
+            Поддерживаемые типы файлов: <small class="text-muted muted">.gif .jpe .jpeg .jpg
+              .png .svg .svgz
+            </small><br>
+            Изображение будет обрезано до квадрата размером 100х100 пикселей.
+          </p>
+          <div class="btn-panel">
+            <div class="row justify-content-start g-2">
+              <div class="col-sm-6 col-md-6 col-lg-3">
+                <button class="btn btn-sm btn-outline-secondary" onclick="alert('Выбрать файл')">Загрузить файл</button>
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6">
+                <button class="btn btn-sm btn-outline-secondary" onclick="alert('Изображение удалено')">Удалить текущее
+                  изображение</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
 
-  <div class="container d-flex my-3 py-2 px-4 block">
+  <div class="container my-3 py-2 block">
+    <div class="row my-3 text-center">
+      <h3>Основная информация<br></h3>
+    </div>
     <form autocomplete="off" action="" method="post" accept-charset="utf-8" style="width: 100%;">
       <fieldset>
-        <div class="container">
-          <div class="row my-3">
-            <h2>Основная информация<br></h2>
-          </div>
+        <div class="row justify-content-center my-3">
+          <div class="col-3"> <label for="last-name">Фамилия</label></div>
+          <div class="col-6"><input id="last-name" type="text" class="form-control input_text" name="last-name"
+              placeholder="Ваша фамилия" value="Фамилия"></div>
         </div>
-        <div class="container">
-          <div class="row my-3">
-            <div class="col-3"> <label for="last-name">Фамилия</label></div>
-            <div class="col-6"><input id="last-name" type="text" class="form-control input_text" name="last-name"
-                placeholder="Ваша фамилия"></div>
-          </div>
-          <div class="row my-3">
-            <div class="col-3"><label for="first-name">Имя</label></div>
-            <div class="col-6"><input id="first-name" type="text" class="form-control input_text" name="first-name"
-                placeholder="Ваше имя"></div>
-          </div>
-          <div class="row my-3">
-            <div class="col-3"><label for="partonymic">Отчество</label></div>
-            <div class="col-6"><input id="partonymic" type="text" class="form-control input_text" name="partonymic"
-                placeholder="Ваше отчество"></div>
-          </div>
-          <div class="row my-3">
-            <div class="col-3"><label for="workplace">Место работы</label></div>
-            <div class="col-6"><input id="workplace" type="text" class="form-control input_text" name="workplace"
-                placeholder="Ваше место работы"></div>
-          </div>
-          <div class="row my-3">
-            <div class="col-3"><label for="phone">Телефон</label></div>
-            <div class="col-6"><input id="phone" type="text" class="form-control input_text" name="phone"
-                placeholder="Ваш телефон"></div>
-          </div>
+        <div class="row justify-content-center my-3">
+          <div class="col-3"><label for="first-name">Имя</label></div>
+          <div class="col-6"><input id="first-name" type="text" class="form-control input_text" name="first-name"
+              placeholder="Ваше имя" value="Имя"></div>
+        </div>
+        <div class="row justify-content-center my-3">
+          <div class="col-3"><label for="partonymic">Отчество</label></div>
+          <div class="col-6"><input id="partonymic" type="text" class="form-control input_text" name="partonymic"
+              placeholder="Ваше отчество" value="Отчество"></div>
+        </div>
+        <div class="row justify-content-center my-3">
+          <div class="col-3"><label for="workplace">Место работы</label></div>
+          <div class="col-6"><input id="workplace" type="text" class="form-control input_text" name="workplace"
+              placeholder="Ваше место работы" value="Место работы"></div>
+        </div>
+        <div class="row justify-content-center my-3">
+          <div class="col-3"><label for="phone">Телефон</label></div>
+          <div class="col-6"><input id="phone" type="text" class="form-control input_text" name="phone"
+              placeholder="Ваш телефон" value="Телефон"></div>
         </div>
       </fieldset>
-
-      <div class="container my-3">
-        <div class="row">
-          <div class="col-3">
-            <button class="btn btn-primary" onclick="alert('Данные изменены')">Сохранить данные</button>
-          </div>
-          <div class="col-6">
-            <button class="btn btn-secondary"onclick="alert('Выход в ЛК')">Отмена</button>
-          </div>
-        </div>
-      </div>
     </form>
+    <div class="row my-3 justify-content-around">
+      <div class="col-3">
+        <button class="btn btn-primary" onclick="alert('Данные изменены')">Сохранить данные</button>
+      </div>
+      <div class="col-3">
+        <button class="btn btn-secondary pull-right" onclick="alert('Выход в ЛК')">Отмена</button>
+      </div>
+    </div>
   </div>
 </body>
 
