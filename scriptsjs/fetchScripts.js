@@ -1,4 +1,8 @@
 var URL_link = "http://localhost:8080";
+let dateWithoutTime = new Intl.DateTimeFormat("ru" , {
+  dateStyle: "short",
+  formatMatcher: "best fit"
+});
 
 //Функции общего назначения
 //===================================================================================================//
@@ -214,7 +218,7 @@ async function LoadInformationOfUserForAccount() {
   document.getElementById('full_name').innerText = result['lastName'] + ' ' + result['firstName'] + ' ' + result['patronymic'];
   document.getElementById('work_place').innerText += ': ' + result['workPlace'];
   document.getElementById('status').innerText += ': ' + result['status'];
-  document.getElementById('birthday').innerText += ': ' + result['birthDate'];
+  document.getElementById('birthday').innerText += ': ' + dateWithoutTime.format(Date.parse(result['birthDate']));
   document.getElementById('phone').innerText += ': ' + result['phoneNumber'];
 
   let container = document.querySelector("#projects-list");
