@@ -1,4 +1,4 @@
-let o = new Intl.DateTimeFormat("ru" , {
+let dateWithTime = new Intl.DateTimeFormat("ru" , {
   timeStyle: "medium",
   dateStyle: "short",
   formatMatcher: "best fit"
@@ -354,7 +354,7 @@ class Card {
     var user = await GetUser(this.cardEntity.lastModifiedUserId);
     this.divHeader.insertAdjacentHTML('beforeend',
       '<div class="last-change">' +      
-      '<p id = "lastData">Последнее изменение: ' + o.format(Date.parse(this.cardEntity.lastChangeDate)) + '</p>' +
+      '<p id = "lastData">Последнее изменение: ' + dateWithTime.format(Date.parse(this.cardEntity.lastChangeDate)) + '</p>' +
       '<p id = "lastUser">Изменил: ' + user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic'] + '</p>' +
       '</div>');
     //================================================================================================//
@@ -546,7 +546,7 @@ class Card {
       if (this.textAreaComment.value != "") {        
         var tokenOfComment = await CreateComment(sessionStorage.getItem('tokenOfProject'), this.cardEntity.id, this.textAreaComment.value);
         this.cardEntity.commentList.push(new Comment(this.textAreaComment.value, sessionStorage.getItem('token'), tokenOfComment,
-          o.format(new Date())));
+          dateWithTime.format(new Date())));
         this.cardEntity.commentList[this.cardEntity.commentList.length-1].render(this);
         this.textAreaComment.value = "";
       }
@@ -567,7 +567,7 @@ class Card {
     
     for (var i = 0; i < Object.keys(listOfComments).length; i++) {
       this.cardEntity.commentList.push(new Comment(listOfComments[i]['content'], listOfComments[i]['userOwnerUuid'], listOfComments[i]['commentId'],
-        o.format(Date.parse(listOfComments[i]['dateCreated']))));
+        dateWithTime.format(Date.parse(listOfComments[i]['dateCreated']))));
     }
   }
 

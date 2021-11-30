@@ -1,5 +1,5 @@
 var URL_link = "http://localhost:8080";
-let dateWithoutTime = new Intl.DateTimeFormat("ru" , {
+var dateWithoutTime = new Intl.DateTimeFormat("ru" , {
   dateStyle: "short",
   formatMatcher: "best fit"
 });
