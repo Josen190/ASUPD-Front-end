@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS v5.0.2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <title>Личный кабинет</title>
+  <link rel="stylesheet" type="text/css" href="../../css/styles-account.css">
+
+  <style>
+    #cover {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background: #fff;
+      z-index: 9999;
+    }
+  </style>
+
+</head>
+
+<body>
+  <!-- <div id="cover"></div> -->
+
+  <header>
+    <nav class="navbar">
+      <div class="container-fluid">
+        <a href="project_bank.html">Банк проектных предложений</a>
+        <a href="#">Личный кабинет</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div id="user-card" class="container m-3 py-2 px-4 block">
+      <div class="row align-items-center">
+        <div class="col-3">
+          <div class="avatar">
+            <img src="..\..\img\avatars\priroda-zhivotnye-kotenok.jpg" alt="avatar">
+          </div>
+        </div>
+        <div class="col-5">
+          <div class="personal-info" onload="">
+            <p>
+            <h3 id="full_name" style="margin-bottom: -10px;">Фамилия Имя Отчество</h3><br>
+            <p id="work_place">Место работы</p><br>
+            <p id="status">Должность</p><br>
+            <p id="birthday">Дата рождения</p><br>
+            <p id="phone">Телефон</p><br>
+            </p>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="btn-panel">
+            <button class="btn btn-primary btn-sm pull-right" onclick="alert('Настройки')">Изменить данные</button>
+            <br>
+            <br>
+            <br>
+            <button class="btn btn-light btn-sm pull-right" onclick="logOut()">Выйти из системы</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container m-3 py-2 block">
+      <div class="my-projects">
+        <p><i>Мои проекты:</i></p>
+        <ul id="projects-list">
+          <!-- <li><a href="project.html">проект 1</a></li>
+          <li><a href="project.html">проект 2</a></li>
+          <li><a href="project.html">проект 3</a></li>
+          <li><a href="project.html">проект 4</a></li>
+          <li><a href="project.html">проект 5</a></li> -->
+        </ul>
+      </div>
+    </div>
+    <div class="container m-3">
+      <div class="access-btn">
+        <button class="btn btn-light btn-sm pull-right" onclick="alert('Заявка на повышение прав отправлена!')">Повысить
+          права пользователя</button>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
