@@ -1,5 +1,5 @@
 var dict = {
-    "BUSINESS_ADMINISTRATOR" : "Администратор",
+    "BUSINESS_ADMINISTRATOR": "Администратор",
     "CURATOR": "Куратор",
     "USER": "Пользователь"
 }
@@ -9,20 +9,20 @@ const listOfUsersToAdd = [];
 const list_newMembers = [];
 const list_newCurators = [];
 
-function DeleteAlreadyMembers(project, listOfAllUsers){
+function DeleteAlreadyMembers(project, listOfAllUsers) {
     var list = [];
     list.push(project['projectManager'], project['userCaptain']);
     project['usersConsultantsUuidList'].forEach(element => { list.push(element) });
     project['usersMembersUuidList'].forEach(element => { list.push(element) });
 
-    for(var i = 0; i < listOfAllUsers.length; i++){
-        if (list.indexOf(listOfAllUsers[i]) == -1) notPartOfProjectYet.push(listOfAllUsers[i]); 
+    for (var i = 0; i < listOfAllUsers.length; i++) {
+        if (list.indexOf(listOfAllUsers[i]) == -1) notPartOfProjectYet.push(listOfAllUsers[i]);
     }
 }
 
 async function LoadAllUsers() {
     var listOfUsers = await GetAllUsers();
-    var project = await GetProject(localStorage.getItem('tokenOfProject'));    
+    var project = await GetProject(localStorage.getItem('tokenOfProject'));
     await DeleteAlreadyMembers(project, listOfUsers);
 
     for (var i = 0; i < notPartOfProjectYet.length; i++) {
@@ -32,12 +32,12 @@ async function LoadAllUsers() {
         //if (alreadyMembers.includes(listOfUser[i])) continue;
 
         var newUser = new User(user, notPartOfProjectYet[i]);
-        newUser.loadUser();        
+        newUser.loadUser();
     }
 }
 
 class User {
-    constructor(params, idOfUser){
+    constructor(params, idOfUser) {
         this.FullName = params['lastName'] + ' ' + params['firstName'] + ' ' + params['patronymic'];
         this.role = params['role'];
         this.id = idOfUser;
@@ -79,7 +79,7 @@ class User {
                 divUserElement.remove();
                 divUserElement.dataset.status = "new";
                 divUserElement.querySelector('#icon').classList = "";
-                divUserElement.querySelector('#icon').classList.add("bi", "bi-plus-lg"); 
+                divUserElement.querySelector('#icon').classList.add("bi", "bi-plus-lg");
                 document.querySelector('#listOfUsersToAdd').append(divUserElement);
 
                 let i = listOfUsersToAdd.indexOf(this);
@@ -91,11 +91,11 @@ class User {
     }
 }
 
-async function AddUsersToMembersOfProject(){   
+async function AddUsersToMembersOfProject() {
     listOfUsersToAdd.forEach(user => {
         if (user.role == "USER") list_newMembers.push(user);
         else if (user.role == "CURATOR") list_newCurators.push(user);
     });
-    await AddConsultants(list_newCurators.map((item) => { return item.id } ));
+    await AddConsultants(list_newCurators.map((item) => { return item.id }));
     //document.location = "project.html";
 }

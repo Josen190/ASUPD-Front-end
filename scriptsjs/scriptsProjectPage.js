@@ -618,52 +618,60 @@ class Comment {
   }
 }
 
+class Participant {
+  constructor(userParams, id) {
+    this.ParticipantEntity = {
+      firstName: userParams['firstName'],
+      lastName: userParams['lastName'],
+      patronymic: userParams['patronymic'],
+      role: userParams['role'],
+      id: id
+    }
+  }
 
-async function LoadMembersOfProject(project) {
-  var divMembersContainer = document.createElement('div');
-  divMembersContainer.classList.add('row', 'justify-content-center', 'mb-1');
-  divMembersContainer.insertAdjacentHTML('beforeend',
-    '<div class="container my-3 w-40">' +
-    '<div class="row justify-content-center mb-3 h-50">' +
-    '<div class="col-md-6">' +
-    '<div id="listOfUsersToAdd" class="container user-list py-2"></div>' +
-    '</div>' +
-    '</div>' +
-    '</div>');
+  async render(place) {
+    var divUserElement = document.createElement('div');
+    divUserElement.classList.add("userElement");
+    divUserElement.insertAdjacentHTML('beforeend',
+      '<div id="fullNameOfMember">' + this.ParticipantEntity.lastName + ' ' + this.ParticipantEntity.firstName + ' ' + this.ParticipantEntity.patronymic + '</div>' +
+        '<small id="roleOfMember">' + this.ParticipantEntity.role +  '</small>' +
+          '<button id="deleteParticipant" class="btn btn-sm btn-secondary pull-right">' +
+        '<i id = "icon" class="bi bi-backspace"></i>' +
+      '</button>');
+    place.appendChild(divUserElement);
 
-  var captainUser = await GetUser(project['userCaptain']);
-  var captainElement = CreateUserElement(captainUser['lastName'], captainUser['firstName'], captainUser['patronymic'], dictOfStatus[captainUser['role']]);
-
-  var projectManager = await GetUser(project['projectManager']);
-  var projectManagerElement = CreateUserElement(projectManager['lastName'], projectManager['firstName'], projectManager['patronymic'], dictOfStatus[projectManager['role']]);
-
-  divMembersContainer.querySelector('#listOfUsersToAdd').appendChild(projectManagerElement);
-  divMembersContainer.querySelector('#listOfUsersToAdd').appendChild(captainElement);
-
-  document.querySelector('#membersOfProject').append(divMembersContainer);
+    divUserElement.querySelector('#deleteParticipant').addEventListener('click', ()=>{
+      divUserElement.remove();
+    })
+  }
 }
 
-function CreateUserElement(lastname, firstname, patronymic, role) {
-  var divUserElement = document.createElement('div');
-  divUserElement.classList.add("row", "align-items-center", "gy-5", "border-bottom");
-  divUserElement.dataset.status = "new";
-  divUserElement.insertAdjacentHTML('beforeend',
-    '<div class="col">' +
-    '<div class="avatar">' +
-    '<img src="../img/avatars/priroda-zhivotnye-kotenok.jpg" alt="avatar" class="img-fluid">' +
-    '</div>' +
-    '</div>' +
-    '<div class="col-7">' +
-    '<a href="#" target="_blank" rel="noopener noreferrer">' +
-    '<b>' + lastname + ' ' + firstname + ' ' + patronymic + '</b><br>' +
-    '</a>' +
-    '<small>' + role + '</small>' +
-    '</div>' +
-    '<div class="col-3">' +
-    '<button class="btn btn-sm btn-secondary pull-right">' +
-    '<i id = "icon" class="bi bi-plus-lg"></i>' +
-    '</button>' +
-    '</div>');
+async function LoadMembersOfProject(project) {
+  var place = document.querySelector('#membersOfProject');
 
-  return divUserElement;  
+  var captainParams = await GetUser(project['userCaptain']);
+  captainParams['role'] = "Капитан";
+
+  var managerParams = await GetUser(project['projectManager']);
+  managerParams['role'] = "Менеджер";
+
+  var manager = new Participant(managerParams, project['projectManager']); 
+  var captain = new Participant(captainParams, project['userCaptain']);
+
+  captain.render(place);
+  manager.render(place);
+
+  for (var i = 0; i < project['usersConsultantsUuidList'].length; i++){
+    var consultantParams = await GetUser(project['usersConsultantsUuidList'][i]);
+    consultantParams['role'] = 'Куратор';
+    var consultant = new Participant(consultantParams, project['usersConsultantsUuidList'][i]);
+    consultant.render(place);
+  }
+
+  for (var i = 0; i < project['usersMembersUuidList'].length; i++){
+    var memberParams = await GetUser(project['usersMembersUuidList'][i]);
+    memberParams['role'] = 'Участник';
+    var member = new Participant(memberParams, project['usersMembersUuidList'][i]);
+    member.render(place);
+  }
 }
