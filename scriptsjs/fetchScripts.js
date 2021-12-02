@@ -740,12 +740,40 @@ async function DeleteComment(tokenOfProject, tokenOfCard, tokenOfComment) {
 //===================================================================================================//
 async function AddConsultants(list_tokenOfConultant) {
   var myHeaders = new Headers();
-  myHeaders.append("Authorization", "f6b04dab-b157-48eb-a3ca-db8675331d23");
+  myHeaders.append("Authorization", localStorage.getItem('token'));
   myHeaders.append("Content-Type", "application/json");
 
-
+  var usersConsultantsUuidList = [];
+  list_tokenOfConultant.forEach(element => { usersConsultantsUuidList.push(element) });
   var raw = JSON.stringify({
-    usersMembersUuidList: list_tokenOfConultant
+    usersConsultantsUuidList
+  });
+
+  var requestOptions = {
+    method: 'PUT',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  fetch(URL_link + "/project/" + localStorage.getItem('tokenOfProject') + "/add_consultants", requestOptions)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+    })
+    .then(() => document.location = 'project.html')
+    .catch(error => console.log('error', error));
+}
+async function AddMembers(list_tokenOfMember) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", localStorage.getItem('token'));
+  myHeaders.append("Content-Type", "application/json");
+
+  var usersMembersUuidList = [];
+  list_tokenOfMember.forEach(element => { usersMembersUuidList.push(element) });
+  var raw = JSON.stringify({
+    usersMembersUuidList
   });
 
   var requestOptions = {
@@ -756,14 +784,60 @@ async function AddConsultants(list_tokenOfConultant) {
   };
 
   fetch(URL_link + "/project/" + localStorage.getItem('tokenOfProject') + "/add_members", requestOptions)
-  .then((response) => {
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+    })
+    .then(() => document.location = 'project.html')
+    .catch(error => console.log('error', error));
+}
+async function DeleteConsultant(tokenOfConsultant) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", localStorage.getItem('token'));
+  myHeaders.append("Content-Type", "application/json");
+
+  var raw = JSON.stringify({
+    "usersConsultantsUuidList": [ tokenOfConsultant ]
+  });
+
+  var requestOptions = {
+    method: 'DELETE',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  fetch(URL_link + "/project/" + localStorage.getItem('tokenOfProject') + "/delete_consultants", requestOptions)
+  .then(response => {
     if (!response.ok) {
       throw new Error('Ошибочный запрос');
     }
   })
-  .catch(error => {
-    console.log('error', error);
-    alert('Ошибка в AddConsultants');
+  .catch(error => console.log('error', error));
+}
+async function DeleteMember(tokenOfMember) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", localStorage.getItem('token'));
+  myHeaders.append("Content-Type", "application/json");
+
+  var raw = JSON.stringify({
+    "usersMembersUuidList": [ tokenOfMember ]
   });
+
+  var requestOptions = {
+    method: 'DELETE',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  fetch(URL_link + "/project/" + localStorage.getItem('tokenOfProject') + "/delete_members", requestOptions)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Ошибочный запрос');
+    }
+  })
+  .catch(error => console.log('error', error));
 }
 //===================================================================================================//

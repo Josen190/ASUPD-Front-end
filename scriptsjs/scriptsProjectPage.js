@@ -618,6 +618,7 @@ class Comment {
   }
 }
 
+var statusOfUser = "";
 class Participant {
   constructor(userParams, id) {
     this.ParticipantEntity = {
@@ -629,18 +630,21 @@ class Participant {
     }
   }
 
-  async render(place) {
+  render(place, isItHasDeleteBtn) {
     var divUserElement = document.createElement('div');
     divUserElement.classList.add("userElement");
     divUserElement.insertAdjacentHTML('beforeend',
       '<div id="fullNameOfMember">' + this.ParticipantEntity.lastName + ' ' + this.ParticipantEntity.firstName + ' ' + this.ParticipantEntity.patronymic + '</div>' +
         '<small id="roleOfMember">' + this.ParticipantEntity.role +  '</small>' +
-          '<button id="deleteParticipant" class="btn btn-sm btn-secondary pull-right">' +
+          '<button id="deleteParticipant" class="btn btn-sm btn-secondary pull-right" style="display: none;">' +
         '<i id = "icon" class="bi bi-backspace"></i>' +
       '</button>');
+    if (isItHasDeleteBtn) divUserElement.querySelector('#deleteParticipant').removeAttribute('style');
     place.appendChild(divUserElement);
 
     divUserElement.querySelector('#deleteParticipant').addEventListener('click', ()=>{
+      if (statusOfUser == "Manager") DeleteConsultant(this.ParticipantEntity.id);
+      else if (statusOfUser == "Captain") DeleteMember(this.ParticipantEntity.id);
       divUserElement.remove();
     })
   }
@@ -648,6 +652,9 @@ class Participant {
 
 async function LoadMembersOfProject(project) {
   var place = document.querySelector('#membersOfProject');
+  
+  if (localStorage.getItem('token') == project['userCaptain']) statusOfUser = "Captain";
+  if (localStorage.getItem('token') == project['projectManager']) statusOfUser = "Manager";
 
   var captainParams = await GetUser(project['userCaptain']);
   captainParams['role'] = "Капитан";
@@ -655,23 +662,25 @@ async function LoadMembersOfProject(project) {
   var managerParams = await GetUser(project['projectManager']);
   managerParams['role'] = "Менеджер";
 
-  var manager = new Participant(managerParams, project['projectManager']); 
-  var captain = new Participant(captainParams, project['userCaptain']);
+  var manager = await new Participant(managerParams, project['projectManager']); 
+  var captain = await new Participant(captainParams, project['userCaptain']);
 
-  captain.render(place);
-  manager.render(place);
+  captain.render(place, false);
+  manager.render(place, false);
 
   for (var i = 0; i < project['usersConsultantsUuidList'].length; i++){
     var consultantParams = await GetUser(project['usersConsultantsUuidList'][i]);
     consultantParams['role'] = 'Куратор';
     var consultant = new Participant(consultantParams, project['usersConsultantsUuidList'][i]);
-    consultant.render(place);
+    if (statusOfUser == "Manager") consultant.render(place, true);    
+    else consultant.render(place, false);    
   }
 
   for (var i = 0; i < project['usersMembersUuidList'].length; i++){
     var memberParams = await GetUser(project['usersMembersUuidList'][i]);
     memberParams['role'] = 'Участник';
-    var member = new Participant(memberParams, project['usersMembersUuidList'][i]);
-    member.render(place);
+    var member = new Participant(memberParams, project['usersMembersUuidList'][i]);    
+    if (statusOfUser == "Captain") member.render(place, true);
+    else member.render(place, false);  
   }
 }

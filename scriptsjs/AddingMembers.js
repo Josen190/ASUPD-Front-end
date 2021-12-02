@@ -8,6 +8,7 @@ const notPartOfProjectYet = []; //Тут будут храниться учас�
 const listOfUsersToAdd = [];
 const list_newMembers = [];
 const list_newCurators = [];
+var roleOfUser = "";
 
 function DeleteAlreadyMembers(project, listOfAllUsers) {
     var list = [];
@@ -20,16 +21,21 @@ function DeleteAlreadyMembers(project, listOfAllUsers) {
     }
 }
 
-async function LoadAllUsers() {
+async function LoadAllUsers() {    
     var listOfUsers = await GetAllUsers();
     var project = await GetProject(localStorage.getItem('tokenOfProject'));
+    
+    if (localStorage.getItem('token') == project['userCaptain']) roleOfUser = "Captain";
+    else if (localStorage.getItem('token') == project['projectManager']) roleOfUser = "Manager";
+
     await DeleteAlreadyMembers(project, listOfUsers);
 
     for (var i = 0; i < notPartOfProjectYet.length; i++) {
         var user = await GetUser(notPartOfProjectYet[i]);
 
         if (user['role'] == 'BUSINESS_ADMINISTRATOR') continue;
-        //if (alreadyMembers.includes(listOfUser[i])) continue;
+        if (user['role'] == "CURATOR" && roleOfUser == "Captain") continue;
+        if (user['role'] == "USER" && roleOfUser == "Manager") continue;
 
         var newUser = new User(user, notPartOfProjectYet[i]);
         newUser.loadUser();
@@ -96,6 +102,6 @@ async function AddUsersToMembersOfProject() {
         if (user.role == "USER") list_newMembers.push(user);
         else if (user.role == "CURATOR") list_newCurators.push(user);
     });
-    await AddConsultants(list_newCurators.map((item) => { return item.id }));
-    //document.location = "project.html";
+    if (roleOfUser == "Manager") await AddConsultants(list_newCurators.map((item) => { return item.id }));
+    if (roleOfUser == "Captain") await AddMembers(list_newMembers.map((item) => { return item.id }));
 }
