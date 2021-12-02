@@ -33,9 +33,9 @@
   <script type="text/javascript">
     checkToken()
       .then((status) => {
-        if (status == false) throw new Error('Ошибочный запрос');
-        LoadInformationOfUserForAccount();
+        if (status == false) throw new Error('Ошибочный запрос');        
         $("#cover").hide();
+        LoadInformationOfUserForAccount();
       })
       .catch(error => { document.location.href = "authorization.html"; });
   </script>
@@ -103,7 +103,8 @@
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script>
     function logOut() {
-      sessionStorage.removeItem('token');
+      localStorage.removeItem('token');
+      localStorage.removeItem('tokenOfProject');
       document.location.href = "authorization.html";
     }    
   </script>

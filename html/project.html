@@ -14,6 +14,22 @@
   <link rel="stylesheet" href="..\css\test.css">
 
   <style>
+    .user-list {
+      background-color: #fff;
+      height: 200px;
+      border-radius: 3px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .border-bottom {
+      border-bottom: 2px solid #eee
+    }
+
+    .user-list small {
+      color: #797575
+    }
+    
     #cover {
       position: fixed;
       height: 100%;
@@ -34,13 +50,20 @@
   <script type="text/javascript">
     checkToken()
       .then((status) => {
-        if (status == false) throw new Error('Ошибочный запрос');
+        if (status == false) { 
+          document.location.href = "authorization.html";
+          throw new Error('Нет токена пользователя');
+      }
+        if (localStorage.getItem('tokenOfProject') == null) {
+           document.location = 'account.html';
+           throw new Error('Нет токена проекта');
+        }
       })
-      .then(async () => {        
-        await LoadProjectInformation(sessionStorage.getItem('tokenOfProject'));
+      .then(async () => {                
+        await LoadProjectInformation(localStorage.getItem('tokenOfProject'));
         $("#cover").hide();
       })
-      .catch(error => { document.location.href = "authorization.html"; });
+      .catch(error => { console.log(error); });
   </script>
 
   <header>
@@ -80,17 +103,19 @@
         <button type="button" data-bs-toggle="modal" data-bs-target="#statusSelect" class="button">Изменить статус</button>
       </div>
     </div>
-    <div>
+    <button class="button" name="addUser" style="margin: 10px;" onclick="document.location = 'Adding_members.html'">Добавить участника</button>
+    <div id="membersOfProject" class="col-content"></div>
+    <!-- <div>
       <ul>
         <li id="userCaptain">Капитан: </li>
         <li id="projectManager">Преподователь: </li>
       </ul>
       <div>
-        <button name="addUser">Добавить участника</button>
+        
       </div>
     </div>
     
-    <div id="mentorsOfProject"></div>
+    <div id="mentorsOfProject"></div> -->
   </aside>
 
   <!-- окно добавления участников -->

@@ -1,17 +1,20 @@
-let dateWithTime = new Intl.DateTimeFormat("ru" , {
+let dateWithTime = new Intl.DateTimeFormat("ru", {
   timeStyle: "medium",
   dateStyle: "short",
   formatMatcher: "best fit"
 });
 
 var dictOfStatus = {
-  "IN_PROCESS" : "В процессе",
+  "IN_PROCESS": "В процессе",
   "FROZEN": "Приостановлен",
   "DONE": "Завершён",
   "ACCEPTED": "зачтено",
   "DENIED": "не зачтено",
   "CHECK_REQUIRED": "На проверке",
-  "DONE": "Выполнено"
+  "DONE": "Выполнено",
+  "BUSINESS_ADMINISTRATOR": "Администратор",
+  "CURATOR": "Куратор",
+  "USER": "Пользователь"
 }
 
 function SaveStatusFunction() {
@@ -54,7 +57,7 @@ function removeClass(id, cls) {
 
 document.querySelector('#nameOfProject').addEventListener('change', (e) => {
   console.log('Было изменено название проекта');
-  EditProject(sessionStorage.getItem('tokenOfProject'), document.querySelector('#nameOfProject').value, 'IN_PROCESS');
+  EditProject(localStorage.getItem('tokenOfProject'), document.querySelector('#nameOfProject').value, 'IN_PROCESS');
 });
 
 let addColumnBtn = document.getElementById("createColumn");
@@ -122,7 +125,7 @@ class StageForCards {
     this.AddCardBtn.classList.add('button-new-card');
     this.AddCardBtn.addEventListener('click', async (e) => {
       console.log("Была нажата addCardBtn");
-      this.AddCardBtn.setAttribute("style", "display:none"); 
+      this.AddCardBtn.setAttribute("style", "display:none");
 
       var card = new Card();
       card.createCardInputFormElement(this);
@@ -141,7 +144,7 @@ class StageForCards {
     setAttributes(this.DeleteColumnBtn, { "type": "button" });
     this.DeleteColumnBtn.innerText = "Удалить этап";
     this.DeleteColumnBtn.addEventListener('click', async () => {
-      await DeleteStage(this.stageEntity.uuidOfStage, sessionStorage.getItem('tokenOfProject'));
+      await DeleteStage(this.stageEntity.uuidOfStage, localStorage.getItem('tokenOfProject'));
       console.log("Была нажата DeleteColumnBtn");
       this.divStage.remove();
     })
@@ -174,7 +177,7 @@ class StageForCards {
 
 //Класс, описывающий карточку
 class Card {
-  constructor() { 
+  constructor() {
     this.cardEntity = {
       id: "",
       title: "",
@@ -281,7 +284,7 @@ class Card {
         stageInstance.numberOfCards.innerText = Number(stageInstance.numberOfCards.innerText) + 1;
 
         if (this.textAreaOfCardForm.value == "") this.textAreaOfCardForm.value = "Новая карточка";
-        var tokenOfCard = await AddCard(stageInstance.stageEntity.uuidOfStage, this.textAreaOfCardForm.value, '');        
+        var tokenOfCard = await AddCard(stageInstance.stageEntity.uuidOfStage, this.textAreaOfCardForm.value, '');
         var cardParams = {
           id: tokenOfCard,
           name: this.textAreaOfCardForm.value,
@@ -289,7 +292,7 @@ class Card {
           content: "",
           commentUuidList: [],
           lastModifiedDate: new Date(),
-          lastModifiedUserId: sessionStorage.getItem('token'),
+          lastModifiedUserId: localStorage.getItem('token'),
           mark: ""
         };
         this.init(tokenOfCard, cardParams);
@@ -346,14 +349,14 @@ class Card {
     this.divHeader.classList.add('header');
     this.divHeader.insertAdjacentHTML('beforeend',
       '<div class="info">' +
-      '<h3 id = "nameCard" class="name">' + this.cardEntity.title  + '</h3>' +  //+ this.cardEntity.id
+      '<h3 id = "nameCard" class="name">' + this.cardEntity.title + '</h3>' +  //+ this.cardEntity.id
       '<p id = "statusOfCard">' + dictOfStatus[this.cardEntity.status] + '</p>' +
       '</div>');
-    this.divHeader.append(this.closeCardBtn);    
+    this.divHeader.append(this.closeCardBtn);
 
     var user = await GetUser(this.cardEntity.lastModifiedUserId);
     this.divHeader.insertAdjacentHTML('beforeend',
-      '<div class="last-change">' +      
+      '<div class="last-change">' +
       '<p id = "lastData">Последнее изменение: ' + dateWithTime.format(Date.parse(this.cardEntity.lastChangeDate)) + '</p>' +
       '<p id = "lastUser">Изменил: ' + user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic'] + '</p>' +
       '</div>');
@@ -396,7 +399,7 @@ class Card {
     this.textAreaForCard.setAttribute('disabled', 'true');
     this.textAreaForCard.value = this.cardEntity.description;
     this.textAreaForCard.addEventListener('change', async (e) => {
-      this.cardEntity.description = this.textAreaForCard.value;      
+      this.cardEntity.description = this.textAreaForCard.value;
       this.ContentBtn.click();
       await EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
     });
@@ -415,7 +418,7 @@ class Card {
     this.actionsBtns.insertAdjacentHTML('beforeend', '<h4>Действия</h4>');
     //Кнопки
     this.estimateBtn = document.createElement('button');
-    setAttributes(this.estimateBtn, { "type": "button", "name": "estimate"});
+    setAttributes(this.estimateBtn, { "type": "button", "name": "estimate" });
     this.estimateBtn.innerText = "Зачесть задание";
     // this.estimateBtn.addEventListener('click', () => {
     //   //Создадим модальное окно
@@ -450,7 +453,7 @@ class Card {
 
     //Кнопка "Изменить статус"
     this.status = document.createElement('button');
-    setAttributes(this.status, { "type": "button", "name": "status"});
+    setAttributes(this.status, { "type": "button", "name": "status" });
     this.status.innerText = "Изменить статус";
     this.status.addEventListener('click', () => {
       this.statusWindowWrapper = document.createElement('div');
@@ -543,14 +546,14 @@ class Card {
     setAttributes(this.saveCommentBtn, { "type": "button", "name": "sendComment", "class": "btn" });
     this.saveCommentBtn.innerText = "Сохранить";
     this.saveCommentBtn.addEventListener('click', async () => {
-      if (this.textAreaComment.value != "") {        
-        var tokenOfComment = await CreateComment(sessionStorage.getItem('tokenOfProject'), this.cardEntity.id, this.textAreaComment.value);
-        this.cardEntity.commentList.push(new Comment(this.textAreaComment.value, sessionStorage.getItem('token'), tokenOfComment,
+      if (this.textAreaComment.value != "") {
+        var tokenOfComment = await CreateComment(localStorage.getItem('tokenOfProject'), this.cardEntity.id, this.textAreaComment.value);
+        this.cardEntity.commentList.push(new Comment(this.textAreaComment.value, localStorage.getItem('token'), tokenOfComment,
           dateWithTime.format(new Date())));
-        this.cardEntity.commentList[this.cardEntity.commentList.length-1].render(this);
+        this.cardEntity.commentList[this.cardEntity.commentList.length - 1].render(this);
         this.textAreaComment.value = "";
       }
-    });        
+    });
     //Собираем данный элемент карточки
     this.inputCommentContainer.append(this.textAreaComment, this.saveCommentBtn, this.oldCommentsContainer);
     this.divComments.append(this.inputCommentContainer);
@@ -563,15 +566,15 @@ class Card {
   }
 
   async LoadComments() {
-    var listOfComments = await GetAllComments(sessionStorage.getItem('tokenOfProject'), this.cardEntity.id);
-    
+    var listOfComments = await GetAllComments(localStorage.getItem('tokenOfProject'), this.cardEntity.id);
+
     for (var i = 0; i < Object.keys(listOfComments).length; i++) {
       this.cardEntity.commentList.push(new Comment(listOfComments[i]['content'], listOfComments[i]['userOwnerUuid'], listOfComments[i]['commentId'],
         dateWithTime.format(Date.parse(listOfComments[i]['dateCreated']))));
     }
   }
 
-  async renderComments() {  
+  async renderComments() {
     for (var i = 0; i < this.cardEntity.commentList.length; i++) {
       this.cardEntity.commentList[i].render(this);
     }
@@ -583,7 +586,7 @@ class Comment {
     this.comment = textOfComment;
     this.date = date;
     this.userOwnerUuid = userOwnerUuid;
-    this.commentId = commentId;  
+    this.commentId = commentId;
   }
 
   async render(cardInstance) {
@@ -591,10 +594,10 @@ class Comment {
 
     //Кнопка удалить комментарий
     this.deleteCommentBtn = document.createElement('button');
-    setAttributes(this.deleteCommentBtn, { "type": "button", "name": "sendComment", "class": "close", "style":"float:right" });
+    setAttributes(this.deleteCommentBtn, { "type": "button", "name": "sendComment", "class": "close", "style": "float:right" });
     this.deleteCommentBtn.innerText = "X";
     this.deleteCommentBtn.addEventListener('click', async () => {
-      DeleteComment(sessionStorage.getItem('tokenOfProject'), cardInstance.cardEntity.id, this.commentId);
+      DeleteComment(localStorage.getItem('tokenOfProject'), cardInstance.cardEntity.id, this.commentId);
       this.divContainerOfComment.remove();
       let i = cardInstance.cardEntity.commentList.indexOf(this);
       cardInstance.cardEntity.commentList.splice(i, 1);
@@ -613,4 +616,54 @@ class Comment {
       '</div>')
     cardInstance.oldCommentsContainer.insertBefore(this.divContainerOfComment, cardInstance.oldCommentsContainer.firstChild);
   }
+}
+
+
+async function LoadMembersOfProject(project) {
+  var divMembersContainer = document.createElement('div');
+  divMembersContainer.classList.add('row', 'justify-content-center', 'mb-1');
+  divMembersContainer.insertAdjacentHTML('beforeend',
+    '<div class="container my-3 w-40">' +
+    '<div class="row justify-content-center mb-3 h-50">' +
+    '<div class="col-md-6">' +
+    '<div id="listOfUsersToAdd" class="container user-list py-2"></div>' +
+    '</div>' +
+    '</div>' +
+    '</div>');
+
+  var captainUser = await GetUser(project['userCaptain']);
+  var captainElement = CreateUserElement(captainUser['lastName'], captainUser['firstName'], captainUser['patronymic'], dictOfStatus[captainUser['role']]);
+
+  var projectManager = await GetUser(project['projectManager']);
+  var projectManagerElement = CreateUserElement(projectManager['lastName'], projectManager['firstName'], projectManager['patronymic'], dictOfStatus[projectManager['role']]);
+
+  divMembersContainer.querySelector('#listOfUsersToAdd').appendChild(projectManagerElement);
+  divMembersContainer.querySelector('#listOfUsersToAdd').appendChild(captainElement);
+
+  document.querySelector('#membersOfProject').append(divMembersContainer);
+}
+
+function CreateUserElement(lastname, firstname, patronymic, role) {
+  var divUserElement = document.createElement('div');
+  divUserElement.classList.add("row", "align-items-center", "gy-5", "border-bottom");
+  divUserElement.dataset.status = "new";
+  divUserElement.insertAdjacentHTML('beforeend',
+    '<div class="col">' +
+    '<div class="avatar">' +
+    '<img src="../img/avatars/priroda-zhivotnye-kotenok.jpg" alt="avatar" class="img-fluid">' +
+    '</div>' +
+    '</div>' +
+    '<div class="col-7">' +
+    '<a href="#" target="_blank" rel="noopener noreferrer">' +
+    '<b>' + lastname + ' ' + firstname + ' ' + patronymic + '</b><br>' +
+    '</a>' +
+    '<small>' + role + '</small>' +
+    '</div>' +
+    '<div class="col-3">' +
+    '<button class="btn btn-sm btn-secondary pull-right">' +
+    '<i id = "icon" class="bi bi-plus-lg"></i>' +
+    '</button>' +
+    '</div>');
+
+  return divUserElement;  
 }

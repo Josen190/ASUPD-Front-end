@@ -13,6 +13,6 @@ async function addPPCard(token) {
       });
   }
   function logOut(){
-    sessionStorage.removeItem('token');
+    localStorage.removeItem('token');
     document.location.href = "authorization.html";
   }
