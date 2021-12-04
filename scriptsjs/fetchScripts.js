@@ -4,6 +4,12 @@ var dateWithoutTime = new Intl.DateTimeFormat("ru", {
   formatMatcher: "best fit"
 });
 
+var dictOfStatus = {
+  "BUSINESS_ADMINISTRATOR": "Администратор",
+  "CURATOR": "Куратор",
+  "USER": "Пользователь"
+}
+
 //Функции общего назначения
 //===================================================================================================//
 //Проверка токена
@@ -244,6 +250,7 @@ async function LoadInformationOfUserForAccount() {
   document.getElementById('status').innerText += ': ' + (result['status'] ?? 'не указано');
   if (result['birthDate'] != null) document.getElementById('birthday').innerText += ': ' + dateWithoutTime.format(Date.parse(result['birthDate']));
   document.getElementById('phone').innerText += ': ' + (result['phoneNumber'] ?? 'не указано');
+  document.getElementById('role').innerText += ': ' + (dictOfStatus[result['role']] ?? 'не указано');
 
   let container = document.querySelector("#projects-list");
   for (var i = 0; i < Object.keys(result['projectUuidList']).length; i++) {

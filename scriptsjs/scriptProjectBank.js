@@ -122,7 +122,12 @@ function modalFormProject(projectID = "project_card") {
 //   }
 // }
 
-function newProposalCard(name = "Новый проект", uuid = "") {
+async function newProposalCard(name = "Новый проект", uuid = "") {
+    var user = await GetUser(localStorage.getItem('token'));
+
+    var k = document.querySelector('#btnCreateProposal');
+    if (user['role'] == 'BUSINESS_ADMINISTRATOR') document.querySelector('#btnCreateProposal').removeAttribute('style');
+
     var proposal_icon_div = document.createElement('div');
     setAttributes(proposal_icon_div, { "id": "testProject", "class": "project-card", "data-uuid": uuid });
     proposal_icon_div.insertAdjacentHTML('beforeend',
@@ -151,6 +156,13 @@ function newProposalCard(name = "Новый проект", uuid = "") {
             var user = await GetUser(informationAboutProposal['consultantUuidList'][i]);
             divConsultant.innerText =  user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic'];
             document.querySelector('.mentors').appendChild(divConsultant);
+        };
+        var placeOfStages = document.querySelector('#nameOfStage');
+        placeOfStages.innerHTML = "";
+        for (var i = 0; i < Object.keys(informationAboutProposal['stageNamesList']).length; i++) {
+            var dt = document.createElement('dt');
+            dt.innerText = informationAboutProposal['stageNamesList'][i];            
+            document.querySelector('#nameOfStage').appendChild(dt);
         };
 
         setTimeout(() => {

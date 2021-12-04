@@ -86,10 +86,7 @@
         Основная информация
       </div>
       <div class="stages">
-        <dl>
-          <dt>стадия 1</dt>
-          <dt>стадия 2</dt>
-          <dt>стадия 3</dt>
+        <dl id="nameOfStage">
         </dl>
       </div>
       <div class="s-m">
@@ -101,14 +98,6 @@
           </dl>
         </div>
         <div class="mentors">
-          <!-- <dl>
-            <dt>наставник 1</dt>
-            <dt>наставник 2</dt>
-            <dt>наставник 3</dt>
-            <dt>наставник 3</dt>
-            <dt>наставник 3</dt>
-            <dt>наставник 3</dt>
-          </dl> -->
         </div>
       </div>
       <div class="button">
@@ -127,7 +116,7 @@
     </div>
   </div>
 
-  <input type="button" onclick="newProposalCard()" value="Создать предложение">
+  <input id="btnCreateProposal" type="button" style="display: none;" onclick="newProposalCard()" value="Создать предложение">
   <script src="../scriptsjs/scriptProjectBank.js"></script>
   <script src="../scriptsjs/fetchScripts.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"
