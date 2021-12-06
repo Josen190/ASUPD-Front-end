@@ -4,10 +4,10 @@ var dict = {
     "USER": "Пользователь"
 }
 
-const notPartOfProjectYet = []; //Тут будут храниться участники, которые не состоят в этом проекте
-const listOfUsersToAdd = [];
-const list_newMembers = [];
-const list_newCurators = [];
+var notPartOfProjectYet = []; //Тут будут храниться участники, которые не состоят в этом проекте
+var listOfUsersToAdd = [];
+var list_newMembers = [];
+var list_newCurators = [];
 var roleOfUser = "";
 
 function DeleteAlreadyMembers(project, listOfAllUsers) {
@@ -21,7 +21,12 @@ function DeleteAlreadyMembers(project, listOfAllUsers) {
     }
 }
 
-async function LoadAllUsers() {    
+async function LoadAllUsers() {   
+    document.querySelector('#user-list-added').innerHTML = "";
+    document.querySelector('#user-list-search').innerHTML = "";   
+    notPartOfProjectYet = [];     
+    listOfUsersToAdd = [];
+
     var listOfUsers = await GetAllUsers();
     var project = await GetProject(localStorage.getItem('tokenOfProject'));
     
@@ -29,7 +34,6 @@ async function LoadAllUsers() {
     else if (localStorage.getItem('token') == project['projectManager']) roleOfUser = "Manager";
 
     await DeleteAlreadyMembers(project, listOfUsers);
-
     for (var i = 0; i < notPartOfProjectYet.length; i++) {
         var user = await GetUser(notPartOfProjectYet[i]);
 
@@ -50,34 +54,33 @@ class User {
     }
     loadUser() {
         var divUserElement = document.createElement('div');
-        divUserElement.classList.add("row", "align-items-center", "gy-5", "border-bottom");
+        divUserElement.classList.add("row", "align-items-center", "gy-2", "border-bottom");
         divUserElement.dataset.status = "new";
-        //divUserElement.dataset.idOfUser = this.id;
         divUserElement.insertAdjacentHTML('beforeend',
-            '<div class="col">' +
+        '<div class="col">' +
             '<div class="avatar">' +
-            '<img src="../img/avatars/priroda-zhivotnye-kotenok.jpg" alt="avatar" class="img-fluid">' +
+                '<img src="../img/avatars/priroda-zhivotnye-kotenok.jpg" alt="avatar" class="img-fluid">' +
             '</div>' +
-            '</div>' +
-            '<div class="col-7">' +
+        '</div>' +
+        '<div class="col-7">' +
             '<a href="#" target="_blank" rel="noopener noreferrer">' +
-            '<b>' + this.FullName + '</b><br>' +
+                '<b>' + this.FullName + '</b><br>' +
             '</a>' +
             '<small>' + dict[this.role] + '</small>' +
-            '</div>' +
-            '<div class="col-3">' +
-            '<button class="btn btn-sm btn-secondary pull-right">' +
-            '<i id = "icon" class="bi bi-plus-lg"></i>' +
+        '</div>' +
+        '<div class="col-3">' +
+            '<button id="btn_members" class="btn btn-sm btn-outline-secondary pull-right">' +
+                '<i id="icon" class="bi bi-plus-lg"></i>' +
             '</button>' +
-            '</div>');
+      '</div>');
 
-        divUserElement.addEventListener('click', () => {
+        divUserElement.querySelector('#btn_members').addEventListener('click', () => {
             if (divUserElement.dataset.status == "new") {
                 divUserElement.remove();
                 divUserElement.dataset.status = "added";
                 divUserElement.querySelector('#icon').classList = "";
-                divUserElement.querySelector('#icon').classList.add("bi", "bi-backspace");
-                document.querySelector('#listOfAddedUsers').append(divUserElement);
+                divUserElement.querySelector('#icon').classList.add("bi", "bi-x-lg");
+                document.querySelector('#user-list-added').append(divUserElement);
 
                 listOfUsersToAdd.push(this);
             }
@@ -86,22 +89,31 @@ class User {
                 divUserElement.dataset.status = "new";
                 divUserElement.querySelector('#icon').classList = "";
                 divUserElement.querySelector('#icon').classList.add("bi", "bi-plus-lg");
-                document.querySelector('#listOfUsersToAdd').append(divUserElement);
+                document.querySelector('#user-list-search').append(divUserElement);
 
                 let i = listOfUsersToAdd.indexOf(this);
                 listOfUsersToAdd.splice(i, 1);
             }
         });
 
-        document.querySelector('#listOfUsersToAdd').append(divUserElement);
+        document.querySelector('#user-list-search').append(divUserElement);
     }
 }
 
 async function AddUsersToMembersOfProject() {
+    list_newMembers = [];
+    list_newCurators = [];
+
     listOfUsersToAdd.forEach(user => {
         if (user.role == "USER") list_newMembers.push(user);
         else if (user.role == "CURATOR") list_newCurators.push(user);
     });
     if (roleOfUser == "Manager") await AddConsultants(list_newCurators.map((item) => { return item.id }));
     if (roleOfUser == "Captain") await AddMembers(list_newMembers.map((item) => { return item.id }));
+
+    document.querySelector('#MembersList').innerHTML = "";
+    //Сервер не успевает добавить новых участников
+    setTimeout(async () => {        
+        await LoadMembersOfProject();
+    }, 500);
 }

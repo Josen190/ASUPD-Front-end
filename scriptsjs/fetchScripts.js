@@ -39,14 +39,14 @@ async function checkToken() {
 //Возвращает данные пользователя учитывая токен в sessionstorage
 async function GetUser(tokenOfUser) {
   var myHeaders = new Headers();
-  myHeaders.append("Authorization", tokenOfUser);
+  myHeaders.append("Authorization", localStorage.getItem('token'));
   var requestOptions = {
     method: 'GET',
     headers: myHeaders,
     redirect: 'follow'
   };
 
-  const result = await fetch(URL_link + "/user/self", requestOptions)
+  const result = await fetch(URL_link + "/user/" + tokenOfUser, requestOptions)
     .then((response) => {
       if (!response.ok) {
         throw new Error('Ошибочный запрос');
@@ -245,7 +245,12 @@ async function sendAuthorizationForm() {
 async function LoadInformationOfUserForAccount() {
   var result = await GetUser(localStorage.getItem('token'));
 
-  document.getElementById('full_name').innerText = (result['lastName'] ?? 'Фамилия') + ' ' + (result['firstName'] ?? 'Имя') + ' ' + (result['patronymic'] ?? 'Отчество');
+  if (result['lastName'] && result['firstName']) {
+     document.getElementById('full_name').innerText = result['lastName'] + ' ' + result['firstName'];
+     if (result['patronymic'])  document.getElementById('full_name').innerText += ' ' + result['patronymic'];
+  }
+  else document.getElementById('full_name').value = 'Фамилия' + ' ' + 'Имя' + ' ' + 'Отчество';
+  
   document.getElementById('work_place').innerText += ': ' + (result['workPlace'] ?? 'не указано');
   document.getElementById('status').innerText += ': ' + (result['status'] ?? 'не указано');
   if (result['birthDate'] != null) document.getElementById('birthday').innerText += ': ' + dateWithoutTime.format(Date.parse(result['birthDate']));
@@ -336,10 +341,13 @@ async function LoadAllProposals() {
       return response.json();
     })
     .then(async (result) => {
+      var user = await GetUser(localStorage.getItem('token'));
+      if (user['role'] == 'BUSINESS_ADMINISTRATOR') document.querySelector('#btnCreateProposal').removeAttribute('style');
+
       let proposalsArray = Object.keys(result).length;
       for (var i = 0; i < Object.keys(result).length; i++) {
-        await LoadInformationAboutProposal(result[i]).then((response) => {
-          newProposalCard(response['name'], response['id']);
+        await LoadInformationAboutProposal(result[i]).then(async (response) => {
+          await LoadProposalCard(response);
         });
       }
     })
@@ -375,7 +383,6 @@ async function LoadInformationAboutProposal(tokenOfProposal) {
     });
   return response;
 }
-
 async function CreateProjectFromProposal(proposalId, managerId) {
   var myHeaders = new Headers();
   myHeaders.append("managerId", managerId);
@@ -439,11 +446,6 @@ async function LoadProjectInformation() {
         default:
           break;
       }
-      // var captainUser = await GetUser(result['userCaptain']);
-      // var managerUser = await GetUser(result['projectManager']);
-      // document.querySelector('#userCaptain').innerText += " " + captainUser['firstName'] + ' ' + captainUser['lastName'] + ' ' + captainUser['patronymic'];;
-      // document.querySelector('#projectManager').innerText += " " + managerUser['firstName'] + ' ' + managerUser['lastName'] + ' ' + managerUser['patronymic'];;
-
       for (var i = 0; i < Object.keys(result['stageUuidList']).length; i++) {
         await LoadStageAndCardsFromDB(result['stageUuidList'][i]);
         document.querySelector('[data-uuid-of-stage="' + result['stageUuidList'][i] + '"]').querySelector('.number-cards').innerText =
@@ -451,13 +453,6 @@ async function LoadProjectInformation() {
       }
 
       await LoadMembersOfProject(result);
-
-      // for (var i = 0; i < Object.keys(result['usersConsultantsUuidList']).length; i++) {
-      //   var divConsultant = document.createElement('div');
-      //   var user = await GetUser(result['usersConsultantsUuidList'][i]);
-      //   divConsultant.innerText = user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic'];
-      //   document.querySelector('#mentorsOfProject').append(divConsultant);
-      // };
     })
     .catch(error => {
       console.log('error', error);
@@ -769,7 +764,6 @@ async function AddConsultants(list_tokenOfConultant) {
         throw new Error('Ошибочный запрос');
       }
     })
-    .then(() => document.location = 'project.html')
     .catch(error => console.log('error', error));
 }
 async function AddMembers(list_tokenOfMember) {
@@ -796,7 +790,6 @@ async function AddMembers(list_tokenOfMember) {
         throw new Error('Ошибочный запрос');
       }
     })
-    .then(() => document.location = 'project.html')
     .catch(error => console.log('error', error));
 }
 async function DeleteConsultant(tokenOfConsultant) {

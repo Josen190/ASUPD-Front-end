@@ -140,7 +140,7 @@ main{
     }
 }
   
-.project-proposal{
+.new-project-proposal{
     background-color: rgba(0, 0, 0, 0.6);
     position: fixed;
     top: 0;
@@ -148,6 +148,7 @@ main{
     width: 100%;
     height: 100%;
     z-index: 3;
+    opacity: 0;
   
     .form{
         position: fixed;
@@ -222,16 +223,36 @@ main{
     
         .stages{
             display: flex;
-            dl{
-            display: flex;
-            flex-direction: row;
-                dt{
-                    margin-right: 5px;
-                }
+            flex-wrap: wrap;
+            dl {
+                display: flex;
+                flex-direction: row;
+                max-width: 100%;
+                    dt{
+                        margin-right: 5px;                    
+                        overflow: hidden;                        
+                    }
             }
 
             input{
                 width: auto;
+            }
+
+            button{        
+                border: none;
+                outline: none;
+                border-radius: 20px;
+
+                &:hover{
+                    background-color: #ceedd0;
+                }
+            }
+
+            .newStage-input{
+                width: 15%;
+                margin-right: 10px;
+                margin-bottom: 5px;
+                @include Superellipse(15px);
             }
         }
         .s-m{
@@ -254,7 +275,7 @@ main{
                     margin-bottom: 5px;
                 }
 
-                input[type="button"]{
+                button{
                     height: 30px;
                     width: 86px;
                     position: -webkit-sticky;

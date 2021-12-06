@@ -34,7 +34,7 @@
     checkToken()
       .then((status) => {
         if (status == false) throw new Error('Ошибочный запрос');        
-        $("#cover").hide();
+        document.querySelector("#cover").setAttribute('style', 'display:none');
         LoadInformationOfUserForAccount();
       })
       .catch(error => { document.location.href = "authorization.html"; });

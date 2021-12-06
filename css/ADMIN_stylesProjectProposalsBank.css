@@ -10,9 +10,11 @@ header {
   color: white;
   top: 0;
 }
+
 header .navbar {
   background-color: #164ACF;
 }
+
 header a, header a:link, header a:visited {
   text-decoration: none;
   color: white;
@@ -33,10 +35,12 @@ main {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
+
 main .search-form:focus-within {
   outline: thick double #32a1ce;
   border: 0;
 }
+
 main .header-main {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -46,6 +50,7 @@ main .header-main {
       -ms-flex-direction: row;
           flex-direction: row;
 }
+
 main .header-main .search-form {
   height: 35px;
   width: calc(100% - 120px);
@@ -60,7 +65,8 @@ main .header-main .search-form {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
-main .header-main .search-form input[type=text] {
+
+main .header-main .search-form input[type="text"] {
   height: 100%;
   width: calc(100% - 30px);
   border: 0;
@@ -71,6 +77,7 @@ main .header-main .search-form input[type=text] {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
+
 main .header-main .search-form .con {
   margin-top: 4px;
   margin-bottom: 2px;
@@ -80,13 +87,16 @@ main .header-main .search-form .con {
           align-items: center;
   width: 25px;
 }
+
 main .header-main .search-form .con svg {
   height: 100%;
   width: 100%;
 }
+
 main hr {
   margin: 10px -15px;
 }
+
 main .bank {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -97,6 +107,7 @@ main .bank {
       -ms-flex-pack: center;
           justify-content: center;
 }
+
 main .bank .project-card {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -116,9 +127,11 @@ main .bank .project-card {
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
 }
+
 main .bank .project-card:hover {
   background-color: rgba(206, 237, 208, 0.3);
 }
+
 main .bank .project-card .listen {
   position: absolute;
   width: 240px;
@@ -128,12 +141,14 @@ main .bank .project-card .listen {
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
 }
+
 main .bank .project-card .info {
   height: calc(100% - 40px);
   width: 101%;
   margin: 0;
   overflow: hidden;
 }
+
 main .bank .project-card .name {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -151,12 +166,13 @@ main .bank .project-card .name {
   padding: 5px;
   padding: var(--padding-size);
 }
+
 main .bank .project-card .name p {
   font-size: 16px;
   margin: 0;
 }
 
-.project-proposal {
+.new-project-proposal {
   background-color: rgba(0, 0, 0, 0.6);
   position: fixed;
   top: 0;
@@ -164,8 +180,10 @@ main .bank .project-card .name p {
   width: 100%;
   height: 100%;
   z-index: 3;
+  opacity: 0;
 }
-.project-proposal .form {
+
+.new-project-proposal .form {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -181,10 +199,12 @@ main .bank .project-card .name p {
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
 }
-.project-proposal .form > div {
+
+.new-project-proposal .form > div {
   margin-bottom: 10px;
 }
-.project-proposal .form dl {
+
+.new-project-proposal .form dl {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -199,7 +219,8 @@ main .bank .project-card .name p {
           align-items: flex-start;
   margin: 0;
 }
-.project-proposal .form dl dt {
+
+.new-project-proposal .form dl dt {
   background: #fff;
   border: 1px solid black;
   border-bottom-left-radius: 15px;
@@ -211,11 +232,13 @@ main .bank .project-card .name p {
   line-height: 1;
   margin-bottom: 5px;
 }
-.project-proposal .form input {
+
+.new-project-proposal .form input {
   width: 100%;
   height: 100%;
 }
-.project-proposal .form .header {
+
+.new-project-proposal .form .header {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -223,19 +246,22 @@ main .bank .project-card .name p {
       -ms-flex-pack: center;
           justify-content: center;
 }
-.project-proposal .form .name {
+
+.new-project-proposal .form .name {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
-.project-proposal .form .basic-info {
+
+.new-project-proposal .form .basic-info {
   padding: 0;
   font-size: 15px;
   overflow-y: auto;
   height: 140px;
   border: 1px solid black;
 }
-.project-proposal .form .basic-info textarea {
+
+.new-project-proposal .form .basic-info textarea {
   resize: none;
   width: 100%;
   height: calc(100% - 5px);
@@ -246,12 +272,16 @@ main .bank .project-card .name p {
   color: black;
   font-size: 18px;
 }
-.project-proposal .form .stages {
+
+.new-project-proposal .form .stages {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
-.project-proposal .form .stages dl {
+
+.new-project-proposal .form .stages dl {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -259,14 +289,39 @@ main .bank .project-card .name p {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  max-width: 100%;
 }
-.project-proposal .form .stages dl dt {
+
+.new-project-proposal .form .stages dl dt {
   margin-right: 5px;
+  overflow: hidden;
 }
-.project-proposal .form .stages input {
+
+.new-project-proposal .form .stages input {
   width: auto;
 }
-.project-proposal .form .s-m {
+
+.new-project-proposal .form .stages button {
+  border: none;
+  outline: none;
+  border-radius: 20px;
+}
+
+.new-project-proposal .form .stages button:hover {
+  background-color: #ceedd0;
+}
+
+.new-project-proposal .form .stages .newStage-input {
+  width: 15%;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.new-project-proposal .form .s-m {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -274,7 +329,8 @@ main .bank .project-card .name p {
       -ms-flex-pack: justify;
           justify-content: space-between;
 }
-.project-proposal .form .s-m > div {
+
+.new-project-proposal .form .s-m > div {
   width: 100%;
   height: 120px;
   border: 1px solid black;
@@ -284,7 +340,8 @@ main .bank .project-card .name p {
   display: -ms-flexbox;
   display: flex;
 }
-.project-proposal .form .s-m > div dl {
+
+.new-project-proposal .form .s-m > div dl {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -296,9 +353,11 @@ main .bank .project-card .name p {
       flex-wrap: nowrap;
   margin-bottom: 5px;
 }
-.project-proposal .form .s-m > div input[type=button] {
+
+.new-project-proposal .form .s-m > div button {
   height: 30px;
   width: 86px;
+  position: -webkit-sticky;
   position: sticky;
   z-index: 5;
   top: calc(100% - 30px);
@@ -306,7 +365,8 @@ main .bank .project-card .name p {
   left: 100%;
   clear: right;
 }
-.project-proposal .form .button {
+
+.new-project-proposal .form .button {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -318,7 +378,8 @@ main .bank .project-card .name p {
   margin-left: 15px;
   margin-right: 15px;
 }
-.project-proposal .form .button > input {
+
+.new-project-proposal .form .button > input {
   width: 140px;
   height: auto;
   margin-bottom: 20px;
@@ -328,7 +389,8 @@ main .bank .project-card .name p {
   border-top-right-radius: 15px;
   border: 1px solid black;
 }
-.project-proposal .form .button > input:hover {
+
+.new-project-proposal .form .button > input:hover {
   background-color: gray;
   color: #fff;
 }
@@ -342,6 +404,7 @@ main .bank .project-card .name p {
   height: 100%;
   z-index: 3;
 }
+
 .load .cssload-loader {
   position: fixed;
   left: calc(50% - 56px);
@@ -356,6 +419,7 @@ main .bank .project-card .name p {
   -webkit-perspective: 1400px;
           perspective: 1400px;
 }
+
 .load .cssload-inner {
   position: absolute;
   width: 100%;
@@ -371,6 +435,7 @@ main .bank .project-card .name p {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
 }
+
 .load .cssload-inner.cssload-one {
   left: 0%;
   top: 0%;
@@ -381,6 +446,7 @@ main .bank .project-card .name p {
   -moz-animation: cssload-rotate-one 1.15s linear infinite;
   border-bottom: 5px solid red;
 }
+
 .load .cssload-inner.cssload-two {
   right: 0%;
   top: 0%;
@@ -391,6 +457,7 @@ main .bank .project-card .name p {
   -moz-animation: cssload-rotate-two 1.15s linear infinite;
   border-right: 5px solid #00ff09;
 }
+
 .load .cssload-inner.cssload-three {
   right: 0%;
   bottom: 0%;
@@ -401,6 +468,7 @@ main .bank .project-card .name p {
   -moz-animation: cssload-rotate-three 1.15s linear infinite;
   border-top: 5px solid #000dff;
 }
+
 @keyframes cssload-rotate-one {
   0% {
     -webkit-transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
@@ -411,6 +479,7 @@ main .bank .project-card .name p {
             transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
   }
 }
+
 @-webkit-keyframes cssload-rotate-one {
   0% {
     -webkit-transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
@@ -419,6 +488,7 @@ main .bank .project-card .name p {
     -webkit-transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
   }
 }
+
 @keyframes cssload-rotate-two {
   0% {
     -webkit-transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
@@ -429,6 +499,7 @@ main .bank .project-card .name p {
             transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
   }
 }
+
 @-webkit-keyframes cssload-rotate-two {
   0% {
     -webkit-transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
@@ -437,6 +508,7 @@ main .bank .project-card .name p {
     -webkit-transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
   }
 }
+
 @keyframes cssload-rotate-three {
   0% {
     -webkit-transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
@@ -447,6 +519,7 @@ main .bank .project-card .name p {
             transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
   }
 }
+
 @-webkit-keyframes cssload-rotate-three {
   0% {
     -webkit-transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);

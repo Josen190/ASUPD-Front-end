@@ -631,14 +631,26 @@ class Participant {
   }
 
   render(place, isItHasDeleteBtn) {
-    var divUserElement = document.createElement('div');
-    divUserElement.classList.add("userElement");
+    var role = this.ParticipantEntity.role;
+    if (this.ParticipantEntity.role == "Участник") role = role.substring(0,4);
+    else role = role.substring(0,3);
+
+    var divUserElement = document.createElement('div');    
+    divUserElement.classList.add("row", "align-items-center", "gy-5", "border-bottom");
+    divUserElement.dataset.role = this.ParticipantEntity.role;
     divUserElement.insertAdjacentHTML('beforeend',
-      '<div id="fullNameOfMember">' + this.ParticipantEntity.lastName + ' ' + this.ParticipantEntity.firstName + ' ' + this.ParticipantEntity.patronymic + '</div>' +
-        '<small id="roleOfMember">' + this.ParticipantEntity.role +  '</small>' +
-          '<button id="deleteParticipant" class="btn btn-sm btn-secondary pull-right" style="display: none;">' +
-        '<i id = "icon" class="bi bi-backspace"></i>' +
-      '</button>');
+      '<div class="col-1">' +
+        '<span">' + role + '.' + '</span>' +
+      '</div>' +
+      '<div class="col text-center">' +
+        '<a target="_blank" rel="noopener noreferrer" >' +
+          this.ParticipantEntity.lastName + ' ' +this.ParticipantEntity.firstName + ' ' + this.ParticipantEntity.patronymic +
+        '</a>' +
+      '</div>' +
+      '<div class="col-1"><button id="deleteParticipant" class="btn btn-sm transparent pull-right" style="display:none" title="Исключить участника">' +
+        '<i class="bi bi-x-lg"></i>' +
+      '</button>' +
+    '</div>');
     if (isItHasDeleteBtn) divUserElement.querySelector('#deleteParticipant').removeAttribute('style');
     place.appendChild(divUserElement);
 
@@ -650,8 +662,9 @@ class Participant {
   }
 }
 
-async function LoadMembersOfProject(project) {
-  var place = document.querySelector('#membersOfProject');
+async function LoadMembersOfProject(project = "") {
+  var place = document.querySelector('#MembersList');
+  if (project == "") project = await GetProject(localStorage.getItem('tokenOfProject'));
   
   if (localStorage.getItem('token') == project['userCaptain']) statusOfUser = "Captain";
   if (localStorage.getItem('token') == project['projectManager']) statusOfUser = "Manager";
@@ -684,3 +697,16 @@ async function LoadMembersOfProject(project) {
     else member.render(place, false);  
   }
 }
+
+function AddNewParticipant(participant){
+
+}
+
+document.querySelector('#AddParticipantsOfProject').addEventListener('click', ()=>{
+  LoadAllUsers();
+});
+
+document.querySelector('#sendInvite').addEventListener('click', (e) => {  
+  AddUsersToMembersOfProject();
+  $('#AddMembers').modal('hide');
+})

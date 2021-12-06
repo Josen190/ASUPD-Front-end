@@ -6,6 +6,11 @@
   --scrollbarBorderRadius: calc(var(--scrollbarWidth) / 2);
 }
 
+#deleteParticipant{
+    &:hover{
+        border: 1px solid darkgoldenrod;
+    }
+}
 
 *{
     box-sizing: border-box;
