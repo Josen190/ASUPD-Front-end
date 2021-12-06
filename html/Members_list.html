@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS v5.0.2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+  <title>Добавление участников</title>
+  <link rel="stylesheet" type="text/css" href="../CSS/styles-account.css">
+  <style>
+    .user-list {
+      background-color: #fff;
+      height: 200px;
+      border-radius: 3px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .border-bottom {
+      border-bottom: 2px solid #eee
+    }
+
+    .user-list small {
+      color: #797575
+    }
+
+    #cover {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background: #fff;
+      z-index: 9999;
+    }
+
+  </style>
+</head>
+
+<body>
+  <!-- TO DO: исключение самого себя: запретить(кнопка исчезает) или отдельная кнопка? -->
+  <div class="container-fluid my-3">
+    <div class="row justify-content-center mb-3">
+      <div class="col">
+        <div class="text-center">
+          Участники проекта:
+          <span class="badge bg-info rounded-pill">5</span>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center h-50">
+      <div class="col">
+        <div id="MembersList" class="container user-list py-2">
+          <div class="row align-items-center gy-5 border-bottom">
+            <div class="col-1">
+              <span title="Руководитель">Р</span>
+            </div>
+            <div class="col text-center">
+              <a href="#" target="_blank" rel="noopener noreferrer" >
+                Фамилия Имя Отчество 
+              </a>
+            </div>
+            <div class="col-1"><button class="btn btn-sm transparent pull-right" title="Исключить участника">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </div>
+          <div class="row align-items-center gy-5 border-bottom">
+            <div class="col-1">
+              <span title="Консультант/наставник">Н</span>
+            </div>
+            <div class="col text-center">
+              <a href="#" target="_blank" rel="noopener noreferrer" >
+                Фамилия Имя Отчество 
+              </a>
+            </div>
+            <div class="col-1"><button class="btn btn-sm transparent pull-right" title="Исключить участника">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </div>
+          <div class="row align-items-center gy-5 border-bottom">
+            <div class="col-1">
+              <span title="Капитан команды">К</span>
+            </div>
+            <div class="col text-center">
+              <a href="#" target="_blank" rel="noopener noreferrer" >
+                Фамилия Имя Отчество 
+              </a>
+            </div>
+            <div class="col-1"><button class="btn btn-sm transparent pull-right" title="Исключить участника">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </div>
+          <div class="row align-items-center gy-5 border-bottom">
+            <div class="col-1">
+              <span title="Участник команды">У</span>
+            </div>
+            <div class="col text-center">
+              <a href="#" target="_blank" rel="noopener noreferrer" >
+                Фамилия Имя Отчество 
+              </a>
+            </div>
+            <div class="col-1"><button class="btn btn-sm transparent pull-right" title="Исключить участника">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </div>
+          <div class="row align-items-center gy-5">
+            <div class="col-1">
+              <span title="Участник команды">У</span>
+            </div>
+            <div class="col text-center">
+              <a href="#" target="_blank" rel="noopener noreferrer" >
+                Фамилия Имя Отчество 
+              </a>
+            </div>
+            <div class="col-1"><button class="btn btn-sm transparent pull-right" title="Исключить участника">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mt-3">
+      <div class="col-sm-4 col-md-3 text-center ">
+        <button class="btn btn-sm btn-primary" onclick="alert('Переход к окошку поиска');">Добавить участников</button>
+      </div>
+    </div>
+  </div>
+
+  
+</body>
+
+</html>
