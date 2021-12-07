@@ -8,12 +8,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS v5.0.2 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
   <link rel="stylesheet" href="..\css\stylesProjectBank.css">
   <link rel="stylesheet" href="..\css\ADMIN_stylesProjectProposalsBank.css">
 
   <style>
+    .user-list {
+      background-color: #fff;
+      height: 150px;
+      border-radius: 3px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      border: 1px solid #eee;
+    }
+
+    .avatar img {
+      width: 100%;
+      position: relative;
+      padding: 10%;
+      border-radius: 50%;
+    }
+
+    .pull-left {
+      float: left;
+    }
+
+    .pull-right {
+      float: right;
+    }
+
+    .user-listForParticipants {
+      background-color: #fff;
+      height: 250px;
+      border-radius: 3px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .border-bottom {
+      padding-bottom: 5px;
+      border-bottom: 2px solid #eee
+    }
+
+    .user-list small {
+      color: #797575
+    }
+
     #cover {
       position: fixed;
       height: 100%;
@@ -33,12 +76,12 @@
   <script src="../scriptsjs/fetchScripts.js"></script>
   <script type="text/javascript">
     checkToken()
-    .then((status) => {
-      if (status == false) throw new Error('Ошибочный запрос');
-      LoadAllProposals();
-      $("#cover").hide();
-    })
-    .catch(error => { document.location.href = "authorization.html"; });
+      .then((status) => {
+        if (status == false) throw new Error('Ошибочный запрос');
+        LoadAllProposals();
+        $("#cover").hide();
+      })
+      .catch(error => { document.location.href = "authorization.html"; });
   </script>
 
   <header>
@@ -76,48 +119,111 @@
       </template>
 
     </div>
-  </main>  
+  </main>
+
+  <div class="modal fade" id="AddMembersToProposal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="AddMembersLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-height: 90%;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="AddMembersLabel">Добавить новых участников</h5>
+        </div>
+        <div class="modal-body px-1 py-0">
+          <div class="container my-1">
+            <div class="row justify-content-center mb-1">
+              <div class="col">
+                <div class="input-group rounded">
+                  <input type="search" class="form-control rounded" placeholder="Введите имя участника"
+                    aria-label="Search" aria-describedby="search-addon" />
+                  <button class="btn btn-sm btn-secondary">
+                    <i class="bi bi-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-center mb-3 h-40">
+              <div class="col">
+                <div id="members_list_search" class="container user-list py-2">
+                  <!-- Результаты поиска -->
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-center mb-3 h-40">
+              <div class="col">
+                <div class="container text-start px-1">
+                  <h5><i>Вы выбрали:</i></h5>
+                </div>
+                <div id="user-list-added" class="container user-list py-2">
+                  <!-- Добавленные пользователи -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="container">
+            <div class="row justify-content-around">
+              <div class="col">
+                <button id="sendInvite" type="submit"
+                  onclick="AddCuratorsToFormOfProposal(document.querySelector('#new-supervisors'))"
+                  class="btn btn-sm btn-primary">Пригласить</button>
+              </div>
+              <div class="col">
+                <button class="btn btn-sm btn-secondary pull-right" data-dismiss="modal">Отмена</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div id="new-project-proposal" class="new-project-proposal" style="display: none;">
     <div class="form">
-        <div class="header"><p>Создать проектное предложение</p></div>
-        <div class="name">
-            <input id="nameOfNewProposal" type="text" placeholder="Название">
-        </div>
-        <div id="basicInfoAboutNewProposal" class="basic-info">
-            <textarea placeholder="Основная информация"></textarea>
-        </div>
-        <!-- стадии проекта -->
-        <div class="stages">
-            <dl id="new-stages-list">
+      <div class="header">
+        <p>Создать проектное предложение</p>
+      </div>
+      <div class="name">
+        <input id="nameOfNewProposal" type="text" placeholder="Название">
+      </div>
+      <div id="basicInfoAboutNewProposal" class="basic-info">
+        <textarea placeholder="Основная информация"></textarea>
+      </div>
+      <!-- стадии проекта -->
+      <div class="stages">
+        <dl id="new-stages-list">
 
-            </dl>
-            <input class="newStage-input" type="text">            
-            <button id="new-stages-btn" type="button">+</button>
+        </dl>
+        <input class="newStage-input" type="text">
+        <button id="new-stages-btn" type="button">+</button>
+      </div>
+      <div class="s-m">
+        <!-- руководители -->
+        <div class="supervisors">
+          <dl id="new-supervisors">
+          </dl>
+          <button type="button" data-toggle="modal" data-target="#AddMembersToProposal"
+            onclick="LoadManagers()">Добавить</button>
         </div>
-        <div class="s-m">
-            <!-- руководители -->
-            <div class="supervisors">                
-                <dl id="new-supervisors">
-                </dl>
-                <button id="new-managers-btn" value="Добавить">Добавить</button>
-            </div>
-            <!-- наставники -->
-            <div class="new-mentors">
-              <dl id="new-mentors">                
-              </dl>
-                <input type="button" value="Добавить">
-            </div>
+        <!-- наставники -->
+        <div class="new-mentors">
+          <dl id="new-mentors">
+          </dl>
+          <!-- <button type="button" data-toggle="modal" data-target="#AddMembersToProposal">Добавить</button> -->
         </div>
-        <div class="button">
-            <input type="button" onclick="document.querySelector('#new-project-proposal').setAttribute('style','display:none')" name="close" value="Отмена">
-            <input onclick="CreateProjectFromProposal(document.querySelector('#project-proposal').dataset.uuidOfProposalWindow, 
-            document.querySelector('#supervisors').dataset.uuidOfManager)" type="button" name="create" value="Сохранить">
-        </div>
+      </div>
+      <div class="button">
+        <input type="button"
+          onclick="document.querySelector('#new-project-proposal').setAttribute('style','display:none')" name="close"
+          value="Отмена">
+        <input onclick="CreateProjectFromProposal(document.querySelector('#project-proposal').dataset.uuidOfProposalWindow, 
+            document.querySelector('#supervisors').dataset.uuidOfManager)" type="button" name="create"
+          value="Сохранить">
+      </div>
     </div>
-</div>
+  </div>
 
-  <div id = "load_circle" class="load" style="display: none">
+  <div id="load_circle" class="load" style="display: none">
     <div class="cssload-loader">
       <div class="cssload-inner cssload-one"></div>
       <div class="cssload-inner cssload-two"></div>
@@ -125,13 +231,20 @@
     </div>
   </div>
 
-  <button id="btnCreateProposal" onclick="LoadFormOfNewProposal()" class="button" type="button" style="display: none;">Создать предложение</button>
+  <button id="btnCreateProposal" onclick="LoadFormOfNewProposal()" class="button" type="button"
+    style="display: none;">Создать предложение</button>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
   <script src="../scriptsjs/scriptProjectBank.js"></script>
   <script src="../scriptsjs/AddingMembersProposal.js"></script>
   <script src="../scriptsjs/fetchScripts.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
 </body>
 
 </html>

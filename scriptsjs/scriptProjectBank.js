@@ -118,8 +118,8 @@ class Proposal {
                 '<dl id="nameOfStage"></dl>' +
             '</div>' +
             '<div class="s-m">' +
-                '<div id="supervisors" class="supervisors"></div>' +
-                '<div class="mentors"></div>' +
+                '<div><dl id="supervisors" class="supervisors"></dl></div>' +
+                '<div><dl class="mentors"></dl></div>' +
             '</div>' +
             '<div class="button">' +
                 '<input id="cancelOldProposal" type="button" name="close" value="Отмена">' +
@@ -185,7 +185,7 @@ function LoadFormOfNewProposal() {
     document.querySelector('#new-stages-list').innerHTML = "";
     document.querySelector('#new-supervisors').innerHTML = "";
     document.querySelector('#new-mentors').innerHTML = "";
-    candidatesForManager = []
+    candidatesForManager = [];
 
     setTimeout(() => {
         loadCircle.setAttribute("style", "display: none");
@@ -204,7 +204,7 @@ document.querySelector("#new-stages-btn").addEventListener('click', () => {
     }
 });
 
-document.querySelector('#new-managers-btn').addEventListener('click', () => {
-    localStorage.setItem('method_to_call', "AddManagersToProposal");
-    document.location = "Adding_members_for_proposal.html";    
-})
+// document.querySelector('#new-managers-btn').addEventListener('click', () => {
+//     localStorage.setItem('method_to_call', "AddManagersToProposal");
+//     document.location = "Adding_members_for_proposal.html";    
+// })

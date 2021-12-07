@@ -622,7 +622,7 @@ var statusOfUser = "";
 class Participant {
   constructor(userParams, id) {
     this.ParticipantEntity = {
-      firstName: userParams['firstName'],
+      firstName: userParams["firstName"],
       lastName: userParams['lastName'],
       patronymic: userParams['patronymic'],
       role: userParams['role'],
@@ -678,28 +678,38 @@ async function LoadMembersOfProject(project = "") {
   var manager = await new Participant(managerParams, project['projectManager']); 
   var captain = await new Participant(captainParams, project['userCaptain']);
 
-  captain.render(place, false);
-  manager.render(place, false);
+  captain.render(document.querySelector('#captain_list'), false);
+  manager.render(document.querySelector('#manager_list'), false);
 
   for (var i = 0; i < project['usersConsultantsUuidList'].length; i++){
     var consultantParams = await GetUser(project['usersConsultantsUuidList'][i]);
     consultantParams['role'] = 'Куратор';
     var consultant = new Participant(consultantParams, project['usersConsultantsUuidList'][i]);
-    if (statusOfUser == "Manager") consultant.render(place, true);    
-    else consultant.render(place, false);    
+    if (statusOfUser == "Manager") consultant.render(document.querySelector('#curator_list'), true);    
+    else consultant.render(document.querySelector('#curator_list'), false);    
   }
 
   for (var i = 0; i < project['usersMembersUuidList'].length; i++){
     var memberParams = await GetUser(project['usersMembersUuidList'][i]);
     memberParams['role'] = 'Участник';
     var member = new Participant(memberParams, project['usersMembersUuidList'][i]);    
-    if (statusOfUser == "Captain") member.render(place, true);
-    else member.render(place, false);  
+    if (statusOfUser == "Captain") member.render(document.querySelector('#member_list'), true);
+    else member.render(document.querySelector('#member_list'), false);  
   }
 }
 
-function AddNewParticipant(participant){
-
+function AddNewParticipant(participantParams){  
+  var participant = new Participant(participantParams, participantParams["id"]);
+  if (participant.ParticipantEntity.role == 'USER'){
+    participant.ParticipantEntity.role = 'Участник';
+    if (statusOfUser == "Captain") participant.render(document.querySelector('#member_list'), true);
+    else participant.render(document.querySelector('#member_list'), false);
+  }
+  else if (participant.ParticipantEntity.role == 'CURATOR'){
+    participant.ParticipantEntity.role = 'Куратор';
+    if (statusOfUser == "Manager") participant.render(document.querySelector('#curator_list'), true);
+    else participant.render(document.querySelector('#curator_list'), false);
+  }
 }
 
 document.querySelector('#AddParticipantsOfProject').addEventListener('click', ()=>{

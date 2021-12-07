@@ -48,7 +48,9 @@ async function LoadAllUsers() {
 
 class User {
     constructor(params, idOfUser) {
-        this.FullName = params['lastName'] + ' ' + params['firstName'] + ' ' + params['patronymic'];
+        this.firstName = params['firstName'];
+        this.lastName = params['lastName'];
+        this.patronymic = params['patronymic'];
         this.role = params['role'];
         this.id = idOfUser;
     }
@@ -64,7 +66,7 @@ class User {
         '</div>' +
         '<div class="col-7">' +
             '<a href="#" target="_blank" rel="noopener noreferrer">' +
-                '<b>' + this.FullName + '</b><br>' +
+                '<b>' + this.lastName + ' ' + this.firstName + ' ' + this.patronymic + '</b><br>' +
             '</a>' +
             '<small>' + dict[this.role] + '</small>' +
         '</div>' +
@@ -111,9 +113,7 @@ async function AddUsersToMembersOfProject() {
     if (roleOfUser == "Manager") await AddConsultants(list_newCurators.map((item) => { return item.id }));
     if (roleOfUser == "Captain") await AddMembers(list_newMembers.map((item) => { return item.id }));
 
-    document.querySelector('#MembersList').innerHTML = "";
-    //Сервер не успевает добавить новых участников
-    setTimeout(async () => {        
-        await LoadMembersOfProject();
-    }, 500);
+    listOfUsersToAdd.forEach(user => {
+        AddNewParticipant(user);
+    })  
 }
