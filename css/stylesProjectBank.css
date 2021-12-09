@@ -121,6 +121,13 @@ main .bank .project-card:hover {
   background-color: rgba(206, 237, 208, 0.3);
 }
 
+main .bank .project-card .close {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 3px;
+  left: 3px;
+}
+
 main .bank .project-card .listen {
   position: absolute;
   width: 240px;
@@ -209,7 +216,7 @@ main .bank .project-card .name p {
   margin: 0;
 }
 
-.project-proposal .form dl dt {
+.project-proposal .form dl input, .project-proposal .form dl dt {
   background: #fff;
   border: 1px solid black;
   border-bottom-left-radius: 15px;
@@ -220,6 +227,14 @@ main .bank .project-card .name p {
   height: 30px;
   line-height: 1;
   margin-bottom: 5px;
+}
+
+.project-proposal .form dl input:hover, .project-proposal .form dl dt:hover {
+  background-color: aqua;
+}
+
+.project-proposal .form dl input:checked, .project-proposal .form dl dt:checked {
+  background-color: chartreuse;
 }
 
 .project-proposal .form .name {

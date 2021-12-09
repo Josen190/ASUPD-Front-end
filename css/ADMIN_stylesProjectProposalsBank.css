@@ -233,6 +233,11 @@ main .bank .project-card .name p {
   margin-bottom: 5px;
 }
 
+.new-project-proposal .form dl dt:hover {
+  background-color: #e95151;
+  cursor: no-drop;
+}
+
 .new-project-proposal .form input {
   width: 100%;
   height: 100%;
@@ -380,7 +385,9 @@ main .bank .project-card .name p {
 }
 
 .new-project-proposal .form .button > input {
-  width: 140px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
   height: auto;
   margin-bottom: 20px;
   border-bottom-left-radius: 15px;

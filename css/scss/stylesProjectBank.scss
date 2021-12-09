@@ -99,6 +99,12 @@ main{
       &:hover{
         background-color: rgba(206, 237, 208, 0.3);
       }
+      
+      .close{
+        position: sticky;
+        top: 3px;
+        left: 3px;
+      }
 
       .listen{
         position: absolute;
@@ -171,7 +177,7 @@ main{
       flex-wrap: wrap;
       align-items: flex-start;
       margin: 0;
-      dt{
+      input, dt{
         background: #fff;
         border: 1px solid black;
         @include Superellipse(15px);
@@ -179,6 +185,13 @@ main{
         height: 30px;
         line-height: 1;
         margin-bottom: 5px;
+
+        &:hover{
+          background-color:aqua;
+        }
+        &:checked{
+          background-color:chartreuse;
+        }
       }
     }
 

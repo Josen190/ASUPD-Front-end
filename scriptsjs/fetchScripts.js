@@ -246,11 +246,11 @@ async function LoadInformationOfUserForAccount() {
   var result = await GetUser(localStorage.getItem('token'));
 
   if (result['lastName'] && result['firstName']) {
-     document.getElementById('full_name').innerText = result['lastName'] + ' ' + result['firstName'];
-     if (result['patronymic'])  document.getElementById('full_name').innerText += ' ' + result['patronymic'];
+    document.getElementById('full_name').innerText = result['lastName'] + ' ' + result['firstName'];
+    if (result['patronymic']) document.getElementById('full_name').innerText += ' ' + result['patronymic'];
   }
   else document.getElementById('full_name').value = 'Фамилия' + ' ' + 'Имя' + ' ' + 'Отчество';
-  
+
   document.getElementById('work_place').innerText += ': ' + (result['workPlace'] ?? 'не указано');
   document.getElementById('status').innerText += ': ' + (result['status'] ?? 'не указано');
   if (result['birthDate'] != null) document.getElementById('birthday').innerText += ': ' + dateWithoutTime.format(Date.parse(result['birthDate']));
@@ -356,7 +356,7 @@ async function LoadAllProposals() {
       alert('Ошибка в LoadAllProposals');
     });
 }
-//Загружает окно при нажатии на проектное предложение
+//Загружает информацию для окна при нажатии на проектное предложение
 async function LoadInformationAboutProposal(tokenOfProposal) {
   var myHeaders = new Headers();
   myHeaders.append("Authorization", localStorage.getItem('token'));
@@ -408,6 +408,94 @@ async function CreateProjectFromProposal(proposalId, managerId) {
       console.log('error', error);
       alert('Ошибка в LoadInformationAboutProposal');
     });
+}
+async function DeleteProposal(proposalId) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", localStorage.getItem('token'));
+
+  var requestOptions = {
+    method: 'DELETE',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  fetch(URL_link + "/project_proposal/" + proposalId, requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в DeleteProposal');
+    });
+}
+async function CreateProposal(nameOfNewProposal, informationAboutProposal, list_stages_to_add, listOfNewManagers, listOfNewCurators) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", localStorage.getItem('token'));
+  myHeaders.append("Content-Type", "application/json");
+
+  var usersMembersUuidList = [];
+  var raw = JSON.stringify({
+    "name" : nameOfNewProposal,
+    "information" : informationAboutProposal,
+    "projectManagersUuidList" : listOfNewManagers.map((item) => { return item.id }),
+    "consultantUuidList" : listOfNewCurators.map((item) => { return item.id }),
+    "stageNamesList" : list_stages_to_add.map((item) => { return item.text })
+  });
+
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  const id = await fetch(URL_link + "/project_proposal/", requestOptions)
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error('Ошибочный запрос');
+    }
+    return response.json();
+  })
+  .then((result) => {
+    return result;
+  })
+  .catch(error => {
+    console.log('error', error);
+    alert('Ошибка в GetAllComments')});
+  return id;
+}
+async function ChangeProposal(tokenOfProposal, nameOfNewProposal, informationAboutProposal, list_stages_to_add, listOfNewManagers, listOfNewCurators) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", localStorage.getItem('token'));
+  myHeaders.append("Content-Type", "application/json");
+
+  var usersMembersUuidList = [];
+  var raw = JSON.stringify({
+    "name" : nameOfNewProposal,
+    "information" : informationAboutProposal,
+    "projectManagersUuidList" : listOfNewManagers.map((item) => { return item.id }),
+    "consultantUuidList" : listOfNewCurators.map((item) => { return item.id }),
+    "stageNamesList" : list_stages_to_add.map((item) => { return item.text })
+  });
+
+  var requestOptions = {
+    method: 'PUT',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  await fetch(URL_link + "/project_proposal/" + tokenOfProposal, requestOptions)
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error('Ошибочный запрос');
+    }
+  })
+  .catch(error => {
+    console.log('error', error);
+    alert('Ошибка в ChangeProposal')});
 }
 //===================================================================================================//
 
@@ -798,7 +886,7 @@ async function DeleteConsultant(tokenOfConsultant) {
   myHeaders.append("Content-Type", "application/json");
 
   var raw = JSON.stringify({
-    "usersConsultantsUuidList": [ tokenOfConsultant ]
+    "usersConsultantsUuidList": [tokenOfConsultant]
   });
 
   var requestOptions = {
@@ -809,12 +897,12 @@ async function DeleteConsultant(tokenOfConsultant) {
   };
 
   fetch(URL_link + "/project/" + localStorage.getItem('tokenOfProject') + "/delete_consultants", requestOptions)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Ошибочный запрос');
-    }
-  })
-  .catch(error => console.log('error', error));
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+    })
+    .catch(error => console.log('error', error));
 }
 async function DeleteMember(tokenOfMember) {
   var myHeaders = new Headers();
@@ -822,7 +910,7 @@ async function DeleteMember(tokenOfMember) {
   myHeaders.append("Content-Type", "application/json");
 
   var raw = JSON.stringify({
-    "usersMembersUuidList": [ tokenOfMember ]
+    "usersMembersUuidList": [tokenOfMember]
   });
 
   var requestOptions = {
@@ -833,11 +921,11 @@ async function DeleteMember(tokenOfMember) {
   };
 
   fetch(URL_link + "/project/" + localStorage.getItem('tokenOfProject') + "/delete_members", requestOptions)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Ошибочный запрос');
-    }
-  })
-  .catch(error => console.log('error', error));
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+    })
+    .catch(error => console.log('error', error));
 }
 //===================================================================================================//

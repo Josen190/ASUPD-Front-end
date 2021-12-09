@@ -8,10 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS v5.0.2 -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
   <link rel="stylesheet" href="..\css\stylesProjectBank.css">
   <link rel="stylesheet" href="..\css\ADMIN_stylesProjectProposalsBank.css">
 
@@ -115,6 +115,7 @@
             <p ib="name"></p>
           </div>
           <div class="listen"></div>
+          <div class="close"><button>x</button></div>
         </div>
       </template>
 
@@ -165,7 +166,7 @@
             <div class="row justify-content-around">
               <div class="col">
                 <button id="sendInvite" type="submit"
-                  onclick="AddCuratorsToFormOfProposal(document.querySelector('#new-supervisors'))"
+                  onclick="AddCuratorsToFormOfProposal()"
                   class="btn btn-sm btn-primary">Пригласить</button>
               </div>
               <div class="col">
@@ -186,8 +187,8 @@
       <div class="name">
         <input id="nameOfNewProposal" type="text" placeholder="Название">
       </div>
-      <div id="basicInfoAboutNewProposal" class="basic-info">
-        <textarea placeholder="Основная информация"></textarea>
+      <div class="basic-info">
+        <textarea id="basicInfoAboutNewProposal" placeholder="Основная информация"></textarea>
       </div>
       <!-- стадии проекта -->
       <div class="stages">
@@ -202,23 +203,20 @@
         <div class="supervisors">
           <dl id="new-supervisors">
           </dl>
-          <button type="button" data-toggle="modal" data-target="#AddMembersToProposal"
-            onclick="LoadManagers()">Добавить</button>
+          <button id="btnAddSuperVisors" type="button" data-toggle="modal" data-target="#AddMembersToProposal">Добавить</button>
         </div>
         <!-- наставники -->
         <div class="new-mentors">
           <dl id="new-mentors">
           </dl>
-          <!-- <button type="button" data-toggle="modal" data-target="#AddMembersToProposal">Добавить</button> -->
+          <button id="btnAddMentors" type="button" data-toggle="modal" data-target="#AddMembersToProposal">Добавить</button>
         </div>
       </div>
       <div class="button">
         <input type="button"
           onclick="document.querySelector('#new-project-proposal').setAttribute('style','display:none')" name="close"
           value="Отмена">
-        <input onclick="CreateProjectFromProposal(document.querySelector('#project-proposal').dataset.uuidOfProposalWindow, 
-            document.querySelector('#supervisors').dataset.uuidOfManager)" type="button" name="create"
-          value="Сохранить">
+        <input id="btnSaveProposal" type="button" name="create">
       </div>
     </div>
   </div>
@@ -231,16 +229,13 @@
     </div>
   </div>
 
-  <button id="btnCreateProposal" onclick="LoadFormOfNewProposal()" class="button" type="button"
+  <button id="btnCreateProposal" class="button" type="button"
     style="display: none;">Создать предложение</button>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
     crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
     crossorigin="anonymous"></script>
   <script src="../scriptsjs/scriptProjectBank.js"></script>
   <script src="../scriptsjs/AddingMembersProposal.js"></script>
