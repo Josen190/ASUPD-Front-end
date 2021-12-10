@@ -179,49 +179,6 @@
     </div>
   </div>
 
-  <div id="new-project-proposal" class="new-project-proposal" style="display: none;">
-    <div class="form">
-      <div class="header">
-        <p>Создать проектное предложение</p>
-      </div>
-      <div class="name">
-        <input id="nameOfNewProposal" type="text" placeholder="Название">
-      </div>
-      <div class="basic-info">
-        <textarea id="basicInfoAboutNewProposal" placeholder="Основная информация"></textarea>
-      </div>
-      <!-- стадии проекта -->
-      <div class="stages">
-        <dl id="new-stages-list">
-
-        </dl>
-        <input class="newStage-input" type="text">
-        <button id="new-stages-btn" type="button">+</button>
-      </div>
-      <div class="s-m">
-        <!-- руководители -->
-        <div class="supervisors">
-          <dl id="new-supervisors">
-          </dl>
-          <button id="btnAddSuperVisors" type="button" data-toggle="modal" data-target="#AddMembersToProposal">Добавить</button>
-        </div>
-        <!-- наставники -->
-        <div class="new-mentors">
-          <dl id="new-mentors">
-          </dl>
-          <button id="btnAddMentors" type="button" data-toggle="modal" data-target="#AddMembersToProposal">Добавить</button>
-        </div>
-      </div>
-      <div class="button">
-        <input type="button"
-          onclick="document.querySelector('#new-project-proposal').setAttribute('style','display:none')" name="close"
-          value="Отмена">
-        <input id="btnSaveProposal" style="display: none;" type="button" value="Сохранить проектное предложение">
-        <input id="btnCreateNewProposal" style="display: none;" type="button" value="Создать проектное предложение">
-      </div>
-    </div>
-  </div>
-
   <div id="load_circle" class="load" style="display: none">
     <div class="cssload-loader">
       <div class="cssload-inner cssload-one"></div>

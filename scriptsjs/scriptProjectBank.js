@@ -228,7 +228,7 @@ class Proposal {
             var added_curator = new User(user, this.ProposalEntity.curatorsList[i], 'Mentor'); 
             listOfUsersToAdd.push(added_curator);
         }
-        AddCuratorsToFormOfProposal();        
+        AddCuratorsToFormOfProposal();     
 
         document.querySelector('#btnSaveProposal').addEventListener('click', async ()=>{            
             this.ProposalEntity.name = document.querySelector('#nameOfNewProposal').value;
@@ -250,24 +250,84 @@ var candidatesForManager = [];
 function LoadFormOfNewProposal() {
     loadCircle.removeAttribute("style");
 
-    var newProjectProposal = document.querySelector('#new-project-proposal');
+    var newProposal = document.createElement('div');
+    newProposal.id = "new-project-proposal";
+    newProposal.classList.add('new-project-proposal');
+    newProposal.setAttribute('style', 'display: none');
 
-    document.querySelector('#new-stages-list').innerHTML = "";
-    document.querySelector('#new-supervisors').innerHTML = "";
-    document.querySelector('#new-mentors').innerHTML = "";
+    newProposal.insertAdjacentHTML('beforeend', 
+        '<div class="form">' +
+            '<div class="header">' +
+                '<p>Создать проектное предложение</p>' +
+            '</div>' +
+            '<div class="name">' +
+                '<input id="nameOfNewProposal" type="text" placeholder="Название">' +
+            '</div>' +
+            '<div class="basic-info">' +
+                '<textarea id="basicInfoAboutNewProposal" placeholder="Основная информация"></textarea>' +
+            '</div>' +            
+            '<div class="stages">' +
+                '<dl id="new-stages-list"></dl>' +
+                '<input class="newStage-input" type="text">' +
+                '<button id="new-stages-btn" type="button">+</button>' +
+            '</div>' +
+            '<div class="s-m">' +            
+                '<div class="supervisors">' +
+                    '<dl id="new-supervisors"></dl>' +
+                    '<button id="btnAddSuperVisors" type="button" data-toggle="modal" data-target="#AddMembersToProposal">Добавить</button>' +
+                '</div>' +
+                '<div class="new-mentors">' +
+                    '<dl id="new-mentors"></dl>' +
+                    '<button id="btnAddMentors" type="button" data-toggle="modal" data-target="#AddMembersToProposal">Добавить</button>' +
+                '</div>' +
+            '</div>' +
+            '<div class="button">' +
+                '<input id="btnCancelPropopsal" type="button" name="close" value="Отмена">' +
+                '<input id="btnSaveProposal" style="display: none;" type="button" value="Сохранить проектное предложение">' +
+                '<input id="btnCreateNewProposal" style="display: none;" type="button" value="Создать проектное предложение">' +
+            '</div>' +
+        '</div>');    
+
+    newProposal.querySelector('#btnCancelPropopsal').addEventListener('click', () => {
+        newProposal.remove();
+    });
+    
+    newProposal.querySelector("#new-stages-btn").addEventListener('click', () => {
+        var nameOfStage = document.querySelector('.newStage-input').value;
+        if (nameOfStage != "") {
+            var new_stage = new Stage(nameOfStage);
+            new_stage.render();
+            list_stages_to_add.push(new_stage);
+            document.querySelector('.newStage-input').value = "";
+        }
+    });
+
+    newProposal.querySelector('#btnAddSuperVisors').addEventListener('click', () => {
+        categoryOfCuratorId = 'Supervisor';
+        LoadManagers();
+    });
+
+    newProposal.querySelector('#btnAddMentors').addEventListener('click', () => {
+        categoryOfCuratorId = 'Mentor';
+        LoadManagers();
+    });
+
+    newProposal.querySelector('#btnCreateNewProposal').addEventListener('click', () => {
+        CreateNewProposal();
+    });
+
+    document.getElementById('load_circle').before(newProposal);
+
     candidatesForManager = [];
     listOfNewManagers = [];
     listOfNewCurators = [];
     list_stages_to_add = [];
     listOfUsersToAdd = [];
 
-    document.querySelector('#nameOfNewProposal').value = "";
-    document.querySelector('#basicInfoAboutNewProposal').value = "";
-
     setTimeout(() => {
         loadCircle.setAttribute("style", "display: none");
-        newProjectProposal.removeAttribute("style");
-        setOpacity(newProjectProposal, 100);
+        newProposal.removeAttribute("style");
+        setOpacity(newProposal, 100);
     }, 2000);
 }
 
@@ -285,16 +345,6 @@ async function CreateNewProposal() {
     }
     LoadProposalCard(proposalParams);
 }
-
-document.querySelector("#new-stages-btn").addEventListener('click', () => {
-    var nameOfStage = document.querySelector('.newStage-input').value;
-    if (nameOfStage != "") {
-        var new_stage = new Stage(nameOfStage);
-        new_stage.render();
-        list_stages_to_add.push(new_stage);
-        document.querySelector('.newStage-input').value = "";
-    }
-});
 
 var list_stages_to_add = [];
 class Stage {
@@ -315,22 +365,9 @@ class Stage {
     }
 }
 
-document.querySelector('#btnAddSuperVisors').addEventListener('click', () => {
-    categoryOfCuratorId = 'Supervisor';
-    LoadManagers();
-});
-
-document.querySelector('#btnAddMentors').addEventListener('click', () => {
-    categoryOfCuratorId = 'Mentor';
-    LoadManagers();
-});
 
 document.querySelector('#btnCreateProposalForm').addEventListener('click', ()=>{
     LoadFormOfNewProposal();    
     document.getElementById('btnSaveProposal').setAttribute('style', 'display:none');
     document.getElementById('btnCreateNewProposal').removeAttribute('style');
 });
-
-document.getElementById('btnCreateNewProposal').addEventListener('click', () => {
-    CreateNewProposal();
-})
