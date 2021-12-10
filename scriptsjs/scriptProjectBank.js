@@ -239,7 +239,7 @@ class Proposal {
             this.ProposalEntity.curatorsList = listOfNewCurators.map((item) => { return item.id });
 
             await ChangeProposal(this.ProposalEntity.id, document.querySelector('#nameOfNewProposal').value, document.querySelector('#basicInfoAboutNewProposal').value, list_stages_to_add, listOfNewManagers, listOfNewCurators);
-            document.querySelector('#new-project-proposal').setAttribute('style', 'display:none');
+            document.querySelector('#new-project-proposal').remove();
         });
         document.querySelector('#btnSaveProposal').value = "Сохранить изменения";
     }
@@ -313,7 +313,7 @@ function LoadFormOfNewProposal() {
     });
 
     newProposal.querySelector('#btnCreateNewProposal').addEventListener('click', () => {
-        CreateNewProposal();
+        CreateNewProposal();        
     });
 
     document.getElementById('load_circle').before(newProposal);
@@ -344,6 +344,7 @@ async function CreateNewProposal() {
         'consultantUuidList': listOfNewCurators.map((item) => { return item.id })
     }
     LoadProposalCard(proposalParams);
+    document.querySelector('#new-project-proposal').remove();
 }
 
 var list_stages_to_add = [];
