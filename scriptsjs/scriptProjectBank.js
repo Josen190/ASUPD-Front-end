@@ -70,6 +70,8 @@ async function LoadProposalCard(proposalParams) {
 }
 
 var ProposalArray = [];
+var selectedManager;
+var selectedProposalCard;
 
 class Proposal {
     constructor(proposalParams) {
@@ -81,7 +83,6 @@ class Proposal {
             managerList: proposalParams['projectManagersUuidList'],
             curatorsList: proposalParams['consultantUuidList']
         }
-        this.selectedManagerId = "";
     }
     render(place) {
         var proposal_icon_div = document.createElement('div');
@@ -91,7 +92,7 @@ class Proposal {
             '<img src = "../img/Bg_PB/1.jpg">' +
             '</div>' +
             '<div class="name">' +
-            '<p ib="name"></p>' +
+            '<p id="nameProposalCard"></p>' +
             '</div>');
         proposal_icon_div.querySelector("p").innerHTML = this.ProposalEntity.name;
         proposal_icon_div.querySelector("img").src = "../img/Bg_PB/" + (1 + getRandomInt(6)) + ".jpg";
@@ -99,7 +100,10 @@ class Proposal {
         proposal_icon_div.addEventListener('click', async () => {
             var user = await GetUser(localStorage.getItem('token'));
             if (user['role'] != "BUSINESS_ADMINISTRATOR") this.openProposalAsUser();
-            else this.openProposalAsAdmin();
+            else { 
+                selectedProposalCard = proposal_icon_div;
+                this.openProposalAsAdmin();
+            }
         });
 
         proposal_icon_div.addEventListener('contextmenu', async (e) => {
@@ -142,12 +146,9 @@ class Proposal {
             divProjectContainer.setAttribute("style", "display:none");
         });
 
+        divProjectContainer.querySelector('#createProposal').disabled = true;
         divProjectContainer.querySelector('#createProposal').addEventListener('click', () => {
-            CreateProjectFromProposal(this.ProposalEntity.id, this.ProposalEntity.managerList[0]);
-        });
-
-        divProjectContainer.querySelector('#createProposal').addEventListener('click', () => {
-            CreateProjectFromProposal(this.ProposalEntity.id, this.ProposalEntity.managerList[0]);
+            CreateProjectFromProposal(this.ProposalEntity.id, selectedManager.dataset.uuidOfManager);
         });
 
         loadCircle.removeAttribute("style");
@@ -163,9 +164,28 @@ class Proposal {
             var managerUser = await GetUser(this.ProposalEntity.managerList[i]);
 
             var dtManager = document.createElement('dt');
+            dtManager.dataset.uuidOfManager = this.ProposalEntity.managerList[i];
             dtManager.innerText = managerUser['lastName'] + ' ' + managerUser['firstName'] + ' ' + managerUser['patronymic'];
-            divProjectContainer.querySelector('#supervisors').appendChild(dtManager);
+            dtManager.classList.add('selectedManagers');
+
+            divProjectContainer.querySelector('#supervisors').append(dtManager);            
         }
+        divProjectContainer.querySelector('#supervisors').onclick = function(event) {
+            let dt = event.target.closest('dt');
+
+            if (!dt) return;
+
+            if (!divProjectContainer.querySelector('#supervisors').contains(dt)) return;
+            
+            divProjectContainer.querySelector('#createProposal').disabled = false;
+            if (selectedManager){
+                selectedManager.removeAttribute('style');
+            }            
+            selectedManager = dt;
+            selectedManager.setAttribute('style', 'background-color: blue');            
+        }
+        
+
         for (var i = 0; i < this.ProposalEntity.curatorsList.length; i++) {
             var curatorUser = await GetUser(this.ProposalEntity.curatorsList[i]);
 
@@ -186,7 +206,10 @@ class Proposal {
         }, 2000);
     }
     async openProposalAsAdmin() {
-        LoadFormOfNewProposal();        
+        LoadFormOfNewProposal();   
+        
+        document.getElementById('btnCreateNewProposal').setAttribute('style', 'display:none');
+        document.getElementById('btnSaveProposal').removeAttribute('style');
 
         document.querySelector('#nameOfNewProposal').value = this.ProposalEntity.name;
         document.querySelector('#basicInfoAboutNewProposal').value = this.ProposalEntity.information;
@@ -207,8 +230,9 @@ class Proposal {
         }
         AddCuratorsToFormOfProposal();        
 
-        document.querySelector('#btnSaveProposal').addEventListener('click', async ()=>{
+        document.querySelector('#btnSaveProposal').addEventListener('click', async ()=>{            
             this.ProposalEntity.name = document.querySelector('#nameOfNewProposal').value;
+            selectedProposalCard.querySelector('#nameProposalCard').innerText = document.querySelector('#nameOfNewProposal').value;
             this.ProposalEntity.information = document.querySelector('#basicInfoAboutNewProposal').value;
             this.ProposalEntity.stagesList = list_stages_to_add.map((item) => { return item.text });
             this.ProposalEntity.managerList = listOfNewManagers.map((item) => { return item.id });
@@ -237,6 +261,9 @@ function LoadFormOfNewProposal() {
     list_stages_to_add = [];
     listOfUsersToAdd = [];
 
+    document.querySelector('#nameOfNewProposal').value = "";
+    document.querySelector('#basicInfoAboutNewProposal').value = "";
+
     setTimeout(() => {
         loadCircle.setAttribute("style", "display: none");
         newProjectProposal.removeAttribute("style");
@@ -252,9 +279,9 @@ async function CreateNewProposal() {
         'id': id,
         'name': document.querySelector('#nameOfNewProposal').value,
         'information': document.querySelector('#basicInfoAboutNewProposal').value,
-        'stageNamesList': list_stages_to_add,
-        'projectManagersUuidList': listOfNewManagers,
-        'consultantUuidList': listOfNewCurators
+        'stageNamesList': list_stages_to_add.map((item) => { return item.text }),
+        'projectManagersUuidList': listOfNewManagers.map((item) => { return item.id }),
+        'consultantUuidList': listOfNewCurators.map((item) => { return item.id })
     }
     LoadProposalCard(proposalParams);
 }
@@ -298,10 +325,12 @@ document.querySelector('#btnAddMentors').addEventListener('click', () => {
     LoadManagers();
 });
 
-document.querySelector('#btnCreateProposal').addEventListener('click', ()=>{
-    LoadFormOfNewProposal();
-    document.querySelector('#btnSaveProposal').addEventListener('click', ()=>{
-        CreateNewProposal();
-    });
-    document.querySelector('#btnSaveProposal').value = "Создать проектное предложение";
+document.querySelector('#btnCreateProposalForm').addEventListener('click', ()=>{
+    LoadFormOfNewProposal();    
+    document.getElementById('btnSaveProposal').setAttribute('style', 'display:none');
+    document.getElementById('btnCreateNewProposal').removeAttribute('style');
 });
+
+document.getElementById('btnCreateNewProposal').addEventListener('click', () => {
+    CreateNewProposal();
+})

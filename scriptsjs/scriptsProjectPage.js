@@ -643,7 +643,7 @@ class Participant {
         '<span">' + role + '.' + '</span>' +
       '</div>' +
       '<div class="col text-center">' +
-        '<a target="_blank" rel="noopener noreferrer" >' +
+        '<a target="_blank" rel="noopener noreferrer" style="float:right">' +
           this.ParticipantEntity.lastName + ' ' +this.ParticipantEntity.firstName + ' ' + this.ParticipantEntity.patronymic +
         '</a>' +
       '</div>' +

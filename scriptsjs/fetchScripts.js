@@ -342,7 +342,7 @@ async function LoadAllProposals() {
     })
     .then(async (result) => {
       var user = await GetUser(localStorage.getItem('token'));
-      if (user['role'] == 'BUSINESS_ADMINISTRATOR') document.querySelector('#btnCreateProposal').removeAttribute('style');
+      if (user['role'] == 'BUSINESS_ADMINISTRATOR') document.querySelector('#btnCreateProposalForm').removeAttribute('style');
 
       let proposalsArray = Object.keys(result).length;
       for (var i = 0; i < Object.keys(result).length; i++) {
