@@ -86,8 +86,9 @@ main{
     flex-wrap: wrap;
     justify-content: center;
     .project-card{
-      display: flex;
+      display: none;
       flex-direction: column;
+      flex-wrap: wrap;
       overflow: hidden;
       width: 240px;
       height: 120px;
@@ -101,9 +102,13 @@ main{
       }
       
       .close{
-        position: sticky;
-        top: 3px;
-        left: 3px;
+        position: relative;
+        z-index: 6;
+        right: 35px;
+        ion-icon{
+          width: 30px;
+          height: 30px;
+        }
       }
 
       .listen{
