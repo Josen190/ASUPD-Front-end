@@ -98,13 +98,13 @@ main .bank {
 }
 
 main .bank .project-card {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+  display: none;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   overflow: hidden;
   width: 240px;
   height: 120px;
@@ -122,10 +122,14 @@ main .bank .project-card:hover {
 }
 
 main .bank .project-card .close {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 3px;
-  left: 3px;
+  position: relative;
+  z-index: 6;
+  right: 35px;
+}
+
+main .bank .project-card .close ion-icon {
+  width: 30px;
+  height: 30px;
 }
 
 main .bank .project-card .listen {

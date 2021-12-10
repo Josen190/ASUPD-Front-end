@@ -15,6 +15,11 @@
   <link rel="stylesheet" href="..\css\stylesProjectBank.css">
   <link rel="stylesheet" href="..\css\ADMIN_stylesProjectProposalsBank.css">
 
+  <!-- иконки -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  
+  
   <style>
     .user-list {
       background-color: #fff;
@@ -71,9 +76,9 @@
 </head>
 
 <body id="bodyId">
-  <div id="cover"></div>
+  <!-- <div id="cover"></div> -->
 
-  <script src="../scriptsjs/fetchScripts.js"></script>
+  <!-- <script src="../scriptsjs/fetchScripts.js"></script>
   <script type="text/javascript">
     checkToken()
       .then((status) => {
@@ -82,7 +87,7 @@
         $("#cover").hide();
       })
       .catch(error => { document.location.href = "authorization.html"; });
-  </script>
+  </script> -->
 
   <header>
     <nav class="navbar">
@@ -112,10 +117,14 @@
             <img src="../img/Bg_PB/1.jpg">
           </div>
           <div class="name">
-            <p ib="name"></p>
+            <p ib="name">выаываыва</p>
           </div>
           <div class="listen"></div>
-          <div class="close"><button>x</button></div>
+          <!-- кнопка крестика -->
+          <button class="close">
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </button>
+          <!-- конец кнопки крестика -->
         </div>
       </template>
 
