@@ -228,6 +228,7 @@ aside
             padding: 8px;
             vertical-align: middle;
             display: flex;
+            align-items: baseline;
 
 
             .number-cards{
@@ -253,6 +254,14 @@ aside
                 height: 40px;
                 overflow: auto;
                 align-items: center;
+
+                .inputProject{
+                    background-color: transparent;
+                    outline: none;
+                    &:focus{
+                        background-color: #fff;
+                    }
+                }
             }
 
             .button-new-card{
@@ -511,6 +520,14 @@ aside
                 *{
                     margin: 0;
                     margin-bottom: 1px;
+                }
+                .name{
+                    border: 0;
+                    -webkit-text-fill-color: black;
+
+                    &:focus{
+                        font-size: 23px;
+                    }
                 }
             }
 

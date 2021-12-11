@@ -402,7 +402,8 @@ async function CreateProjectFromProposal(proposalId, managerId) {
       return response.json();
     })
     .then((result) => {
-      document.location.href = "account.html";
+      localStorage.setItem('tokenOfProject', result);
+      document.location.href = "project.html";
     })
     .catch(error => {
       console.log('error', error);
@@ -437,11 +438,11 @@ async function CreateProposal(nameOfNewProposal, informationAboutProposal, list_
 
   var usersMembersUuidList = [];
   var raw = JSON.stringify({
-    "name" : nameOfNewProposal,
-    "information" : informationAboutProposal,
-    "projectManagersUuidList" : listOfNewManagers.map((item) => { return item.id }),
-    "consultantUuidList" : listOfNewCurators.map((item) => { return item.id }),
-    "stageNamesList" : list_stages_to_add.map((item) => { return item.text })
+    "name": nameOfNewProposal,
+    "information": informationAboutProposal,
+    "projectManagersUuidList": listOfNewManagers.map((item) => { return item.id }),
+    "consultantUuidList": listOfNewCurators.map((item) => { return item.id }),
+    "stageNamesList": list_stages_to_add.map((item) => { return item.text })
   });
 
   var requestOptions = {
@@ -452,18 +453,19 @@ async function CreateProposal(nameOfNewProposal, informationAboutProposal, list_
   };
 
   const id = await fetch(URL_link + "/project_proposal/", requestOptions)
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error('Ошибочный запрос');
-    }
-    return response.json();
-  })
-  .then((result) => {
-    return result;
-  })
-  .catch(error => {
-    console.log('error', error);
-    alert('Ошибка в GetAllComments')});
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+      return response.json();
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в GetAllComments')
+    });
   return id;
 }
 async function ChangeProposal(tokenOfProposal, nameOfNewProposal, informationAboutProposal, list_stages_to_add, listOfNewManagers, listOfNewCurators) {
@@ -473,11 +475,11 @@ async function ChangeProposal(tokenOfProposal, nameOfNewProposal, informationAbo
 
   var usersMembersUuidList = [];
   var raw = JSON.stringify({
-    "name" : nameOfNewProposal,
-    "information" : informationAboutProposal,
-    "projectManagersUuidList" : listOfNewManagers.map((item) => { return item.id }),
-    "consultantUuidList" : listOfNewCurators.map((item) => { return item.id }),
-    "stageNamesList" : list_stages_to_add.map((item) => { return item.text })
+    "name": nameOfNewProposal,
+    "information": informationAboutProposal,
+    "projectManagersUuidList": listOfNewManagers.map((item) => { return item.id }),
+    "consultantUuidList": listOfNewCurators.map((item) => { return item.id }),
+    "stageNamesList": list_stages_to_add.map((item) => { return item.text })
   });
 
   var requestOptions = {
@@ -488,14 +490,15 @@ async function ChangeProposal(tokenOfProposal, nameOfNewProposal, informationAbo
   };
 
   await fetch(URL_link + "/project_proposal/" + tokenOfProposal, requestOptions)
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error('Ошибочный запрос');
-    }
-  })
-  .catch(error => {
-    console.log('error', error);
-    alert('Ошибка в ChangeProposal')});
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в ChangeProposal')
+    });
 }
 //===================================================================================================//
 
@@ -600,6 +603,34 @@ async function AddStage(nameOfStage) {
       alert('Ошибка в AddStage');
     });
   return response;
+}
+async function EditStage(tokenOfStage, newName) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", localStorage.getItem('token'));
+  myHeaders.append("Content-Type", "application/json");
+
+  var raw = JSON.stringify({
+    "name": newName
+  });
+
+  var requestOptions = {
+    method: 'PUT',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  fetch(URL_link + "/stage/" + tokenOfStage +  "?projectUuid=" + localStorage.getItem('tokenOfProject'), requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибочный запрос');
+      }
+      console.log('Стадия была обновлена');
+    })
+    .catch(error => {
+      console.log('error', error);
+      alert('Ошибка в EditStage');
+    });
 }
 async function LoadCard(tokenOfCard) {
   var myHeaders = new Headers();

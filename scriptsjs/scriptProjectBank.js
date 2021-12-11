@@ -84,7 +84,7 @@ class Proposal {
             curatorsList: proposalParams['consultantUuidList']
         }
     }
-    render(place) {
+    async render(place) {
         var proposal_icon_div = document.createElement('div');
         setAttributes(proposal_icon_div, { "id": "testProject", "class": "project-card" });
         proposal_icon_div.insertAdjacentHTML('beforeend',
@@ -93,12 +93,17 @@ class Proposal {
             '</div>' +
             '<div class="name">' +
             '<p id="nameProposalCard"></p>' +
-            '</div>');
+            '</div>' +
+            '<div class="listen"></div>' +
+            '<button style="display:none" class="close">' +
+            '<ion-icon name="close-circle-outline"></ion-icon>' +
+            '</button>');
         proposal_icon_div.querySelector("p").innerHTML = this.ProposalEntity.name;
         proposal_icon_div.querySelector("img").src = "../img/Bg_PB/" + (1 + getRandomInt(6)) + ".jpg";
 
+        var user = await GetUser(localStorage.getItem('token'));
         proposal_icon_div.addEventListener('click', async () => {
-            var user = await GetUser(localStorage.getItem('token'));
+            
             if (user['role'] != "BUSINESS_ADMINISTRATOR") this.openProposalAsUser();
             else { 
                 selectedProposalCard = proposal_icon_div;
@@ -106,15 +111,12 @@ class Proposal {
             }
         });
 
-        proposal_icon_div.addEventListener('contextmenu', async (e) => {
-            e.preventDefault();
-            var userPreference;
-
-            if (confirm("Вы действительно хотите удалить проектное предложение?") == true) {
-                proposal_icon_div.remove();
-                await DeleteProposal(this.ProposalEntity.id);
-            }
-        });
+        if (user['role'] == "BUSINESS_ADMINISTRATOR") proposal_icon_div.querySelector('.close').removeAttribute('style');
+        proposal_icon_div.querySelector('.close').addEventListener('click', async (e) => {
+            e.stopPropagation();
+            proposal_icon_div.remove();
+            await DeleteProposal(this.ProposalEntity.id);
+        })
 
         place.appendChild(proposal_icon_div);
     }

@@ -4,7 +4,7 @@ let dateWithTime = new Intl.DateTimeFormat("ru", {
   formatMatcher: "best fit"
 });
 
-var dictOfStatus = {
+var dictOfStatusCard = {
   "IN_PROCESS": "В процессе",
   "FROZEN": "Приостановлен",
   "DONE": "Завершён",
@@ -151,7 +151,7 @@ class StageForCards {
 
     //"Собираем" заголовок карточки
     this.divHeader.append(this.numberOfCards);
-    this.divHeader.insertAdjacentHTML('beforeend', '<h3 class="name-column"><span>' + this.stageEntity.title + '</span></h3>' +
+    this.divHeader.insertAdjacentHTML('beforeend', '<h3 style="height:fit-content" class="name-column"><input class="inputProject form-control" value="' + this.stageEntity.title + '"></h3>' +
       '<details class="column-menu">' +
       '<summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">' +
       '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal">' +
@@ -162,6 +162,10 @@ class StageForCards {
       '</details>');
     this.divHeader.childNodes[2].childNodes[1].appendChild(this.DeleteColumnBtn); //Помещаем кнопку в <div class="open"></div>
     this.divHeader.append(this.AddCardBtn);
+
+    this.divHeader.querySelector('.inputProject').addEventListener('change', async (e) => {      
+      await EditStage(this.stageEntity.uuidOfStage, this.divHeader.querySelector('.inputProject').value);
+    });
 
     //Контейнер в этапе, который содержит текст карточки
     this.divStageContent = document.createElement('div');
@@ -176,6 +180,7 @@ class StageForCards {
 }
 
 //Класс, описывающий карточку
+var lastOpenCard;
 class Card {
   constructor() {
     this.cardEntity = {
@@ -212,9 +217,12 @@ class Card {
     //Контейнер для карточки
     this.card = document.createElement('div');
     this.card.classList.add('card');
-    this.card.addEventListener('click', () => {
-      console.log("Была открыта карточка");
-      this.showCard(stageInstance); //Открываем карточку
+    this.card.addEventListener('click', (e) => {
+      if (!e.detail || e.detail == 1) {
+        console.log("Была открыта карточка");
+        lastOpenCard = this.card;
+        this.showCard(stageInstance); //Открываем карточку
+      }
     })
 
     //Название карточки
@@ -243,7 +251,8 @@ class Card {
       '</svg>' +
       '</span>' +
       '<span class="card-content">' + this.cardName.innerText + '</span>' +
-      '<small class="add-info color-fg-muted">Добавлено<a class="color-text-primary" href="#" draggable="false">Josen190</a></small>');
+      '<small class="add-info color-fg-muted">Последнее изменение: <a class="color-text-primary" href="#" draggable="false">'
+        + dateWithoutTime.format(Date.parse(this.cardEntity.lastChangeDate)) + '</a></small>');
     this.btnWrapper = document.createElement('div');
     this.btnWrapper.classList.add('button-wrapper');
     this.btnWrapper.append(this.DeleteCardBtn);
@@ -349,9 +358,15 @@ class Card {
     this.divHeader.classList.add('header');
     this.divHeader.insertAdjacentHTML('beforeend',
       '<div class="info">' +
-      '<h3 id = "nameCard" class="name">' + this.cardEntity.title + '</h3>' +  //+ this.cardEntity.id
-      '<p id = "statusOfCard">' + dictOfStatus[this.cardEntity.status] + '</p>' +
+      '<h3 id = "nameCard"><input id="inputNameOfCard" onclick="select()" class="name" value="' + this.cardEntity.title + '"></h3>' +  //+ this.cardEntity.id
+      '<p id = "statusOfCard">' + dictOfStatusCard[this.cardEntity.status] + '</p>' +
       '</div>');
+    this.divHeader.querySelector('#inputNameOfCard').addEventListener('change', async (e) => {
+      this.cardEntity.title = this.divHeader.querySelector('#inputNameOfCard').value;
+      if (lastOpenCard) lastOpenCard.querySelector('.card-content').innerText = this.cardEntity.title;
+      await EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
+    });    
+
     this.divHeader.append(this.closeCardBtn);
 
     var user = await GetUser(this.cardEntity.lastModifiedUserId);
@@ -487,23 +502,23 @@ class Card {
         this.statusWindowWrapper.remove();
       })
       this.statusWindowWrapper.querySelector('#inProcess').addEventListener('click', () => {
-        this.divCard.querySelector('#statusOfCard').innerText = dictOfStatus['IN_PROCESS'];
+        this.divCard.querySelector('#statusOfCard').innerText = dictOfStatusCard['IN_PROCESS'];
         this.cardEntity.status = 'IN_PROCESS';
         EdirCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
       });
       this.statusWindowWrapper.querySelector('#Checking').addEventListener('click', () => {
-        this.divCard.querySelector('#statusOfCard').innerText = dictOfStatus['CHECK_REQUIRED'];
+        this.divCard.querySelector('#statusOfCard').innerText = dictOfStatusCard['CHECK_REQUIRED'];
         this.cardEntity.status = 'CHECK_REQUIRED';
         EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
       });
       this.statusWindowWrapper.querySelector('#Completed').addEventListener('click', () => {
-        this.divCard.querySelector('#statusOfCard').innerText = dictOfStatus['DONE'];
+        this.divCard.querySelector('#statusOfCard').innerText = dictOfStatusCard['DONE'];
         this.cardEntity.status = 'DONE';
         EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
       });
 
       document.getElementById('showCardContaier').append(this.statusWindowWrapper);
-    })
+    });
 
     this.delete = document.createElement('button');
     setAttributes(this.estimateBtn, { "type": "button", "name": "delete" });
@@ -563,6 +578,14 @@ class Card {
     this.divCard.append(this.divHeader, this.divContent, this.actionsBtns, this.divComments);
     this.divCardContainer.append(this.divCard);
     document.getElementById('showCardContaier').append(this.divCardContainer);
+
+    var input = $("input[id=inputNameOfCard]");
+    input.focusin(function () {
+        $(this).addClass("inputProject form-control");
+      });
+      input.focusout(function () {
+        $(this).removeClass("inputProject form-control");
+      });    
   }
 
   async LoadComments() {
@@ -632,29 +655,29 @@ class Participant {
 
   render(place, isItHasDeleteBtn) {
     var role = this.ParticipantEntity.role;
-    if (this.ParticipantEntity.role == "Участник") role = role.substring(0,4);
-    else role = role.substring(0,3);
+    if (this.ParticipantEntity.role == "Участник") role = role.substring(0, 4);
+    else role = role.substring(0, 3);
 
-    var divUserElement = document.createElement('div');    
+    var divUserElement = document.createElement('div');
     divUserElement.classList.add("row", "align-items-center", "gy-5", "border-bottom");
     divUserElement.dataset.role = this.ParticipantEntity.role;
     divUserElement.insertAdjacentHTML('beforeend',
       '<div class="col-1">' +
-        '<span">' + role + '.' + '</span>' +
+      '<span">' + role + '.' + '</span>' +
       '</div>' +
       '<div class="col text-center">' +
-        '<a target="_blank" rel="noopener noreferrer" style="float:right">' +
-          this.ParticipantEntity.lastName + ' ' +this.ParticipantEntity.firstName + ' ' + this.ParticipantEntity.patronymic +
-        '</a>' +
+      '<a target="_blank" rel="noopener noreferrer" style="float:right">' +
+      this.ParticipantEntity.lastName + ' ' + this.ParticipantEntity.firstName + ' ' + this.ParticipantEntity.patronymic +
+      '</a>' +
       '</div>' +
       '<div class="col-1"><button id="deleteParticipant" class="btn btn-sm transparent pull-right" style="display:none" title="Исключить участника">' +
-        '<i class="bi bi-x-lg"></i>' +
+      '<i class="bi bi-x-lg"></i>' +
       '</button>' +
-    '</div>');
+      '</div>');
     if (isItHasDeleteBtn) divUserElement.querySelector('#deleteParticipant').removeAttribute('style');
     place.appendChild(divUserElement);
 
-    divUserElement.querySelector('#deleteParticipant').addEventListener('click', ()=>{
+    divUserElement.querySelector('#deleteParticipant').addEventListener('click', () => {
       if (statusOfUser == "Manager") DeleteConsultant(this.ParticipantEntity.id);
       else if (statusOfUser == "Captain") DeleteMember(this.ParticipantEntity.id);
       divUserElement.remove();
@@ -665,7 +688,7 @@ class Participant {
 async function LoadMembersOfProject(project = "") {
   var place = document.querySelector('#MembersList');
   if (project == "") project = await GetProject(localStorage.getItem('tokenOfProject'));
-  
+
   if (localStorage.getItem('token') == project['userCaptain']) statusOfUser = "Captain";
   if (localStorage.getItem('token') == project['projectManager']) statusOfUser = "Manager";
 
@@ -675,48 +698,63 @@ async function LoadMembersOfProject(project = "") {
   var managerParams = await GetUser(project['projectManager']);
   managerParams['role'] = "Менеджер";
 
-  var manager = await new Participant(managerParams, project['projectManager']); 
+  var manager = await new Participant(managerParams, project['projectManager']);
   var captain = await new Participant(captainParams, project['userCaptain']);
 
   captain.render(document.querySelector('#captain_list'), false);
   manager.render(document.querySelector('#manager_list'), false);
 
-  for (var i = 0; i < project['usersConsultantsUuidList'].length; i++){
+  for (var i = 0; i < project['usersConsultantsUuidList'].length; i++) {
     var consultantParams = await GetUser(project['usersConsultantsUuidList'][i]);
     consultantParams['role'] = 'Куратор';
     var consultant = new Participant(consultantParams, project['usersConsultantsUuidList'][i]);
-    if (statusOfUser == "Manager") consultant.render(document.querySelector('#curator_list'), true);    
-    else consultant.render(document.querySelector('#curator_list'), false);    
+    if (statusOfUser == "Manager") consultant.render(document.querySelector('#curator_list'), true);
+    else consultant.render(document.querySelector('#curator_list'), false);
   }
 
-  for (var i = 0; i < project['usersMembersUuidList'].length; i++){
+  for (var i = 0; i < project['usersMembersUuidList'].length; i++) {
     var memberParams = await GetUser(project['usersMembersUuidList'][i]);
     memberParams['role'] = 'Участник';
-    var member = new Participant(memberParams, project['usersMembersUuidList'][i]);    
+    var member = new Participant(memberParams, project['usersMembersUuidList'][i]);
     if (statusOfUser == "Captain") member.render(document.querySelector('#member_list'), true);
-    else member.render(document.querySelector('#member_list'), false);  
+    else member.render(document.querySelector('#member_list'), false);
   }
 }
 
-function AddNewParticipant(participantParams){  
+function AddNewParticipant(participantParams) {
   var participant = new Participant(participantParams, participantParams["id"]);
-  if (participant.ParticipantEntity.role == 'USER'){
+  if (participant.ParticipantEntity.role == 'USER') {
     participant.ParticipantEntity.role = 'Участник';
     if (statusOfUser == "Captain") participant.render(document.querySelector('#member_list'), true);
     else participant.render(document.querySelector('#member_list'), false);
   }
-  else if (participant.ParticipantEntity.role == 'CURATOR'){
+  else if (participant.ParticipantEntity.role == 'CURATOR') {
     participant.ParticipantEntity.role = 'Куратор';
     if (statusOfUser == "Manager") participant.render(document.querySelector('#curator_list'), true);
     else participant.render(document.querySelector('#curator_list'), false);
   }
 }
 
-document.querySelector('#AddParticipantsOfProject').addEventListener('click', ()=>{
+document.querySelector('#AddParticipantsOfProject').addEventListener('click', () => {
   LoadAllUsers();
 });
 
-document.querySelector('#sendInvite').addEventListener('click', (e) => {  
+document.querySelector('#sendInvite').addEventListener('click', (e) => {
   AddUsersToMembersOfProject();
   $('#AddMembers').modal('hide');
+})
+
+// Fetch all the details element.
+
+var details;
+document.onclick = () => {
+  details = [...document.querySelectorAll('details')];
+}
+
+document.addEventListener('click', function (e) {
+  if (!details.some(f => f.contains(e.target))) {
+    details.forEach(f => f.removeAttribute('open'));
+  } else {
+    details.forEach(f => !f.contains(e.target) ? f.removeAttribute('open') : '');
+  }
 })

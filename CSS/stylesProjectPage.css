@@ -247,6 +247,9 @@ aside #membersOfProject .userElement button {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
 }
 
 #board .col-my .col-header .number-cards {
@@ -274,6 +277,15 @@ aside #membersOfProject .userElement button {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+#board .col-my .col-header .name-column .inputProject {
+  background-color: transparent;
+  outline: none;
+}
+
+#board .col-my .col-header .name-column .inputProject:focus {
+  background-color: #fff;
 }
 
 #board .col-my .col-header .button-new-card {
@@ -550,6 +562,15 @@ aside #membersOfProject .userElement button {
 .card-wrapper .form-card .header .info * {
   margin: 0;
   margin-bottom: 1px;
+}
+
+.card-wrapper .form-card .header .info .name {
+  border: 0;
+  -webkit-text-fill-color: black;
+}
+
+.card-wrapper .form-card .header .info .name:focus {
+  font-size: 23px;
 }
 
 .card-wrapper .form-card .header .close {
