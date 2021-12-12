@@ -282,6 +282,8 @@ aside #membersOfProject .userElement button {
 #board .col-my .col-header .name-column .inputProject {
   background-color: transparent;
   outline: none;
+  font-size: 15px;
+  overflow-wrap: normal;
 }
 
 #board .col-my .col-header .name-column .inputProject:focus {

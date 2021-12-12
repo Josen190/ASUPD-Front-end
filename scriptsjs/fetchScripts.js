@@ -529,14 +529,19 @@ async function LoadProjectInformation() {
           document.querySelector('#inputStatus').value = 'В процессе';
           break;
         case 'FROZEN':
-          document.querySelector('#inputStatus').value = 'Заморожен';
+          document.querySelector('#inputStatus').value = 'Приостановлен';
           break;
         case 'DONE':
-          document.querySelector('#inputStatus').value = 'Выполнен';
+          document.querySelector('#inputStatus').value = 'Завершён';
           break;
         default:
           break;
       }
+      var userParams = await GetUser(localStorage.getItem('token'));
+      userRole = userParams['role'];
+      if (localStorage.getItem('token') == result['userCaptain']) userRole = "Captain";
+      if (localStorage.getItem('token') == result['projectManager']) userRole = "Manager";
+      
       for (var i = 0; i < Object.keys(result['stageUuidList']).length; i++) {
         await LoadStageAndCardsFromDB(result['stageUuidList'][i]);
         document.querySelector('[data-uuid-of-stage="' + result['stageUuidList'][i] + '"]').querySelector('.number-cards').innerText =

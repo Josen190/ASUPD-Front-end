@@ -8,24 +8,30 @@ var dictOfStatusCard = {
   "IN_PROCESS": "В процессе",
   "FROZEN": "Приостановлен",
   "DONE": "Завершён",
-  "ACCEPTED": "зачтено",
-  "DENIED": "не зачтено",
-  "CHECK_REQUIRED": "На проверке",
-  "DONE": "Выполнено",
+  "В процессе": "IN_PROCESS",
+  "Приостановлен": "FROZEN",
+  "Завершён": "DONE",    
   "BUSINESS_ADMINISTRATOR": "Администратор",
   "CURATOR": "Куратор",
   "USER": "Пользователь"
 }
 
+var dictOfGradingCards = {
+  "IN_PROCESS": "В процессе выполнения",
+  "CHECK_REQUIRED": "Нуждается в проверке",    
+  "DONE": "Принято",
+  "ACCEPTED":"Зачтено",
+  "DENIED": "Отклонено"
+}
+
 function SaveStatusFunction() {
   let radios = document.getElementsByName('flexRadioStatus');
 
-  console.log("Радио");
 
   for (var i = 0, length = radios.length; i < length; i++) {
     if (radios[i].checked) {
       document.getElementById('inputStatus').value = radios[i].value;
-
+      EditProject(localStorage.getItem('tokenOfProject'), document.querySelector('#nameOfProject').value, dictOfStatusCard[radios[i].value]);
       break;
     }
   }
@@ -61,6 +67,7 @@ document.querySelector('#nameOfProject').addEventListener('change', (e) => {
 });
 
 let addColumnBtn = document.getElementById("createColumn");
+var userRole = "";
 
 async function LoadStageAndCardsFromDB(tokenOfStage) {
   var stageParams = await GetStage(tokenOfStage);
@@ -76,9 +83,8 @@ async function LoadStageAndCardsFromDB(tokenOfStage) {
 addColumnBtn.addEventListener('click', async () => {
   console.log("Была нажата addColumnBtn");
   var nameOfStage = document.querySelector('#nameColum').value;
-  let uuidOfStage = await AddStage(nameOfStage);
-
   if (nameOfStage == '') nameOfStage = 'Новый этап';
+  let uuidOfStage = await AddStage(nameOfStage); 
   var stageEntity = new StageForCards(nameOfStage, uuidOfStage);
   stageEntity.render();
 });
@@ -117,7 +123,7 @@ class StageForCards {
 
     //Заголовок этапа
     this.divHeader = document.createElement('div');
-    this.divHeader.classList.add('col-header');
+    this.divHeader.classList.add('col-header', 'row');
 
     //Кнопка для добавления карточки
     this.AddCardBtn = document.createElement('button');
@@ -135,9 +141,10 @@ class StageForCards {
       '</svg>';
 
     //Счётчик количества карточек в этапе
-    this.numberOfCards = document.createElement('span');
-    this.numberOfCards.classList.add('number-cards');
-    this.numberOfCards.innerText = 0;
+    this.numberOfCards = document.createElement('div');
+    this.numberOfCards.classList.add('col');
+    this.numberOfCards.insertAdjacentHTML('beforeend', '<span class="number-cards">0</span>');
+    this.numberOfCards.setAttribute('style', "text-align: start");
 
     //Кнопка удалить этап
     this.DeleteColumnBtn = document.createElement('button');
@@ -147,24 +154,35 @@ class StageForCards {
       await DeleteStage(this.stageEntity.uuidOfStage, localStorage.getItem('tokenOfProject'));
       console.log("Была нажата DeleteColumnBtn");
       this.divStage.remove();
-    })
+    })   
 
     //"Собираем" заголовок карточки
     this.divHeader.append(this.numberOfCards);
-    this.divHeader.insertAdjacentHTML('beforeend', '<h3 style="height:fit-content" class="name-column"><input class="inputProject form-control" value="' + this.stageEntity.title + '"></h3>' +
-      '<details class="column-menu">' +
+
+    this.detailsCloseStage = document.createElement('details');
+    this.detailsCloseStage.classList.add('column-menu');
+    this.detailsCloseStage.insertAdjacentHTML('beforeend', 
       '<summary class="column-menu" aria-label="Column menu" aria-haspopup="menu" role="button">' +
       '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-kebab-horizontal">' +
       '<path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>' +
       '</svg>' +
       '</summary>' +
-      '<div class="open"></div>' +
-      '</details>');
-    this.divHeader.childNodes[2].childNodes[1].appendChild(this.DeleteColumnBtn); //Помещаем кнопку в <div class="open"></div>
-    this.divHeader.append(this.AddCardBtn);
+      '<div class="open"></div>');
+    this.detailsCloseStage.querySelector('.open').appendChild(this.DeleteColumnBtn); //Помещаем кнопку в <div class="open"></div>
+          
+    this.btnContainer = document.createElement('div');
+    this.btnContainer.setAttribute('style', 'text-align: end');
+    this.btnContainer.classList.add('col');
+    this.btnContainer.append(this.AddCardBtn, this.detailsCloseStage);
 
-    this.divHeader.querySelector('.inputProject').addEventListener('change', async (e) => {      
-      await EditStage(this.stageEntity.uuidOfStage, this.divHeader.querySelector('.inputProject').value);
+    this.divHeader.append(this.btnContainer);
+
+    this.divTitle = document.createElement('div');
+    this.divTitle.insertAdjacentHTML('beforeend', '<h3 style="height:fit-content" class="name-column">' +
+      '<input class="inputProject form-control" value="' + this.stageEntity.title + '"></h3>');
+
+    this.divTitle.querySelector('.inputProject').addEventListener('change', async (e) => {      
+      await EditStage(this.stageEntity.uuidOfStage, this.divTitle.querySelector('.inputProject').value);
     });
 
     //Контейнер в этапе, который содержит текст карточки
@@ -173,9 +191,12 @@ class StageForCards {
 
     //Дособираем итоговый этап
     this.divStage.append(this.divHeader);
+    this.divStage.append(this.divTitle);
     this.divStage.append(this.divStageContent);
 
     root.before(this.divStage);
+
+    details = [...document.querySelectorAll('details')];
   }
 }
 
@@ -235,7 +256,7 @@ class Card {
     this.DeleteCardBtn.innerText = "x";
     this.DeleteCardBtn.addEventListener('click', async (e) => {
       e.stopPropagation(); //Убираем открытие карточки, при нажатии на кнопку внутри карточки
-      stageInstance.numberOfCards.innerText = Number(stageInstance.numberOfCards.innerText) - 1;
+      stageInstance.numberOfCards.querySelector('.number-cards').innerText = Number(stageInstance.numberOfCards.innerText) - 1;
       this.card.remove();
       DeleteCard(this.cardEntity.id);
       let i = stageInstance.stageEntity.cardList.indexOf(this);
@@ -251,8 +272,8 @@ class Card {
       '</svg>' +
       '</span>' +
       '<span class="card-content">' + this.cardName.innerText + '</span>' +
-      '<small class="add-info color-fg-muted">Последнее изменение: <a class="color-text-primary" href="#" draggable="false">'
-        + dateWithoutTime.format(Date.parse(this.cardEntity.lastChangeDate)) + '</a></small>');
+      '<small class="add-info color-fg-muted">Статус: <a id="smallStatus" class="color-text-primary" href="#" draggable="false">'
+        + dictOfGradingCards[this.cardEntity.status] + '</a></small>');
     this.btnWrapper = document.createElement('div');
     this.btnWrapper.classList.add('button-wrapper');
     this.btnWrapper.append(this.DeleteCardBtn);
@@ -290,13 +311,15 @@ class Card {
     this.submitCardBtn.addEventListener('click', async (e) => {
       if (!e.detail || e.detail == 1) {
         console.log("Была нажата кнопка потверждения создания карточки");
-        stageInstance.numberOfCards.innerText = Number(stageInstance.numberOfCards.innerText) + 1;
+        stageInstance.numberOfCards.querySelector('.number-cards').innerText = Number(stageInstance.numberOfCards.innerText) + 1;
 
-        if (this.textAreaOfCardForm.value == "") this.textAreaOfCardForm.value = "Новая карточка";
-        var tokenOfCard = await AddCard(stageInstance.stageEntity.uuidOfStage, this.textAreaOfCardForm.value, '');
+        var nameOfCard = ""
+        if (this.textAreaOfCardForm.value == "") nameOfCard = "Новая карточка";
+        else nameOfCard = this.textAreaOfCardForm.value;
+        var tokenOfCard = await AddCard(stageInstance.stageEntity.uuidOfStage, nameOfCard, '');
         var cardParams = {
           id: tokenOfCard,
-          name: this.textAreaOfCardForm.value,
+          name: nameOfCard,
           status: "IN_PROCESS",
           content: "",
           commentUuidList: [],
@@ -334,7 +357,7 @@ class Card {
     this.divCardContainer = document.createElement('div');
     this.divCardContainer.classList.add('card-wrapper');
     //Будем закрывать карточку, если нажимаем на затемнённую область
-    this.divCardContainer.addEventListener('click', (e) => {
+    this.divCardContainer.addEventListener('mousedown', (e) => {
       if (e.target.classList.contains("card-wrapper")) {
         this.divCardContainer.remove();
       }
@@ -359,7 +382,7 @@ class Card {
     this.divHeader.insertAdjacentHTML('beforeend',
       '<div class="info">' +
       '<h3 id = "nameCard"><input id="inputNameOfCard" onclick="select()" class="name" value="' + this.cardEntity.title + '"></h3>' +  //+ this.cardEntity.id
-      '<p id = "statusOfCard">' + dictOfStatusCard[this.cardEntity.status] + '</p>' +
+      '<p id = "statusOfCard">' + dictOfGradingCards[this.cardEntity.status] + '</p>' +
       '</div>');
     this.divHeader.querySelector('#inputNameOfCard').addEventListener('change', async (e) => {
       this.cardEntity.title = this.divHeader.querySelector('#inputNameOfCard').value;
@@ -373,7 +396,7 @@ class Card {
     this.divHeader.insertAdjacentHTML('beforeend',
       '<div class="last-change">' +
       '<p id = "lastData">Последнее изменение: ' + dateWithTime.format(Date.parse(this.cardEntity.lastChangeDate)) + '</p>' +
-      '<p id = "lastUser">Изменил: ' + user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic'] + '</p>' +
+      '<p id = "lastUser">Изменил(а): ' + user['lastName'] + ' ' + user['firstName'] + ' ' + user['patronymic'] + '</p>' +
       '</div>');
     //================================================================================================//
 
@@ -434,37 +457,31 @@ class Card {
     //Кнопки
     this.estimateBtn = document.createElement('button');
     setAttributes(this.estimateBtn, { "type": "button", "name": "estimate" });
-    this.estimateBtn.innerText = "Зачесть задание";
-    // this.estimateBtn.addEventListener('click', () => {
-    //   //Создадим модальное окно
-    //   // this.estimateWindow = document.createElement('div');
-    //   // setAttributes(this.estimateWindow, { "class": "pop-outer", "id": "estimateWindow" })
-    //   // this.estimateWindow.insertAdjacentHTML('beforeend',
-    //   //   '<div class="form-estimate">' +
-    //   //   '<div class="header">' +
-    //   //   '<h3>Оценить карточку</h3>' +
-    //   //   '</div>' +
-    //   //   '<div class="estimate">' +
-    //   //   '<input id="inputMark" type="text" name="" placeholder="Оценка">' +
-    //   //   '<button id="buttonSaveMark" type="button" name="button">Сохранить</button>' +
-    //   //   '</div>' +
-    //   //   '</div>');
-    //   this.estimateWindow.addEventListener('click', (e) => {
-    //     e.stopPropagation();
-    //     if (e.target.id == "estimateWindow") {
-    //       this.estimateWindow.remove();
-    //     }
-    //   })
-    //   //Кнопка "Сохранить"
-    //   this.estimateWindow.querySelector('#buttonSaveMark').addEventListener('click', () => {
-    //     this.estimateWindow.remove();
+    if (userRole != "Manager") this.estimateBtn.setAttribute('style', "display:none");
 
-    //     this.cardEntity.mark = String(this.estimateWindow.querySelector('#inputMark').value);
-    //     this.markDiv.innerText = "Оценка: " + String(this.estimateWindow.querySelector('#inputMark').value);
-    //   })
+    if (!this.cardEntity.mark || this.cardEntity.mark == "DENIED") this.estimateBtn.innerText = "Зачесть задание";
+    else this.estimateBtn.innerHTML = "Отменить зачёт";
 
-    //   document.getElementById('showCardContaier').append(this.estimateWindow);
-    // })
+    this.estimateBtn.addEventListener('click',  () => {      
+      if (!this.cardEntity.mark || this.cardEntity.mark == "DENIED"){
+        this.markDiv.innerText = "Оценка задачи: зачтено";
+        this.estimateBtn.innerText = "Отменить зачёт";
+        this.cardEntity.mark = "ACCEPTED"; 
+        this.cardEntity.status = "DONE";
+        lastOpenCard.querySelector('#smallStatus').innerText = dictOfGradingCards[this.cardEntity.status];
+        this.divCard.querySelector('#statusOfCard').innerText = dictOfGradingCards[this.cardEntity.status];
+        EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
+      }
+      else if (this.cardEntity.mark == "ACCEPTED"){
+        this.markDiv.innerText = "Оценка задачи: Отклонено";
+        this.estimateBtn.innerText = "Зачесть задание";
+        this.cardEntity.mark = "DENIED"; 
+        this.cardEntity.status = "IN_PROCESS";
+        lastOpenCard.querySelector('#smallStatus').innerText = dictOfGradingCards[this.cardEntity.status];
+        this.divCard.querySelector('#statusOfCard').innerText = dictOfGradingCards[this.cardEntity.status];
+        EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
+      }
+    });    
 
     //Кнопка "Изменить статус"
     this.status = document.createElement('button');
@@ -479,15 +496,15 @@ class Card {
         '<h3>Изменить статус</h3>' +
         '<button type="button" name="close" class="button">x</button>' +
         '</div>' +
-        '<div class="status">' +
+        '<div class="status" style="width:fit-content">' +
         '<div>' +
-        '<input id="inProcess" type="radio" name="status" value="В процессе"> В процессе' +
+        '<input id="inProcess" type="radio" name="status" value="В процессе выполнения"> В процессе выполнения' +
         '</div>' +
         '<div>' +
-        '<input id="Checking" type="radio" name="status" value="На проверке"> На проверке' +
+        '<input id="Checking" type="radio" name="status" value="Нуждается в проверке"> Нуждается в проверке' +
         '</div>' +
         '<div>' +
-        '<input id="Completed" type="radio" name="status" value="Завершён"> Завершён' +
+        '<input id="Completed" style="display:none" type="radio" name="status" value="Принято">' +
         '</div>' +
         '</div>' +
         '</div>');
@@ -502,21 +519,23 @@ class Card {
         this.statusWindowWrapper.remove();
       })
       this.statusWindowWrapper.querySelector('#inProcess').addEventListener('click', () => {
-        this.divCard.querySelector('#statusOfCard').innerText = dictOfStatusCard['IN_PROCESS'];
+        this.divCard.querySelector('#statusOfCard').innerText = dictOfGradingCards['IN_PROCESS'];
         this.cardEntity.status = 'IN_PROCESS';
-        EdirCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
+        EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
+        lastOpenCard.querySelector('#smallStatus').innerText = dictOfGradingCards[this.cardEntity.status];
       });
       this.statusWindowWrapper.querySelector('#Checking').addEventListener('click', () => {
-        this.divCard.querySelector('#statusOfCard').innerText = dictOfStatusCard['CHECK_REQUIRED'];
+        this.divCard.querySelector('#statusOfCard').innerText = dictOfGradingCards['CHECK_REQUIRED'];
         this.cardEntity.status = 'CHECK_REQUIRED';
         EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
+        lastOpenCard.querySelector('#smallStatus').innerText = dictOfGradingCards[this.cardEntity.status];
       });
-      this.statusWindowWrapper.querySelector('#Completed').addEventListener('click', () => {
-        this.divCard.querySelector('#statusOfCard').innerText = dictOfStatusCard['DONE'];
-        this.cardEntity.status = 'DONE';
-        EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
-      });
-
+      // this.statusWindowWrapper.querySelector('#Completed').addEventListener('click', () => {
+      //   this.divCard.querySelector('#statusOfCard').innerText = dictOfGradingCards['DONE'];
+      //   this.cardEntity.status = 'DONE';
+      //   EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
+      //   lastOpenCard.querySelector('#smallStatus').innerText = dictOfGradingCards[this.cardEntity.status];
+      // });      
       document.getElementById('showCardContaier').append(this.statusWindowWrapper);
     });
 
@@ -524,7 +543,7 @@ class Card {
     setAttributes(this.estimateBtn, { "type": "button", "name": "delete" });
     this.delete.innerText = "Удалить";
     this.delete.addEventListener('click', async (e) => {
-      stageInstance.numberOfCards.innerText = Number(stageInstance.numberOfCards.innerText) - 1;
+      stageInstance.numberOfCards.querySelector('.number-cards').innerText = Number(stageInstance.numberOfCards.innerText) - 1;
       DeleteCard(this.cardEntity.id);
       this.card.remove();
       this.divCardContainer.remove();
@@ -534,8 +553,9 @@ class Card {
 
     //Оценка
     this.markDiv = document.createElement('div');
-    this.markDiv.classList.add('mark-div');
-    this.markDiv.innerText = "Оценка задачи: " + 'задание не проверено';
+    this.markDiv.classList.add('mark-div');    
+    if (!this.cardEntity.mark) this.markDiv.innerText = "Оценка задачи: " + 'задание не проверено';
+    else if (this.cardEntity.mark == "ACCEPTED" || this.cardEntity.mark == "DENIED") this.markDiv.innerText = "Оценка задачи: " + dictOfGradingCards[this.cardEntity.mark];
 
     //Собираем эту часть карточки
     this.actionsBtns.append(this.estimateBtn, this.status, this.delete, this.markDiv);
@@ -545,6 +565,7 @@ class Card {
     //================================================================================================//    
     this.divComments = document.createElement('div');
     this.divComments.classList.add('comments');
+    this.divComments.setAttribute('style', "width:95%");
     this.divComments.insertAdjacentHTML('beforeend', '<h5>Коментарии</h5>');
     //Контейнер для ввода комментария
     this.inputCommentContainer = document.createElement('div');
@@ -558,6 +579,7 @@ class Card {
     await this.renderComments(this.oldCommentsContainer);
     //Кнопка "Сохранить комменатрий"
     this.saveCommentBtn = document.createElement('button');
+    this.saveCommentBtn.setAttribute('style', "flex:right");
     setAttributes(this.saveCommentBtn, { "type": "button", "name": "sendComment", "class": "btn" });
     this.saveCommentBtn.innerText = "Сохранить";
     this.saveCommentBtn.addEventListener('click', async () => {
@@ -635,7 +657,7 @@ class Comment {
       '<data id = "dataComment">' + this.date + '</data>' +
       '</div>' +
       '<div class="content-comment">' +
-      '<p id = "contentComment" >' + this.comment + '</p>' +
+      '<p id = "contentComment" style="word-break:break-word">' + this.comment + '</p>' +
       '</div>')
     cardInstance.oldCommentsContainer.insertBefore(this.divContainerOfComment, cardInstance.oldCommentsContainer.firstChild);
   }
@@ -747,9 +769,6 @@ document.querySelector('#sendInvite').addEventListener('click', (e) => {
 // Fetch all the details element.
 
 var details;
-document.onclick = () => {
-  details = [...document.querySelectorAll('details')];
-}
 
 document.addEventListener('click', function (e) {
   if (!details.some(f => f.contains(e.target))) {

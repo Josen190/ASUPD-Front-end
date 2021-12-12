@@ -258,6 +258,8 @@ aside
                 .inputProject{
                     background-color: transparent;
                     outline: none;
+                    font-size: 15px;
+                    overflow-wrap: normal;
                     &:focus{
                         background-color: #fff;
                     }
