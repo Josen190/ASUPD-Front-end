@@ -93,7 +93,7 @@
     <div id="board" class="row-my row flex-nowrap">
       <div id="addColumn" class="add-column">
         <!-- кнопка создать колонку -->
-        <button id="add-column-btn" class="add-column-btn" aria-expanded="false"
+        <button style="display: none" id="add-column-btn" class="add-column-btn" aria-expanded="false"
           onclick="removeClass('create-column', 'display-none')">
           <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true"
             class="octicon octicon-plus">
@@ -121,7 +121,7 @@
     </div>
     <div class="row justify-content-center mt-3" style="margin-bottom: 10px;">
       <div class="col-sm-4 col-md-12 text-center">
-        <button id="AddParticipantsOfProject" type="button" class="col-md-10 btn btn-sm btn-primary"
+        <button style="display: none;" id="AddParticipantsOfProject" type="button" class="col-md-10 btn btn-sm btn-primary"
           data-bs-toggle="modal" data-bs-target="#AddMembers">
           Добавить участников
         </button>
@@ -247,7 +247,7 @@
       </div>
       <div class="content">
         <h4 class="name">Имя этапа</h4>
-        <input id="nameColum" type="text" class="input_text" name="" value="">
+        <input id="nameColum" autocomplete="off" type="text" class="input_text" name="" value="">
         <button id="createColumn" type="submit" data-view-component="true"
           class="create-column-btn flex-auto btn-primary btn" onclick="addClass('create-column', 'display-none')">
           Создать этап

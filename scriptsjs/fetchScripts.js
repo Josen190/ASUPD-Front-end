@@ -542,6 +542,9 @@ async function LoadProjectInformation() {
       if (localStorage.getItem('token') == result['userCaptain']) userRole = "Captain";
       if (localStorage.getItem('token') == result['projectManager']) userRole = "Manager";
       
+      if (userRole == "Captain" || userRole == "Manager") document.getElementById('AddParticipantsOfProject').removeAttribute('style');
+      if (userRole != "CURATOR") document.getElementById('add-column-btn').removeAttribute('style');
+
       for (var i = 0; i < Object.keys(result['stageUuidList']).length; i++) {
         await LoadStageAndCardsFromDB(result['stageUuidList'][i]);
         document.querySelector('[data-uuid-of-stage="' + result['stageUuidList'][i] + '"]').querySelector('.number-cards').innerText =

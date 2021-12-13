@@ -132,9 +132,14 @@ class Proposal {
             'Основная информация' +
             '</div>' +
             '<div class="stages">' +
+            '<div style="margin:inherit">Этапы: </div>' + 
             '<dl id="nameOfStage"></dl>' +
             '</div>' +
-            '<div class="s-m">' +
+            '<div class="row">' +
+            '<div class="col">Менеджеры: </div>' +
+            '<div class="col">Консультанты: </div>' +
+            '</div>' +
+            '<div class="s-m">' +            
             '<div><dl id="supervisors" class="supervisors"></dl></div>' +
             '<div><dl class="mentors"></dl></div>' +
             '</div>' +
@@ -268,10 +273,15 @@ function LoadFormOfNewProposal() {
             '<div class="basic-info">' +
                 '<textarea id="basicInfoAboutNewProposal" placeholder="Основная информация"></textarea>' +
             '</div>' +            
-            '<div class="stages">' +
+            '<div style="margin:inherit">Этапы: </div>' + 
+            '<div class="stages">' +                
                 '<dl id="new-stages-list"></dl>' +
                 '<input class="newStage-input" type="text">' +
                 '<button id="new-stages-btn" type="button">+</button>' +
+            '</div>' +
+            '<div class="row">' +
+            '<div class="col">Менеджеры: </div>' +
+            '<div class="col">Консультанты: </div>' +
             '</div>' +
             '<div class="s-m">' +            
                 '<div class="supervisors">' +

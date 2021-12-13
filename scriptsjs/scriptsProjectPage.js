@@ -12,7 +12,7 @@ var dictOfStatusCard = {
   "Приостановлен": "FROZEN",
   "Завершён": "DONE",    
   "BUSINESS_ADMINISTRATOR": "Администратор",
-  "CURATOR": "Куратор",
+  "CURATOR": "Консультант",
   "USER": "Пользователь"
 }
 
@@ -86,6 +86,7 @@ addColumnBtn.addEventListener('click', async () => {
   if (nameOfStage == '') nameOfStage = 'Новый этап';
   let uuidOfStage = await AddStage(nameOfStage); 
   var stageEntity = new StageForCards(nameOfStage, uuidOfStage);
+  document.querySelector('#nameColum').value = "";
   stageEntity.render();
 });
 
@@ -129,6 +130,7 @@ class StageForCards {
     this.AddCardBtn = document.createElement('button');
     setAttributes(this.AddCardBtn, { "type": "button", "aria-label": "Добавить новую карточку", "aria-expanded": "false" });
     this.AddCardBtn.classList.add('button-new-card');
+    if (userRole == "CURATOR") this.AddCardBtn.setAttribute('style', 'display:none');
     this.AddCardBtn.addEventListener('click', async (e) => {
       console.log("Была нажата addCardBtn");
       this.AddCardBtn.setAttribute("style", "display:none");
@@ -150,6 +152,7 @@ class StageForCards {
     this.DeleteColumnBtn = document.createElement('button');
     setAttributes(this.DeleteColumnBtn, { "type": "button" });
     this.DeleteColumnBtn.innerText = "Удалить этап";
+    if (userRole == "CURATOR") this.DeleteColumnBtn.setAttribute('style', 'display:none');
     this.DeleteColumnBtn.addEventListener('click', async () => {
       await DeleteStage(this.stageEntity.uuidOfStage, localStorage.getItem('tokenOfProject'));
       console.log("Была нажата DeleteColumnBtn");
@@ -254,6 +257,7 @@ class Card {
     this.DeleteCardBtn = document.createElement('button');
     this.DeleteCardBtn.classList.add('button');
     this.DeleteCardBtn.innerText = "x";
+    if (userRole == "CURATOR") this.DeleteCardBtn.setAttribute('style', 'display:none');
     this.DeleteCardBtn.addEventListener('click', async (e) => {
       e.stopPropagation(); //Убираем открытие карточки, при нажатии на кнопку внутри карточки
       stageInstance.numberOfCards.querySelector('.number-cards').innerText = Number(stageInstance.numberOfCards.innerText) - 1;
@@ -299,6 +303,7 @@ class Card {
       "name": "note", "required": "", "autofocus": "", "aria-label": "Название задачи", "class": "form-control input-block js-quick-submit js-size-to-fit js-note-text js-length-limited-input",
       "data-input-max-length": "256", "data-warning-length": "99", "data-warning-text": "{{remaining}} remaining", "placeholder": "Название задачи", "spellcheck": "false"
     });
+    this.textAreaOfCardForm.setAttribute('style', "resize:none");
 
     //Контейнер для кнопок
     this.divContainerForBtn = document.createElement('div');
@@ -411,7 +416,7 @@ class Card {
     //Кнопка "Содержание"
     this.ContentBtn = document.createElement('button');
     setAttributes(this.ContentBtn, { "id": "viewingCardContents", "type": "button", "name": "viewing", "disabled": "true" });
-    this.ContentBtn.innerText = "Содержание";
+    this.ContentBtn.innerText = "Содержание";   
     this.ContentBtn.addEventListener('click', () => {
       console.log("Содержание");
       this.ContentBtn.parentNode.childNodes[0].setAttribute("disabled", "true");
@@ -422,6 +427,7 @@ class Card {
     this.ChangeContentBtn = document.createElement('button');
     setAttributes(this.ChangeContentBtn, { "id": "changeCardContents", "type": "button", "name": "change" });
     this.ChangeContentBtn.innerText = "Изменить";
+    if (userRole == "CURATOR") this.ChangeContentBtn.disabled = true;
     this.ChangeContentBtn.addEventListener('click', () => {
       console.log("Изменить");
       this.ChangeContentBtn.parentNode.childNodes[0].removeAttribute('disabled');
@@ -440,6 +446,13 @@ class Card {
       this.cardEntity.description = this.textAreaForCard.value;
       this.ContentBtn.click();
       await EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
+      this.cardEntity.status = "IN_PROCESS";
+      this.cardEntity.mark = null;
+      lastOpenCard.querySelector('#smallStatus').innerText = dictOfGradingCards[this.cardEntity.status];
+      this.divCard.querySelector('#statusOfCard').innerText = dictOfGradingCards[this.cardEntity.status];
+      this.acceptTaskBtn.disabled = false;
+      this.denyTaskBtn.disabled = false;
+      this.markDiv.innerText = "Оценка задачи: " + 'задание не проверено';
     });
     //Собираем эту часть карточки
     this.btnContainer.append(this.ContentBtn, this.ChangeContentBtn);
@@ -455,38 +468,56 @@ class Card {
     this.actionsBtns.classList.add('actions');
     this.actionsBtns.insertAdjacentHTML('beforeend', '<h4>Действия</h4>');
     //Кнопки
-    this.estimateBtn = document.createElement('button');
-    setAttributes(this.estimateBtn, { "type": "button", "name": "estimate" });
-    if (userRole != "Manager") this.estimateBtn.setAttribute('style', "display:none");
-
-    if (!this.cardEntity.mark || this.cardEntity.mark == "DENIED") this.estimateBtn.innerText = "Зачесть задание";
-    else this.estimateBtn.innerHTML = "Отменить зачёт";
-
-    this.estimateBtn.addEventListener('click',  () => {      
+    this.acceptTaskBtn = document.createElement('button');
+    setAttributes(this.acceptTaskBtn, { "type": "button", "name": "estimate" });
+    if (userRole != "Manager") this.acceptTaskBtn.setAttribute('style', "display:none");
+    this.acceptTaskBtn.innerText = "Зачесть задание";
+    this.acceptTaskBtn.addEventListener('click',  () => {      
       if (!this.cardEntity.mark || this.cardEntity.mark == "DENIED"){
         this.markDiv.innerText = "Оценка задачи: зачтено";
-        this.estimateBtn.innerText = "Отменить зачёт";
+        this.acceptTaskBtn.disabled = true;
+        this.denyTaskBtn.disabled = false;
         this.cardEntity.mark = "ACCEPTED"; 
         this.cardEntity.status = "DONE";
         lastOpenCard.querySelector('#smallStatus').innerText = dictOfGradingCards[this.cardEntity.status];
         this.divCard.querySelector('#statusOfCard').innerText = dictOfGradingCards[this.cardEntity.status];
         EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
       }
-      else if (this.cardEntity.mark == "ACCEPTED"){
-        this.markDiv.innerText = "Оценка задачи: Отклонено";
-        this.estimateBtn.innerText = "Зачесть задание";
+    });    
+
+    this.denyTaskBtn = document.createElement('button');
+    setAttributes(this.denyTaskBtn, { "type": "button", "name": "estimate" });
+    if (userRole != "Manager") this.denyTaskBtn.setAttribute('style', "display:none");
+    this.denyTaskBtn.innerHTML = "Отклонить задание";
+    this.denyTaskBtn.addEventListener('click',  () => {      
+      if (!this.cardEntity.mark || this.cardEntity.mark == "ACCEPTED"){
+        this.markDiv.innerText = "Оценка задачи: отклонено";
+        this.acceptTaskBtn.disabled = false;
+        this.denyTaskBtn.disabled = true;
         this.cardEntity.mark = "DENIED"; 
         this.cardEntity.status = "IN_PROCESS";
         lastOpenCard.querySelector('#smallStatus').innerText = dictOfGradingCards[this.cardEntity.status];
         this.divCard.querySelector('#statusOfCard').innerText = dictOfGradingCards[this.cardEntity.status];
         EditCard(this.cardEntity.id, this.cardEntity.title, this.cardEntity.status, this.cardEntity.description, this.cardEntity.mark);
       }
-    });    
+    });  
+
+    switch (this.cardEntity.mark) {
+      case "ACCEPTED":
+        this.acceptTaskBtn.disabled = true;
+        this.denyTaskBtn.disabled = false;
+        break;
+      case "DENIED":
+        this.acceptTaskBtn.disabled = false;
+        this.denyTaskBtn.disabled = true;
+        break;
+    }
 
     //Кнопка "Изменить статус"
     this.status = document.createElement('button');
     setAttributes(this.status, { "type": "button", "name": "status" });
     this.status.innerText = "Изменить статус";
+    if (userRole == "Manager" || userRole == "CURATOR") this.status.setAttribute('style', 'display:none')
     this.status.addEventListener('click', () => {
       this.statusWindowWrapper = document.createElement('div');
       setAttributes(this.statusWindowWrapper, { "class": "pop-outer", "id": "statusWindow" })
@@ -540,8 +571,9 @@ class Card {
     });
 
     this.delete = document.createElement('button');
-    setAttributes(this.estimateBtn, { "type": "button", "name": "delete" });
+    setAttributes(this.delete, { "type": "button", "name": "delete" });
     this.delete.innerText = "Удалить";
+    if (userRole == "CURATOR") this.delete.setAttribute('style', 'display:none');
     this.delete.addEventListener('click', async (e) => {
       stageInstance.numberOfCards.querySelector('.number-cards').innerText = Number(stageInstance.numberOfCards.innerText) - 1;
       DeleteCard(this.cardEntity.id);
@@ -558,7 +590,7 @@ class Card {
     else if (this.cardEntity.mark == "ACCEPTED" || this.cardEntity.mark == "DENIED") this.markDiv.innerText = "Оценка задачи: " + dictOfGradingCards[this.cardEntity.mark];
 
     //Собираем эту часть карточки
-    this.actionsBtns.append(this.estimateBtn, this.status, this.delete, this.markDiv);
+    this.actionsBtns.append(this.acceptTaskBtn, this.denyTaskBtn, this.status, this.delete, this.markDiv);
     //================================================================================================//
 
     //Коментарии
@@ -641,6 +673,7 @@ class Comment {
     this.deleteCommentBtn = document.createElement('button');
     setAttributes(this.deleteCommentBtn, { "type": "button", "name": "sendComment", "class": "close", "style": "float:right" });
     this.deleteCommentBtn.innerText = "X";
+    if (localStorage.getItem('token') != this.userOwnerUuid) this.deleteCommentBtn.setAttribute('style', 'display:none');
     this.deleteCommentBtn.addEventListener('click', async () => {
       DeleteComment(localStorage.getItem('tokenOfProject'), cardInstance.cardEntity.id, this.commentId);
       this.divContainerOfComment.remove();
@@ -659,7 +692,7 @@ class Comment {
       '<div class="content-comment">' +
       '<p id = "contentComment" style="word-break:break-word">' + this.comment + '</p>' +
       '</div>')
-    cardInstance.oldCommentsContainer.insertBefore(this.divContainerOfComment, cardInstance.oldCommentsContainer.firstChild);
+    cardInstance.oldCommentsContainer.appendChild(this.divContainerOfComment);
   }
 }
 
@@ -728,7 +761,7 @@ async function LoadMembersOfProject(project = "") {
 
   for (var i = 0; i < project['usersConsultantsUuidList'].length; i++) {
     var consultantParams = await GetUser(project['usersConsultantsUuidList'][i]);
-    consultantParams['role'] = 'Куратор';
+    consultantParams['role'] = 'Консультант';
     var consultant = new Participant(consultantParams, project['usersConsultantsUuidList'][i]);
     if (statusOfUser == "Manager") consultant.render(document.querySelector('#curator_list'), true);
     else consultant.render(document.querySelector('#curator_list'), false);
@@ -751,7 +784,7 @@ function AddNewParticipant(participantParams) {
     else participant.render(document.querySelector('#member_list'), false);
   }
   else if (participant.ParticipantEntity.role == 'CURATOR') {
-    participant.ParticipantEntity.role = 'Куратор';
+    participant.ParticipantEntity.role = 'Консультант';
     if (statusOfUser == "Manager") participant.render(document.querySelector('#curator_list'), true);
     else participant.render(document.querySelector('#curator_list'), false);
   }
@@ -765,8 +798,6 @@ document.querySelector('#sendInvite').addEventListener('click', (e) => {
   AddUsersToMembersOfProject();
   $('#AddMembers').modal('hide');
 })
-
-// Fetch all the details element.
 
 var details;
 

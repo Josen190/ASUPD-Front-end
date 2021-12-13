@@ -1,6 +1,6 @@
 var dict = {
     "BUSINESS_ADMINISTRATOR": "Администратор",
-    "CURATOR": "Куратор",
+    "CURATOR": "Консультант",
     "USER": "Пользователь"
 }
 

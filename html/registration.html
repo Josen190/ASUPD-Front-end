@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
   <title>Регистрация</title>
-  <script src="https://www.google.com/recaptcha/api.js"></script>
+  <!-- <script src="https://www.google.com/recaptcha/api.js"></script> -->
   <script src="https://ajax.googleapis.com/ajax/libs/cesiumjs/1.78/Build/Cesium/Cesium.js"></script>
 </head>
 
@@ -139,7 +139,7 @@
           }
 
           if (flag) {
-            alert(flag);            
+            //alert(flag);            
             await Send_Registration_Form(email, password, first_name, last_name, patronymic, data, phone, post, place_work);
           }
           else {
